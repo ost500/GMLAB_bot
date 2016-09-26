@@ -37,6 +37,7 @@ namespace WindowsFormsApplication1
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 context.textBox1.AppendText(context.user);
+                context.log(context.user + " <= contect user");
                 string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' ORDER BY work_number";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
