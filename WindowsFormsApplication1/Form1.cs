@@ -94,7 +94,7 @@ namespace WindowsFormsApplication1
 
                 //1.해시태그 검색
                 insta_run.hash_tag_search();
-                
+
                 //좋아요 루프
                 insta_run.like_loop(1);
 
@@ -113,7 +113,7 @@ namespace WindowsFormsApplication1
 
                 insta_run.quit();
 
-                
+
 
             }
             catch (Exception ex)
@@ -170,7 +170,7 @@ namespace WindowsFormsApplication1
 
         //        finished_follow = true;
         //        check_finish_proc();
-            
+
 
         //    }
         //    catch (Exception ex)
@@ -182,7 +182,7 @@ namespace WindowsFormsApplication1
         //}
 
 
-  
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -290,6 +290,13 @@ namespace WindowsFormsApplication1
         private void button5_Click(object sender, EventArgs e)
         {
             log(conn_manager.Select_content()["content"].ToString());
+            t = conn_manager.SelectData(1);
+            r = t.Rows[0];
+
+            foreach (DataRow r in t.Rows)
+            {
+                log(r["user_id"].ToString());
+            }
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -297,7 +304,7 @@ namespace WindowsFormsApplication1
 
         }
 
-        
+
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
