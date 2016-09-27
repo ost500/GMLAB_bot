@@ -155,6 +155,11 @@ namespace WindowsFormsApplication1
             conn.mysql_refresh();
         }
 
+        public void refresh_connection()
+        {
+            listener.Close();
+            
+        }
 
 
         public string GetComputer_InternetIP()

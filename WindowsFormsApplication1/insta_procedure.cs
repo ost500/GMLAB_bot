@@ -397,12 +397,20 @@ namespace WindowsFormsApplication1
 
 
                 }
-                
-                // 닫기
-                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
 
-                driver.FindElement(By.CssSelector("button._3eajp")).Click();
+                try
+                {
+                    // 닫기
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+
+                    driver.FindElement(By.CssSelector("button._3eajp")).Click();
+                }
+                catch (Exception e)
+                {
+                    //닫기가 없으면 그냥 패스~
+                }
+                
 
             }
 

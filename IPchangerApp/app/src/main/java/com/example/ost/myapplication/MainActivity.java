@@ -1,9 +1,27 @@
 package com.example.ost.myapplication;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,39 +30,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Enumeration;
-
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.net.wifi.WifiManager;
-import android.nfc.Tag;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.app.Activity;
-import android.provider.Settings;
-import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyManager;
-import android.text.format.Formatter;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends Activity {
 
@@ -53,6 +43,7 @@ public class MainActivity extends Activity {
     Button buttonConnect, buttonClear, buttonClose;
     Socket socket = null;
     MyClientTask myClientTask;
+    IP_save dbManager;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -72,10 +63,20 @@ public class MainActivity extends Activity {
         textResponse = (TextView) findViewById(R.id.response);
 
 
+        dbManager = new IP_save(getApplicationContext(), "ip_addr.db", null, 1);
+
+
+
+        editTextAddress.setText(dbManager.PrintData());
+
+
+
+
         buttonConnect.setOnClickListener(buttonConnectOnClickListener);
         buttonClose.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
                     if (socket != null) {
                         socket.close();
@@ -85,6 +86,8 @@ public class MainActivity extends Activity {
                     textResponse.append(e.toString() + "\n");
                     e.printStackTrace();
                 }
+
+
                 try {
                     myClientTask.cancel(true);
                 } catch (Exception e) {
@@ -108,15 +111,6 @@ public class MainActivity extends Activity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
 
-        runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        textResponse.append("아이피 주소..\n");
-                        textResponse.append(getLocalIpAddress() + "\n");
-                    }
-                });
-
     }
 
     OnClickListener buttonConnectOnClickListener =
@@ -124,6 +118,8 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void onClick(View arg0) {
+
+                    dbManager.update("update IP_ADDRESS set ip_addr = \""+ editTextAddress.getText() +"\" where _id = 1;");
 
                     try {
                         myClientTask.cancel(true);
@@ -247,25 +243,9 @@ public class MainActivity extends Activity {
                         while (!isMobileDataEnabledFromLollipop(getApplicationContext())) {
                         }
 
-                        runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textResponse.append("아이피 주소..BEFORE\n");
-                                        textResponse.append(getLocalIpAddress() + "\n");
-                                    }
-                                });
 
                         setMobileNetworkfromLollipop(getApplicationContext());
 
-                        runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textResponse.append("아이피 주소..AFTER\n");
-                                        textResponse.append(getLocalIpAddress() + "\n");
-                                    }
-                                });
 
                     } else if (line.startsWith("close")) {
                         socket.close();

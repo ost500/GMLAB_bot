@@ -29,6 +29,9 @@ namespace WindowsFormsApplication1
         private bool ready_login = false;
         private bool ready_phone = false;
 
+        //Thread
+        private Thread like_thr;
+
         public Form1()
         {
             InitializeComponent();
@@ -57,7 +60,7 @@ namespace WindowsFormsApplication1
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            Thread like_thr = new Thread(ipchanger.StartListening);
+            like_thr = new Thread(ipchanger.StartListening);
             like_thr.Start();
         }
 
@@ -104,7 +107,7 @@ namespace WindowsFormsApplication1
                 insta_run.random_user();
 
                 insta_run.like_loop(1);
-
+                
 
                 //insta_run.logout();
 
@@ -112,6 +115,8 @@ namespace WindowsFormsApplication1
                 //팔로우, 좋아요
 
                 insta_run.quit();
+
+                ipchanger.send_change();
 
 
 
@@ -316,6 +321,14 @@ namespace WindowsFormsApplication1
             }
 
             IPchange.listener.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ipchanger.refresh_connection();
+            like_thr.Join();
+            like_thr = new Thread(ipchanger.StartListening);
+            like_thr.Start();
         }
     }
 }
