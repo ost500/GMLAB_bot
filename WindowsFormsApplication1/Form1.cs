@@ -19,7 +19,7 @@ namespace WindowsFormsApplication1
 
         public DataRow r;
         public DataTable t;
-
+        
         private IPchange ipchanger;
 
         private bool finished_follow = true;
@@ -67,9 +67,15 @@ namespace WindowsFormsApplication1
 
         public void log(string logging)
         {
-            textBox1.AppendText(Environment.NewLine);
-            textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-        }
+            
+                Invoke(new MethodInvoker(delegate () {
+
+                    textBox1.AppendText(Environment.NewLine);
+                    textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+
+                }));
+               
+          }
 
         public void like_proc()
         {
@@ -121,10 +127,16 @@ namespace WindowsFormsApplication1
 
 
             }
+
             catch (Exception ex)
             {
-                textBox1.Text = ex.StackTrace;
+               // Invoke(new MethodInvoker(delegate ()
+              //  {
+                    textBox1.Text = ex.StackTrace;
+              //  }));
             }
+           
+
 
         }
 
