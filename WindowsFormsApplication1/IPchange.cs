@@ -169,5 +169,20 @@ namespace WindowsFormsApplication1
             return externalip.Replace("\n", "");
         }
 
+        //public bool socket_check()
+        //{
+        //    return listener.Connected;
+        //}
+
+        public bool socket_check()
+        {
+            bool part1 = listener.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (listener.Available == 0);
+            if (part1 && part2)
+                return false;
+            else
+                return true;
+        }
+
     }
 }
