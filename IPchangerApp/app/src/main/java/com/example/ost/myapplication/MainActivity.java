@@ -42,8 +42,10 @@ public class MainActivity extends Activity {
     EditText editTextAddress, editTextPort;
     Button buttonConnect, buttonClear, buttonClose;
     Socket socket = null;
-    MyClientTask myClientTask;
+    MyClientTask[] myClientTask;
     IP_save dbManager;
+    int number_thread = 0;
+    boolean istask_closed = false;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -54,6 +56,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myClientTask = new MyClientTask[10];
+
+
 
         editTextAddress = (EditText) findViewById(R.id.address);
         editTextPort = (EditText) findViewById(R.id.port);
@@ -66,10 +72,7 @@ public class MainActivity extends Activity {
         dbManager = new IP_save(getApplicationContext(), "ip_addr.db", null, 1);
 
 
-
         editTextAddress.setText(dbManager.PrintData());
-
-
 
 
         buttonConnect.setOnClickListener(buttonConnectOnClickListener);
@@ -80,6 +83,7 @@ public class MainActivity extends Activity {
                 try {
                     if (socket != null) {
                         socket.close();
+
                         textResponse.append("소켓 종료..\n");
                     }
                 } catch (IOException e) {
@@ -89,11 +93,14 @@ public class MainActivity extends Activity {
 
 
                 try {
-                    myClientTask.cancel(true);
+
+                    clearAsyncTask(myClientTask[number_thread]);
+
                 } catch (Exception e) {
                     textResponse.append(e.toString() + "\n쓰레드 종료 에러1");
                     textResponse.append("쓰레드 종료 에러2");
                 }
+//
 
 
                 textResponse.append("접속 종료..\n");
@@ -119,22 +126,22 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View arg0) {
 
-                    dbManager.update("update IP_ADDRESS set ip_addr = \""+ editTextAddress.getText() +"\" where _id = 1;");
+                    dbManager.update("update IP_ADDRESS set ip_addr = \"" + editTextAddress.getText() + "\" where _id = 1;");
 
-                    try {
-                        myClientTask.cancel(true);
-
-                    } catch (Exception e) {
-                        textResponse.append(e.toString() + "\n");
-                        textResponse.append("쓰레드 종료 에러");
-                    }
+//                    try {
+//                        myClientTask.cancel(true);
+//
+//                    } catch (Exception e) {
+//                        textResponse.append(e.toString() + "\n");
+//                        textResponse.append("쓰레드 종료 에러");
+//                    }
 
                     textResponse.append("연결 실행..\n");
-                    myClientTask = new MyClientTask(
+                    myClientTask[number_thread] = new MyClientTask(
                             editTextAddress.getText().toString(),
                             Integer.parseInt(editTextPort.getText().toString()));
                     textResponse.append("쓰레드 클래스 생성\n");
-                    myClientTask.execute();
+                    myClientTask[number_thread].execute();
 
                 }
             };
@@ -192,6 +199,19 @@ public class MainActivity extends Activity {
         }
 
         @Override
+        protected void onPreExecute() {
+            number_thread++;
+            runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            textResponse.append(number_thread + "\n");
+                        }
+                    });
+            super.onPreExecute();
+        }
+
+        @Override
         protected Void doInBackground(Void... arg0) {
 
 
@@ -206,6 +226,9 @@ public class MainActivity extends Activity {
                             }
                         });
                 socket = new Socket(dstAddress, dstPort);
+
+//                socket.setSoTimeout(3000);
+
                 OutputStream out;
                 InputStream in;
                 PrintWriter pw;
@@ -226,6 +249,7 @@ public class MainActivity extends Activity {
      * notice:
      * inputStream.read() will block if no data return
      */
+
                 runOnUiThread(
                         new Runnable() {
                             @Override
@@ -234,9 +258,26 @@ public class MainActivity extends Activity {
                             }
                         });
                 String line = null;
+
+                runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                textResponse.append(number_thread + "Waiting readLine\n");
+                            }
+                        });
+
+
                 if ((line = br.readLine()) != null) {
                     System.out.println(line);
 
+                    runOnUiThread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    textResponse.append(number_thread + "Passed readLine\n");
+                                }
+                            });
 
                     if (line.startsWith("SSH") || line.startsWith("change")) {
                         //데이터가 켜질 때 까지 무한 루프 켜지면 끄기
@@ -262,6 +303,35 @@ public class MainActivity extends Activity {
                                 }
                             });
                 }
+
+                //켜져 있으면 무한루프 꺼져 있으면 켜기
+                while (isMobileDataEnabledFromLollipop(getApplicationContext())) {
+                }
+                setMobileNetworkfromLollipop(getApplicationContext());
+
+                System.out.println("working!!");
+                runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                textResponse.append("waiting..." + "\n");
+                            }
+                        });
+                Thread.sleep(1000 * 10);
+
+
+                if (isCancelled()) {
+                    return null;
+                }
+
+//
+//                        myClientTask = new MyClientTask(
+//                                dstAddress,
+//                                dstPort);
+//                        myClientTask.execute();
+
+
+
                 /*while ((bytesRead = inputStream.read(buffer)) != -1){
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
                     response += byteArrayOutputStream.toString("UTF-8");
@@ -269,12 +339,8 @@ public class MainActivity extends Activity {
 
             } catch (Exception e) {
                 //Log.(e.toString());
-                response = "IOException: " + e.toString();
-                try {
-
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                response = "소켓 연결이 해제 됐습니다";
+                istask_closed = true;
 
             } finally {
                 if (socket != null) {
@@ -287,41 +353,10 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                try {
-                    //켜져 있으면 무한루프 꺼져 있으면 켜기
-                    while (isMobileDataEnabledFromLollipop(getApplicationContext())) {
-                    }
-                    setMobileNetworkfromLollipop(getApplicationContext());
-
-                    System.out.println("working!!");
-                    runOnUiThread(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    textResponse.append("waiting..." + "\n");
-                                }
-                            });
-                    Thread.sleep(1000 * 10);
-
-                    if (!isCancelled()) {
-                        myClientTask = new MyClientTask(
-                                dstAddress,
-                                dstPort);
-                        myClientTask.execute();
-                    }
-
-//
-//                        myClientTask = new MyClientTask(
-//                                dstAddress,
-//                                dstPort);
-//                        myClientTask.execute();
-
-
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
 
             }
+
+
             return null;
         }
 
@@ -329,6 +364,22 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             textResponse.setText(response + "\n");
+            number_thread--;
+            runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            textResponse.append(number_thread + "\n");
+                        }
+                    });
+
+            if (!istask_closed) {
+                myClientTask[number_thread] = new MyClientTask(
+                        dstAddress,
+                        dstPort);
+                myClientTask[number_thread].execute();
+            }
+            istask_closed = false;
             super.onPostExecute(result);
         }
 
@@ -444,6 +495,16 @@ public class MainActivity extends Activity {
             } finally {
                 success = true;
             }
+        }
+    }
+
+    public static void clearAsyncTask(AsyncTask<?, ?, ?> asyncTask) {
+        if (asyncTask != null) {
+            if (!asyncTask.isCancelled()) {
+                asyncTask.cancel(true);
+            }
+            asyncTask = null;
+
         }
     }
 

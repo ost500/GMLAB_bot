@@ -330,5 +330,22 @@ namespace WindowsFormsApplication1
             like_thr = new Thread(ipchanger.StartListening);
             like_thr.Start();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (ipchanger.socket_check())
+            {
+                log("socket connected");
+            }
+            else
+            {
+                log("socket not connected");
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            ipchanger.send_change();
+        }
     }
 }
