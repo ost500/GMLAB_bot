@@ -28,7 +28,7 @@ namespace WindowsFormsApplication1
             ds = new DataSet();
         }
 
-        public DataTable SelectData(int index)
+        public DataTable SelectData()
         {
             ds = new DataSet();
             try
@@ -39,6 +39,8 @@ namespace WindowsFormsApplication1
                 context.textBox1.AppendText(context.user);
                 context.log(context.user + " <= contect user");
                 string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' ORDER BY work_number";
+
+                
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
@@ -109,6 +111,50 @@ namespace WindowsFormsApplication1
             }
             return ds.Tables[0];
         }
+
+
+        public DataTable Select_comments()
+        {
+            ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                context.textBox1.AppendText(context.user);
+                string sql = "SELECT * FROM insta_comment WHERE mb_id = '" + context.user + "' ORDER BY work_number";
+
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "comments");
+
+
+
+
+                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "    \n";
+
+
+
+
+                if (ds.Tables.Count > 0)
+                {
+                    //foreach (DataRow r in ds.Tables[0].Rows)
+                    //{
+                    //    Console.WriteLine(r["ID"]);
+                    //    textBox1.Text += r["ID"].ToString();
+                    //}
+                    return ds.Tables[0];
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                //context.button1.Text = "Failed";
+            }
+            return ds.Tables[0];
+        }
+
+        ////////// Select_comments function closed   //////////
+
+
 
         public void Update_worknum()
         {

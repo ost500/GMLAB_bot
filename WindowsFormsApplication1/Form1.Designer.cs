@@ -125,7 +125,7 @@
             this.textBox3.PasswordChar = '*';
             this.textBox3.Size = new System.Drawing.Size(100, 21);
             this.textBox3.TabIndex = 3;
-            this.textBox3.Text = "zlaekdus0905";
+            this.textBox3.Text = "1a2s3d4f";
             // 
             // button2
             // 
@@ -196,7 +196,7 @@
             // account_label
             // 
             this.account_label.AutoSize = true;
-            this.account_label.Font = new System.Drawing.Font("굴림", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.account_label.Font = new System.Drawing.Font("Gulim", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.account_label.Location = new System.Drawing.Point(21, 26);
             this.account_label.Name = "account_label";
             this.account_label.Size = new System.Drawing.Size(110, 19);
