@@ -6,7 +6,8 @@ using System.Data;
 using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium.Remote;
+
+
 
 namespace WindowsFormsApplication1
 {
@@ -19,6 +20,7 @@ namespace WindowsFormsApplication1
         private bool acceptNextAlert = true;
         Form1 context;
         WebDriverWait wait;
+        
         IWebElement myDynamicElement;
         int sleep_t;
 
@@ -34,8 +36,12 @@ namespace WindowsFormsApplication1
         static public DateTime follow_time;
         static public DateTime like_time;
 
+
         private int like_time_sec = 11;
         private int follow_time_min = 3;
+
+
+        static public DateTime comment_time;
 
 
 
@@ -51,6 +57,7 @@ namespace WindowsFormsApplication1
             r = context.r;
 
             follow_time = DateTime.Now;
+            comment_time = DateTime.Now;
 
             int time;
 
@@ -63,6 +70,9 @@ namespace WindowsFormsApplication1
                 follow_time_min = time;
             }
             
+
+
+           
 
         }
 
@@ -105,6 +115,27 @@ namespace WindowsFormsApplication1
         }
 
 
+        public bool comment_time_gap()
+        {
+            DateTime now = DateTime.Now;
+            
+            log(now.ToString());
+            log(comment_time.ToString());
+            log(now.Subtract(comment_time).TotalMinutes.ToString() + "comment_time_gap");
+
+            if (now.Subtract(comment_time).TotalMinutes > 1)
+            {
+                comment_time = DateTime.Now;
+                return true;
+            }
+            else
+            {
+                log("no work");
+                //Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                return false;
+            }
+        }
+       
 
         public void log(string logging)
         {
@@ -116,7 +147,7 @@ namespace WindowsFormsApplication1
         {
 
 
-            t = conn_manager.SelectData(4);
+            t = conn_manager.SelectData();
             r = t.Rows[0];
             log("row[0]" + t.Rows[0]["user_id"]);
             //log("row[1]" + t.Rows[1]);
@@ -136,7 +167,7 @@ namespace WindowsFormsApplication1
             //String path = "D:\\chrome_cache\\" + r["user_id"].ToString();
             log(r["user_id"].ToString());
             string a = r["user_id"].ToString();
-            string path = "D:\\chrome_cache\\" + a.Trim();
+            string path = "E:\\chrome_cache\\" + a.Trim();
 
             ChromeOptions co = new ChromeOptions();
 
@@ -160,29 +191,99 @@ namespace WindowsFormsApplication1
 
             driver.Navigate().GoToUrl(baseURL + "/");
             log("메인으로 갔습니다");
-
+           
 
         }
 
         public bool block_check()
         {
+            try
+            {
+
+                log("hhhhhhh");
+                log(driver.FindElement(By.CssSelector("a._fcn8k")).Text);
+                Assert.AreEqual("Log in", driver.FindElement(By.CssSelector("a._fcn8k")).Text);
+                log("after");
+                new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
+                log("Language Changed");
+            }
+            catch (Exception e)
+            {
+                context.log("It's Koreean");
+            }
+            
 
             try
             {
                 //로그인 버튼이 안뜨고 에러가 난다면 로그인이 돼 있다는 얘기
+
+               
+                // If Language is not Korean, then Change language to Korean
+                /*  String lang = driver.FindElement(By.CssSelector("select._nif11")).Selected();
+                  log(lang);
+                  if (lang !="Korean" || lang != "한국어"){
+                      log("IAM HERE");
+                      new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("한국어");
+                      log("Language Changed");
+
+                  } else if (lang == "한국어") { log("do nothing");  }
+                  */
+
+
+
                 wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
                 myDynamicElement = wait.Until(d => d.FindElement(By.LinkText("로그인")));
+
+               
+                
             }
             catch (Exception ex)
             {
                 try
                 {
+                   
                     Assert.AreEqual("계정 인증", driver.FindElement(By.CssSelector("h2")).Text);
                     //계정 인증 메세지가 나오면 막힌 계정임
                     log("에러가 났습니다");
                 }
                 catch (Exception e)
                 {
+                    try
+                    {
+                        
+                       //check for Profile Keyword 
+                        Assert.AreEqual("Profile", driver.FindElement(By.LinkText("Profile")).Text);
+                        //if Profile Word exist [means lanuage is English] then click on the Profile 
+                        driver.FindElement(By.LinkText("Profile")).Click();
+                        //Now Change the language to Korean
+                        new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
+                        log("Language Changed after login");
+                    }
+                   catch (Exception exe)
+                    {
+                         log("korean");
+                       //  return false;
+                    } 
+
+                    /* wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                     myDynamicElement = wait.Until(d => d.FindElement(By.LinkText("로그인")));
+                     //click on profile
+                        driver.FindElement(By.LinkText("프로필")).Click();
+                        log("Profile Clicked");
+
+                        // If Language is not Korean, then Change language to Korean
+                        String lang = driver.FindElement(By.CssSelector("select._nif11")).Text;
+
+                        if (lang != "Korean" || lang != "한국어")
+                        {
+
+                            new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("한국어");
+                            log("Language Changed from pofile");
+
+                        }
+                        else if (lang == "한국어") { log("do nothing man"); }
+                        */
+
                     //안나오면 정상 가동
                     log("계정 인증이 없다");
                     return false;
@@ -407,14 +508,26 @@ namespace WindowsFormsApplication1
 
                     }
 
+                   //comment portion
+                  if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
+                    {
+                        if (comment_time_gap())
+                        {
 
+                            t = conn_manager.Select_comments();
 
+                            string a = t.Rows[0]["comment"].ToString();
 
-
-
-
-                    if (!IsElementPresent(By.LinkText("다음")))
-                    //"다음"이 없을 때
+                            //팔로우를 찾아서 있으면 진행 없으면 에러
+                             driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(a);
+                             driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
+                          
+                        }
+                       Thread.Sleep(rnd.Next(1000, 3000));
+                    }
+                    
+                    
+                    if (!IsElementPresent(By.LinkText("다음")))  //"다음"이 없을 때
                     {
                         //다음이 없고 follow는 안했을 때 대기
                         if (!follow_time_gap())
@@ -425,8 +538,7 @@ namespace WindowsFormsApplication1
                         break;
                     }
                     else
-                    //"다음"이 있을 때
-                    {
+                    {  //"다음"이 있을 때
                         driver.FindElement(By.LinkText("다음")).Click();
 
                         log("다음 게시물로 넘어갑니다");
@@ -522,8 +634,11 @@ namespace WindowsFormsApplication1
             
         }
 
+       
 
-
+        /// <summary>
+        /// Function for following users:follow_loop() begins
+        /// </summary>
         public void follow_loop()
         {
 

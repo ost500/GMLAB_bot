@@ -135,10 +135,11 @@ namespace WindowsFormsApplication1
 
             catch (Exception ex)
             {
-               // Invoke(new MethodInvoker(delegate ()
-              //  {
-                    textBox1.Text = ex.StackTrace;
-              //  }));
+                Invoke(new MethodInvoker(delegate ()
+                {
+                   textBox1.Text = ex.StackTrace;
+                  //  textBox1.Text ="ERROR";
+                }));
             }
            
 
@@ -236,7 +237,7 @@ namespace WindowsFormsApplication1
                     //시작 버튼 활성화 시도
                     start_button_valid("login");
 
-                    t = conn_manager.SelectData(1);
+                    t = conn_manager.SelectData();
                     r = t.Rows[0];
 
                     foreach (DataRow r in t.Rows)
@@ -312,7 +313,7 @@ namespace WindowsFormsApplication1
         private void button5_Click(object sender, EventArgs e)
         {
             log(conn_manager.Select_content()["content"].ToString());
-            t = conn_manager.SelectData(1);
+            t = conn_manager.SelectData();
             r = t.Rows[0];
 
             foreach (DataRow r in t.Rows)
