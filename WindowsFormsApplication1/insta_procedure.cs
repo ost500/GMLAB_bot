@@ -34,6 +34,9 @@ namespace WindowsFormsApplication1
         static public DateTime follow_time;
         static public DateTime like_time;
 
+        private int like_time_sec = 11;
+        private int follow_time_min = 3;
+
 
 
         public insta_procedure(Form1 context, sql_connection_manager conn_manager)
@@ -48,6 +51,18 @@ namespace WindowsFormsApplication1
             r = context.r;
 
             follow_time = DateTime.Now;
+
+            int time;
+
+            if ((time = (int) conn_manager.select_configuration()["delay_like"]) != null)
+            {
+                like_time_sec = time;
+            }
+            if ((time = (int)conn_manager.select_configuration()["delay_follow"]) != null)
+            {
+                follow_time_min = time;
+            }
+            
 
         }
 
@@ -194,6 +209,7 @@ namespace WindowsFormsApplication1
             driver.FindElement(By.Name("username")).SendKeys(r["user_id"].ToString());
             driver.FindElement(By.Name("password")).Clear();
             driver.FindElement(By.Name("password")).SendKeys(r["user_pass"].ToString());
+            
             Thread.Sleep(rnd.Next(1000, 3000));
             driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div[2]/div/div/form/span/button")).Click();
 
@@ -230,8 +246,30 @@ namespace WindowsFormsApplication1
             Thread.Sleep(rnd.Next(1000, 3000));
         }
 
+        public void require()
+        {
+            DataRow require_table = conn_manager.select_request();
+            go_to_there("/" + require_table["account"]);
+            Thread.Sleep(rnd.Next(1000, 3000));
+        }
 
-        public void like_loop(int follow_count)
+        public int require_follow_count()
+        {
+            DataRow require_table = conn_manager.select_request();
+            context.log("follow required" + ((int)require_table["request_follow"] - (int)require_table["done_follow"]).ToString());
+            return (int)require_table["request_follow"]-(int)require_table["done_follow"];
+            
+        }
+
+        public int require_like_count()
+        {
+            DataRow require_table = conn_manager.select_request();
+            context.log("like required" + ((int)require_table["request_like"] - (int)require_table["done_like"]).ToString());
+            return (int)require_table["request_like"] - (int)require_table["done_like"];
+            
+        }
+
+        public void like_loop(int follow_count, int like_count = 1000)
         {
 
 

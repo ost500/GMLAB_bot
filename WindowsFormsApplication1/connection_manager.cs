@@ -303,5 +303,85 @@ namespace WindowsFormsApplication1
             conn.Open();
         }
 
+        public DataRow select_request()
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_request_job " +
+                             "WHERE request_follow > done_follow " +
+                             "OR request_like > done_like ";
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "request");
+
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0];
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            return ds.Tables[0].Rows[0];
+        }
+
+        public DataRow select_configuration()
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_job " +
+                             "WHERE account_id = " + ds.Tables[0].Rows[0]["no"];
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "request");
+
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0];
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            return null;
+        }
+
+        public void insert_insta_job()
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_account ";
+                             
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "request");
+
+
+                foreach (DataRow r in ds.Tables[0].Rows)
+                {
+                    context.log(r["user_id"].ToString());
+                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `account_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`) VALUES(NULL, 'admin', '"+ r["user_id"] + "', '3', '11', '11', '3', '0', '0');", conn);
+                    context.textBox1.AppendText("차단 기록");
+                    cmd2.ExecuteNonQuery();
+
+                }
+
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            
+        }
+
     }
 }

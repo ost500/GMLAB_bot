@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
                     textResponse.append("쓰레드 종료 에러2");
                 }
 //
-
+                istask_closed = true;
 
                 textResponse.append("접속 종료..\n");
             }
@@ -340,7 +340,7 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 //Log.(e.toString());
                 response = "소켓 연결이 해제 됐습니다";
-                istask_closed = true;
+
 
             } finally {
                 if (socket != null) {

@@ -113,16 +113,21 @@ namespace WindowsFormsApplication1
                 insta_run.random_user();
 
                 insta_run.like_loop(1);
-                
+
 
                 //insta_run.logout();
 
                 //3. 요청 유저
                 //팔로우, 좋아요
+                insta_run.require();
+
+                insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
+
 
                 insta_run.quit();
 
-                ipchanger.send_change();
+
+                new Thread(ipchanger.send_change).Start();
 
 
 
@@ -293,7 +298,7 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("저장된 설정이 없습니다");
             }
 
-
+            
 
 
         }
@@ -301,7 +306,7 @@ namespace WindowsFormsApplication1
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            log(conn_manager.select_request()["mb_id"].ToString());
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -318,7 +323,7 @@ namespace WindowsFormsApplication1
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            conn_manager.insert_insta_job();
         }
 
 
@@ -357,7 +362,7 @@ namespace WindowsFormsApplication1
 
         private void button8_Click(object sender, EventArgs e)
         {
-            ipchanger.send_change();
+            new Thread(ipchanger.send_change).Start();
         }
     }
 }
