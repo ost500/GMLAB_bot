@@ -529,13 +529,24 @@ namespace WindowsFormsApplication1
                     
                     if (!IsElementPresent(By.LinkText("다음")))  //"다음"이 없을 때
                     {
-                        //다음이 없고 follow는 안했을 때 대기
-                        if (!follow_time_gap())
+                        
+                        try
                         {
-                            DateTime now = DateTime.Now;
-                            Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                            //check already follow 
+                            //If it is true, break
+                            Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//button")).Text);
+                            //다음이 없고 follow는 안했을 때 대기
+                            if (!follow_time_gap())
+                            {
+                                DateTime now = DateTime.Now;
+                                Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                            }
+                            
+                            //팔로우 
                         }
+                        catch(Exception ex) { log("이미 팔로우 했습니다"); }
                         break;
+
                     }
                     else
                     {  //"다음"이 있을 때

@@ -79,70 +79,70 @@ namespace WindowsFormsApplication1
 
         public void like_proc()
         {
-
-            try
+            while (true)
             {
-
-                insta_procedure insta_run = new insta_procedure(this, conn_manager);
-
-                //시작
-
-
-
-                insta_run.start();
-
-
-                if (insta_run.block_check())
+                try
                 {
-                    //막힌 계정이면 끄고 루프 탈출
+
+                    insta_procedure insta_run = new insta_procedure(this, conn_manager);
+
+                    //시작
+
+
+
+                    insta_run.start();
+
+
+                    if (insta_run.block_check())
+                    {
+                        //막힌 계정이면 끄고 루프 탈출
+                        insta_run.quit();
+                        return;
+                    }
+                    //막힌 계정이 아니면 로그인
+
+
+                    ////1.해시태그 검색
+                    //insta_run.hash_tag_search();
+
+                    ////좋아요 루프
+                    //insta_run.like_loop(1);
+
+
+
+                    ////2. 등록된 유저 검색
+                    //insta_run.random_user();
+
+                    //insta_run.like_loop(1);
+
+
+                    //insta_run.logout();
+
+                    //3. 요청 유저
+                    //팔로우, 좋아요
+                    insta_run.require();
+
+                    insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
+
+
                     insta_run.quit();
-                    return;
+
+
+                    new Thread(ipchanger.send_change).Start();
+                    Thread.Sleep(5000);
+
+
                 }
-                //막힌 계정이 아니면 로그인
 
-
-                //1.해시태그 검색
-                insta_run.hash_tag_search();
-
-                //좋아요 루프
-                insta_run.like_loop(1);
-
-
-
-                //2. 등록된 유저 검색
-                insta_run.random_user();
-
-                insta_run.like_loop(1);
-
-
-                //insta_run.logout();
-
-                //3. 요청 유저
-                //팔로우, 좋아요
-                insta_run.require();
-
-                insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
-
-
-                insta_run.quit();
-
-
-                new Thread(ipchanger.send_change).Start();
-
-
-
-            }
-
-            catch (Exception ex)
-            {
-                Invoke(new MethodInvoker(delegate ()
+                catch (Exception ex)
                 {
-                   textBox1.Text = ex.StackTrace;
-                  //  textBox1.Text ="ERROR";
-                }));
+                    Invoke(new MethodInvoker(delegate ()
+                    {
+                        log(ex.StackTrace);
+                        //  textBox1.Text ="ERROR";
+                    }));
+                }
             }
-           
-
 
         }
 
