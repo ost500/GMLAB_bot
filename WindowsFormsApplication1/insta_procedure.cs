@@ -59,16 +59,16 @@ namespace WindowsFormsApplication1
             follow_time = DateTime.Now;
             comment_time = DateTime.Now;
 
-            int time;
+            //int time;
 
-            if ((time = (int) conn_manager.select_configuration()["delay_like"]) != null)
-            {
-                like_time_sec = time;
-            }
-            if ((time = (int)conn_manager.select_configuration()["delay_follow"]) != null)
-            {
-                follow_time_min = time;
-            }
+            //if ((time = (int) conn_manager.select_configuration()["delay_like"]) != null)
+            //{
+            //    like_time_sec = time;
+            //}
+            //if ((time = (int)conn_manager.select_configuration()["delay_follow"]) != null)
+            //{
+            //    follow_time_min = time;
+            //}
             
 
 
@@ -167,7 +167,7 @@ namespace WindowsFormsApplication1
             //String path = "D:\\chrome_cache\\" + r["user_id"].ToString();
             log(r["user_id"].ToString());
             string a = r["user_id"].ToString();
-            string path = "E:\\chrome_cache\\" + a.Trim();
+            string path = "D:\\chrome_cache\\" + a.Trim();
 
             ChromeOptions co = new ChromeOptions();
 
