@@ -137,7 +137,7 @@ namespace WindowsFormsApplication1
             {
                 Invoke(new MethodInvoker(delegate ()
                 {
-                   textBox1.Text = ex.StackTrace;
+                   log(ex.StackTrace);
                   //  textBox1.Text ="ERROR";
                 }));
             }
@@ -279,7 +279,7 @@ namespace WindowsFormsApplication1
 
             try
             {
-                DataRow dr = conn_manager.select_job(selected_account);
+                DataRow dr = conn_manager.Select_job(selected_account);
                 limit_comment.Text = dr["comments"].ToString();
                 limit_follow.Text = dr["follows"].ToString();
                 limit_like.Text = dr["likes"].ToString();
