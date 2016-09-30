@@ -20,8 +20,8 @@ namespace WindowsFormsApplication1
             conn = new MySqlConnection(strConn);
 
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
-            context.textBox1.Text += cmd.ExecuteNonQuery();
+            //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
+            //context.textBox1.Text += cmd.ExecuteNonQuery();
 
             this.context = context;
 
@@ -126,7 +126,8 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "comments");
 
-
+                MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_comment SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
+                cmd2.ExecuteNonQuery();
 
 
                 context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "    \n";
@@ -224,7 +225,12 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_tag WHERE mb_id = '" + context.user + "' ORDER BY work_number";
+                string sql =
+                    "SELECT insta_tag.no, insta_tag.tag, insta_tag_my.mb_id " +
+                    "FROM insta_tag, insta_tag_my " +
+                    "WHERE insta_tag_my.group_id = insta_tag.group_id " +
+                    "AND insta_tag_my.mb_id = '" + context.user + "' " +
+                    "ORDER BY work_number;";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
@@ -357,10 +363,19 @@ namespace WindowsFormsApplication1
 
         public void mysql_refresh()
         {
-            String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
-            conn = new MySqlConnection(strConn);
+            try
+            {
+                String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
+                conn = new MySqlConnection(strConn);
 
-            conn.Open();
+                conn.Open();
+            }
+            catch (Exception ex)
+            {
+                context.log("mysql refresh error");
+                context.log(ex.StackTrace);
+            }
+
         }
 
         public DataRow select_request()
