@@ -121,7 +121,15 @@ namespace WindowsFormsApplication1
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 context.textBox1.AppendText(context.user);
-                string sql = "SELECT * FROM insta_comment WHERE mb_id = '" + context.user + "' ORDER BY work_number";
+
+                string sql =
+                    "SELECT insta_comment.no, insta_comment.tag, insta_comment_my.mb_id " +
+                    "FROM insta_tag, insta_tag_my " +
+                    "WHERE insta_tag_my.group_id = insta_tag.group_id " +
+                    "AND insta_tag_my.mb_id = '" + context.user + "' " +
+                    "ORDER BY work_number;";
+
+                
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "comments");
@@ -226,13 +234,16 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "---------    \n";
-                MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
-                cmd2.ExecuteNonQuery();
+                
 
 
                 if (ds.Tables.Count > 0)
                 {
+
+                    context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "---------    \n";
+                    MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
+                    cmd2.ExecuteNonQuery();
+
                     //foreach (DataRow r in ds.Tables[0].Rows)
                     //{
                     //    context.textBox1.AppendText(r["tag"].ToString());
