@@ -103,6 +103,7 @@ namespace WindowsFormsApplication1
             conn.mysql_refresh();
 
             //시작 버튼 활성화 시도
+          
             context.start_button_valid("phone");
 
         }

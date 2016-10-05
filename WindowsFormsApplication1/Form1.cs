@@ -208,7 +208,39 @@ namespace WindowsFormsApplication1
         //}
 
 
+        //CHECK STATUS OF HASH TAGS FOR A USER
+        public bool checkHashTag()
+        {
+            DataRow row = conn_manager.check_hashtag();
+            if (row == null)
+            {
+                log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
+                log("PLEASE LOG IN HERE: http://easygram.kr/   & ADD FEW HASH TAGS");
+                return false;
+            }
+            else
+            {
+                log("continue");
+                return true;
+            }
+        }
+        //CHECK STATUS OF COMMENTS FOR A USER
+        public bool checkCommentStatus()
+        {
+            DataRow row = conn_manager.check_comments();
+            if (row == null)
+            {
+                log("YOU NEED TO ENTER  COMMENTS");
+                log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD FEW COMMENTS");
+                return false;
+            }
+            else
+            {
+                log("continue");
+                return true;
+            }
 
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -233,12 +265,14 @@ namespace WindowsFormsApplication1
 
                 if (responseString == "clear")
                 {
+
+
+
                     MessageBox.Show("success");
                     textBox1.AppendText("로그인 성공");
                     user = values["mb_id"];
 
-                    //시작 버튼 활성화 시도
-                    start_button_valid("login");
+                   
 
                     t = conn_manager.SelectData();
                     r = t.Rows[0];
@@ -247,6 +281,15 @@ namespace WindowsFormsApplication1
                     {
                         listBox1.Items.Add(r["user_id"]);
                     }
+
+                    //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
+
+                    if (checkCommentStatus() && checkHashTag())
+                    { //시작 버튼 활성화 시도
+                        start_button_valid("login");
+                    }
+                    else { MessageBox.Show("Some Initial Data Required "); }
+
                 }
                 else
                 {
@@ -260,12 +303,18 @@ namespace WindowsFormsApplication1
         {
             if (LorP == "login")
             {
+               
                 ready_login = true;
+                ready_phone = true;//testing only
             }
-            else if (LorP == "phone")
+
+            if (LorP == "phone")
             {
                 ready_phone = true;
+                ready_login = true;//testing only
             }
+
+           // log("LN "+ready_login.ToString()); log("PH "+ready_phone.ToString());
 
             if (ready_login && ready_phone)
             {
@@ -283,19 +332,21 @@ namespace WindowsFormsApplication1
             try
             {
                 DataRow dr = conn_manager.Select_job(selected_account);
-                limit_comment.Text = dr["comments"].ToString();
-                limit_follow.Text = dr["follows"].ToString();
-                limit_like.Text = dr["likes"].ToString();
-                limit_unfollow.Text = dr["unfollows"].ToString();
+                
+                    limit_comment.Text = dr["limit_comments"].ToString();
+                    limit_follow.Text = dr["limit_follows"].ToString();
+                    limit_like.Text = dr["limit_likes"].ToString();
+                    //limit_unfollow.Text = dr["unfollows"].ToString();
+                    
 
+                    delay_follow.Text = dr["delay_follow"].ToString();
+                    delay_like.Text = dr["delay_like"].ToString();
+                    delay_unfollow.Text = dr["delay_unfollow"].ToString();
+                    delay_comment.Text = dr["delay_comment"].ToString();
 
-                delay_follow.Text = dr["delay_follow"].ToString();
-                delay_like.Text = dr["delay_like"].ToString();
-                delay_unfollow.Text = dr["delay_unfollow"].ToString();
-                delay_comment.Text = dr["delay_comment"].ToString();
-
-                time_start.Text = dr["hour_between_start"].ToString();
-                time_finish.Text = dr["hour_between_end"].ToString();
+                    time_start.Text = dr["hour_between_start"].ToString();
+                    time_finish.Text = dr["hour_between_end"].ToString();
+                
             }
             catch (IndexOutOfRangeException ex)
             {

@@ -86,38 +86,7 @@ namespace WindowsFormsApplication1
             return path;
         }
 
-        //CHECK STATUS OF HASH TAGS FOR A USER
-        public bool checkHashTag() {
-            DataRow row = conn_manager.check_hashtag();
-            if (row == null)
-            {
-                log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
-                log("PLEASE LOG IN HERE: http://easygram.kr/   & ADD FEW HASH TAGS");
-                return false;
-            }
-            else
-            {
-                log("continue");
-                return true;
-            }
-        }
-        //CHECK STATUS OF COMMENTS FOR A USER
-        public bool checkCommentStatus()
-        {
-            DataRow row = conn_manager.check_comments();
-            if (row == null)
-            {
-                log("YOU NEED TO ENTER  COMMENTS");
-                log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD FEW COMMENTS");
-                return false;
-            }
-            else
-            {
-                log("continue");
-                return true;
-            }
-
-        }
+      
         //CHECK STATUS OF JOB FOR A USER 
         public bool checkJobStatus(string user_id) {
 
@@ -369,9 +338,9 @@ namespace WindowsFormsApplication1
 
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
 
-                if (!checkHashTag()) { log("STOP"); return true; }
-                if (!checkCommentStatus()) { log("STOP"); return true; }
-                if (!checkJobStatus(current_user)) { log("STOP"); return true; }
+              //  if (!checkHashTag()) { log("STOP"); return true; }
+              //  if (!checkCommentStatus()) { log("STOP"); return true; }
+                if (!checkJobStatus(current_user)) { log("STOPPED!!"); return true; }
 
                 //로그인 버튼이 안뜨고 에러가 난다면 로그인이 돼 있다는 얘기
 
@@ -422,7 +391,7 @@ namespace WindowsFormsApplication1
             }
 
             log("로그인 버튼이 있다");
-            login();
+            login(); //instagram login
 
 
             return false;
