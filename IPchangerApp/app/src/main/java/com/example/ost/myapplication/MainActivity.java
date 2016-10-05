@@ -1,9 +1,27 @@
 package com.example.ost.myapplication;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,39 +30,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Enumeration;
-
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.net.wifi.WifiManager;
-import android.nfc.Tag;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.app.Activity;
-import android.provider.Settings;
-import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyManager;
-import android.text.format.Formatter;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends Activity {
 
@@ -52,7 +42,10 @@ public class MainActivity extends Activity {
     EditText editTextAddress, editTextPort;
     Button buttonConnect, buttonClear, buttonClose;
     Socket socket = null;
-    MyClientTask myClientTask;
+    MyClientTask[] myClientTask;
+    IP_save dbManager;
+    int number_thread = 0;
+    boolean istask_closed = false;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -64,6 +57,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myClientTask = new MyClientTask[10];
+
+
+
         editTextAddress = (EditText) findViewById(R.id.address);
         editTextPort = (EditText) findViewById(R.id.port);
         buttonConnect = (Button) findViewById(R.id.connect);
@@ -72,26 +69,39 @@ public class MainActivity extends Activity {
         textResponse = (TextView) findViewById(R.id.response);
 
 
+        dbManager = new IP_save(getApplicationContext(), "ip_addr.db", null, 1);
+
+
+        editTextAddress.setText(dbManager.PrintData());
+
+
         buttonConnect.setOnClickListener(buttonConnectOnClickListener);
         buttonClose.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
                     if (socket != null) {
                         socket.close();
+
                         textResponse.append("소켓 종료..\n");
                     }
                 } catch (IOException e) {
                     textResponse.append(e.toString() + "\n");
                     e.printStackTrace();
                 }
+
+
                 try {
-                    myClientTask.cancel(true);
+
+                    clearAsyncTask(myClientTask[number_thread]);
+
                 } catch (Exception e) {
                     textResponse.append(e.toString() + "\n쓰레드 종료 에러1");
                     textResponse.append("쓰레드 종료 에러2");
                 }
-
+//
+                istask_closed = true;
 
                 textResponse.append("접속 종료..\n");
             }
@@ -108,15 +118,6 @@ public class MainActivity extends Activity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
 
-        runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        textResponse.append("아이피 주소..\n");
-                        textResponse.append(getLocalIpAddress() + "\n");
-                    }
-                });
-
     }
 
     OnClickListener buttonConnectOnClickListener =
@@ -125,20 +126,22 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View arg0) {
 
-                    try {
-                        myClientTask.cancel(true);
+                    dbManager.update("update IP_ADDRESS set ip_addr = \"" + editTextAddress.getText() + "\" where _id = 1;");
 
-                    } catch (Exception e) {
-                        textResponse.append(e.toString() + "\n");
-                        textResponse.append("쓰레드 종료 에러");
-                    }
+//                    try {
+//                        myClientTask.cancel(true);
+//
+//                    } catch (Exception e) {
+//                        textResponse.append(e.toString() + "\n");
+//                        textResponse.append("쓰레드 종료 에러");
+//                    }
 
                     textResponse.append("연결 실행..\n");
-                    myClientTask = new MyClientTask(
+                    myClientTask[number_thread] = new MyClientTask(
                             editTextAddress.getText().toString(),
                             Integer.parseInt(editTextPort.getText().toString()));
                     textResponse.append("쓰레드 클래스 생성\n");
-                    myClientTask.execute();
+                    myClientTask[number_thread].execute();
 
                 }
             };
@@ -196,6 +199,19 @@ public class MainActivity extends Activity {
         }
 
         @Override
+        protected void onPreExecute() {
+            number_thread++;
+            runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            textResponse.append(number_thread + "\n");
+                        }
+                    });
+            super.onPreExecute();
+        }
+
+        @Override
         protected Void doInBackground(Void... arg0) {
 
 
@@ -210,6 +226,9 @@ public class MainActivity extends Activity {
                             }
                         });
                 socket = new Socket(dstAddress, dstPort);
+
+//                socket.setSoTimeout(3000);
+
                 OutputStream out;
                 InputStream in;
                 PrintWriter pw;
@@ -230,6 +249,7 @@ public class MainActivity extends Activity {
      * notice:
      * inputStream.read() will block if no data return
      */
+
                 runOnUiThread(
                         new Runnable() {
                             @Override
@@ -238,34 +258,35 @@ public class MainActivity extends Activity {
                             }
                         });
                 String line = null;
+
+                runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                textResponse.append(number_thread + "Waiting readLine\n");
+                            }
+                        });
+
+
                 if ((line = br.readLine()) != null) {
                     System.out.println(line);
 
+                    runOnUiThread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    textResponse.append(number_thread + "Passed readLine\n");
+                                }
+                            });
 
                     if (line.startsWith("SSH") || line.startsWith("change")) {
                         //데이터가 켜질 때 까지 무한 루프 켜지면 끄기
                         while (!isMobileDataEnabledFromLollipop(getApplicationContext())) {
                         }
 
-                        runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textResponse.append("아이피 주소..BEFORE\n");
-                                        textResponse.append(getLocalIpAddress() + "\n");
-                                    }
-                                });
 
                         setMobileNetworkfromLollipop(getApplicationContext());
 
-                        runOnUiThread(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textResponse.append("아이피 주소..AFTER\n");
-                                        textResponse.append(getLocalIpAddress() + "\n");
-                                    }
-                                });
 
                     } else if (line.startsWith("close")) {
                         socket.close();
@@ -282,6 +303,35 @@ public class MainActivity extends Activity {
                                 }
                             });
                 }
+
+                //켜져 있으면 무한루프 꺼져 있으면 켜기
+                while (isMobileDataEnabledFromLollipop(getApplicationContext())) {
+                }
+                setMobileNetworkfromLollipop(getApplicationContext());
+
+                System.out.println("working!!");
+                runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                textResponse.append("waiting..." + "\n");
+                            }
+                        });
+                Thread.sleep(1000 * 10);
+
+
+                if (isCancelled()) {
+                    return null;
+                }
+
+//
+//                        myClientTask = new MyClientTask(
+//                                dstAddress,
+//                                dstPort);
+//                        myClientTask.execute();
+
+
+
                 /*while ((bytesRead = inputStream.read(buffer)) != -1){
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
                     response += byteArrayOutputStream.toString("UTF-8");
@@ -289,12 +339,8 @@ public class MainActivity extends Activity {
 
             } catch (Exception e) {
                 //Log.(e.toString());
-                response = "IOException: " + e.toString();
-                try {
+                response = "소켓 연결이 해제 됐습니다";
 
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
 
             } finally {
                 if (socket != null) {
@@ -307,41 +353,10 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                try {
-                    //켜져 있으면 무한루프 꺼져 있으면 켜기
-                    while (isMobileDataEnabledFromLollipop(getApplicationContext())) {
-                    }
-                    setMobileNetworkfromLollipop(getApplicationContext());
-
-                    System.out.println("working!!");
-                    runOnUiThread(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    textResponse.append("waiting..." + "\n");
-                                }
-                            });
-                    Thread.sleep(1000 * 10);
-
-                    if (!isCancelled()) {
-                        myClientTask = new MyClientTask(
-                                dstAddress,
-                                dstPort);
-                        myClientTask.execute();
-                    }
-
-//
-//                        myClientTask = new MyClientTask(
-//                                dstAddress,
-//                                dstPort);
-//                        myClientTask.execute();
-
-
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
 
             }
+
+
             return null;
         }
 
@@ -349,6 +364,22 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             textResponse.setText(response + "\n");
+            number_thread--;
+            runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            textResponse.append(number_thread + "\n");
+                        }
+                    });
+
+            if (!istask_closed) {
+                myClientTask[number_thread] = new MyClientTask(
+                        dstAddress,
+                        dstPort);
+                myClientTask[number_thread].execute();
+            }
+            istask_closed = false;
             super.onPostExecute(result);
         }
 
@@ -464,6 +495,16 @@ public class MainActivity extends Activity {
             } finally {
                 success = true;
             }
+        }
+    }
+
+    public static void clearAsyncTask(AsyncTask<?, ?, ?> asyncTask) {
+        if (asyncTask != null) {
+            if (!asyncTask.isCancelled()) {
+                asyncTask.cancel(true);
+            }
+            asyncTask = null;
+
         }
     }
 

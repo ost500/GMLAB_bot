@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace WindowsFormsApplication1
 {
@@ -12,11 +13,14 @@ namespace WindowsFormsApplication1
         public static string data = null;
         private Form1 context;
         private sql_connection_manager conn;
+        private string current_IP;
 
         public IPchange(Form1 context, sql_connection_manager conn)
         {
             this.context = context;
             this.conn = conn;
+
+            current_IP = GetComputer_InternetIP();
         }
 
         public void StartListening()
@@ -28,7 +32,7 @@ namespace WindowsFormsApplication1
             // Establish the local endpoint for the socket.
             // Dns.GetHostName returns the name of the 
             // host running the application.
-            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+            IPHostEntry ipHostInfo =  Dns.Resolve(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 2222);
 
@@ -147,8 +151,36 @@ namespace WindowsFormsApplication1
                 Console.WriteLine(e.ToString());
                 context.log(e.ToString());
             }
-            context.log("변경 완료");
-            context.log("현재 아이피 : " + GetComputer_InternetIP() + "\n");
+
+            int IPchange_count = 1;
+
+            while (true)
+            {
+                //Sleep if IP was not changed
+                //Sleep if IPchange_count is not Zero
+                if (GetComputer_InternetIP() == current_IP && IPchange_count > 3)
+                {
+                    IPchange_count--;
+                    context.log("IP변경 시도중 " + IPchange_count);
+
+                    Thread.Sleep(1000);
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (IPchange_count > 3)
+            {
+                context.log("현재 아이피 : " + GetComputer_InternetIP());
+                context.log("변경 실패");
+            }
+            else
+            {
+                context.log("현재 아이피 : " + GetComputer_InternetIP());
+                context.log("변경 완료");
+            }
 
 
             //mysql 재연결
@@ -156,12 +188,35 @@ namespace WindowsFormsApplication1
         }
 
 
+        public void sleep_thread() { }
+
+        public void refresh_connection()
+        {
+            listener.Close();
+
+        }
+
 
         public string GetComputer_InternetIP()
         {
             string externalip = new WebClient().DownloadString("http://easygram.kr/ip.php");
 
             return externalip.Replace("\n", "");
+        }
+
+        //public bool socket_check()
+        //{
+        //    return listener.Connected;
+        //}
+
+        public bool socket_check()
+        {
+            bool part1 = listener.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (listener.Available == 0);
+            if (part1 && part2)
+                return false;
+            else
+                return true;
         }
 
     }

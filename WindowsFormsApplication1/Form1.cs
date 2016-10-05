@@ -19,7 +19,7 @@ namespace WindowsFormsApplication1
 
         public DataRow r;
         public DataTable t;
-
+        
         private IPchange ipchanger;
 
         private bool finished_follow = true;
@@ -28,6 +28,9 @@ namespace WindowsFormsApplication1
         //로그인 레디, 테더링 레디
         private bool ready_login = false;
         private bool ready_phone = false;
+
+        //Thread
+        private Thread like_thr;
 
         public Form1()
         {
@@ -57,68 +60,97 @@ namespace WindowsFormsApplication1
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            Thread like_thr = new Thread(ipchanger.StartListening);
+            like_thr = new Thread(ipchanger.StartListening);
             like_thr.Start();
         }
 
 
         public void log(string logging)
         {
-            textBox1.AppendText(Environment.NewLine);
-            textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-        }
+            
+                Invoke(new MethodInvoker(delegate () {
+
+                    textBox1.AppendText(Environment.NewLine);
+                    textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+
+                }));
+               
+          }
 
         public void like_proc()
         {
-
-            try
+            while (true)
             {
-
-                insta_procedure insta_run = new insta_procedure(this, conn_manager);
-
-                //시작
-
-
-
-                insta_run.start();
-
-
-                if (insta_run.block_check())
+                try
                 {
-                    //막힌 계정이면 끄고 루프 탈출
+
+                    insta_procedure insta_run = new insta_procedure(this, conn_manager);
+
+                    //시작
+
+
+
+                    insta_run.start();
+
+
+                    if (insta_run.block_check())
+                    {
+                        //막힌 계정이면 끄고 루프 탈출
+                        insta_run.quit();
+                        return;
+                    }
+                    //막힌 계정이 아니면 로그인
+
+
+
+                    //1.해시태그 검색
+                    insta_run.hash_tag_search();
+
+                    //좋아요 루프
+
+                   
+                    insta_run.like_loop(1);
+
+
+
+
+                    //2. 등록된 유저 검색
+
+
+
+                    insta_run.random_user();
+
+                    insta_run.like_loop(1);
+
+
+                    //insta_run.logout();
+
+                    //3. 요청 유저
+                    //팔로우, 좋아요
+                    insta_run.require();
+
+                    insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
+
+
                     insta_run.quit();
-                    return;
+
+
+                    new Thread(ipchanger.send_change).Start();
+                    Thread.Sleep(5000);
+
+
                 }
-                //막힌 계정이 아니면 로그인
 
+                catch (Exception ex)
+                {
 
-                //1.해시태그 검색
-                insta_run.hash_tag_search();
+                    Invoke(new MethodInvoker(delegate ()
+                    {
+                        log(ex.StackTrace);
+                        //  textBox1.Text ="ERROR";
+                    }));
+                }
 
-                //좋아요 루프
-                insta_run.like_loop(1);
-
-
-
-                //2. 등록된 유저 검색
-                insta_run.random_user();
-
-                insta_run.like_loop(1);
-
-
-                //insta_run.logout();
-
-                //3. 요청 유저
-                //팔로우, 좋아요
-
-                insta_run.quit();
-
-
-
-            }
-            catch (Exception ex)
-            {
-                textBox1.Text = ex.StackTrace;
             }
 
         }
@@ -214,7 +246,7 @@ namespace WindowsFormsApplication1
                     //시작 버튼 활성화 시도
                     start_button_valid("login");
 
-                    t = conn_manager.SelectData(1);
+                    t = conn_manager.SelectData();
                     r = t.Rows[0];
 
                     foreach (DataRow r in t.Rows)
@@ -256,7 +288,7 @@ namespace WindowsFormsApplication1
 
             try
             {
-                DataRow dr = conn_manager.select_job(selected_account);
+                DataRow dr = conn_manager.Select_job(selected_account);
                 limit_comment.Text = dr["comments"].ToString();
                 limit_follow.Text = dr["follows"].ToString();
                 limit_like.Text = dr["likes"].ToString();
@@ -276,7 +308,7 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("저장된 설정이 없습니다");
             }
 
-
+            
 
 
         }
@@ -284,13 +316,13 @@ namespace WindowsFormsApplication1
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            log(conn_manager.select_request()["mb_id"].ToString());
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             log(conn_manager.Select_content()["content"].ToString());
-            t = conn_manager.SelectData(1);
+            t = conn_manager.SelectData();
             r = t.Rows[0];
 
             foreach (DataRow r in t.Rows)
@@ -301,7 +333,7 @@ namespace WindowsFormsApplication1
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            conn_manager.insert_insta_job();
         }
 
 
@@ -316,6 +348,31 @@ namespace WindowsFormsApplication1
             }
 
             IPchange.listener.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ipchanger.refresh_connection();
+            like_thr.Join();
+            like_thr = new Thread(ipchanger.StartListening);
+            like_thr.Start();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (ipchanger.socket_check())
+            {
+                log("socket connected");
+            }
+            else
+            {
+                log("socket not connected");
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            new Thread(ipchanger.send_change).Start();
         }
     }
 }
