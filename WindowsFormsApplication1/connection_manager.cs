@@ -336,30 +336,20 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-<<<<<<< HEAD
-                
-=======
-
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
 
 
                 if (ds.Tables.Count > 0)
                 {
-<<<<<<< HEAD
 
-=======
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
                     context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "---------    \n";
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
 
-<<<<<<< HEAD
                     //foreach (DataRow r in ds.Tables[0].Rows)
                     //{
                     //    context.textBox1.AppendText(r["tag"].ToString());
                     //}
-=======
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
+
                     return ds.Tables[0].Rows[0];
                 }
                 else { return null; }
