@@ -102,15 +102,22 @@ namespace WindowsFormsApplication1
                     //막힌 계정이 아니면 로그인
 
 
+
                     //1.해시태그 검색
                     insta_run.hash_tag_search();
 
                     //좋아요 루프
+
+                   
                     insta_run.like_loop(1);
 
 
 
+
                     //2. 등록된 유저 검색
+
+
+
                     insta_run.random_user();
 
                     insta_run.like_loop(1);
@@ -136,12 +143,14 @@ namespace WindowsFormsApplication1
 
                 catch (Exception ex)
                 {
+
                     Invoke(new MethodInvoker(delegate ()
                     {
                         log(ex.StackTrace);
                         //  textBox1.Text ="ERROR";
                     }));
                 }
+
             }
 
         }
@@ -279,7 +288,7 @@ namespace WindowsFormsApplication1
 
             try
             {
-                DataRow dr = conn_manager.select_job(selected_account);
+                DataRow dr = conn_manager.Select_job(selected_account);
                 limit_comment.Text = dr["comments"].ToString();
                 limit_follow.Text = dr["follows"].ToString();
                 limit_like.Text = dr["likes"].ToString();
