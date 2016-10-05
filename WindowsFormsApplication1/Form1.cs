@@ -19,7 +19,7 @@ namespace WindowsFormsApplication1
 
         public DataRow r;
         public DataTable t;
-        
+
         private IPchange ipchanger;
 
         private bool finished_follow = true;
@@ -67,15 +67,16 @@ namespace WindowsFormsApplication1
 
         public void log(string logging)
         {
-            
-                Invoke(new MethodInvoker(delegate () {
 
-                    textBox1.AppendText(Environment.NewLine);
-                    textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+            Invoke(new MethodInvoker(delegate ()
+            {
 
-                }));
-               
-          }
+                textBox1.AppendText(Environment.NewLine);
+                textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+
+            }));
+
+        }
 
         public void like_proc()
         {
@@ -108,7 +109,7 @@ namespace WindowsFormsApplication1
 
                     //좋아요 루프
 
-                   
+
                     insta_run.like_loop(1);
 
 
@@ -278,7 +279,7 @@ namespace WindowsFormsApplication1
                     textBox1.AppendText("로그인 성공");
                     user = values["mb_id"];
 
-                   
+
 
                     t = conn_manager.SelectData();
                     r = t.Rows[0];
@@ -309,7 +310,7 @@ namespace WindowsFormsApplication1
         {
             if (LorP == "login")
             {
-               
+
                 ready_login = true;
                 ready_phone = true;//testing only
             }
@@ -320,7 +321,7 @@ namespace WindowsFormsApplication1
                 ready_login = true;//testing only
             }
 
-           // log("LN "+ready_login.ToString()); log("PH "+ready_phone.ToString());
+            // log("LN "+ready_login.ToString()); log("PH "+ready_phone.ToString());
 
             if (ready_login && ready_phone)
             {
@@ -338,12 +339,30 @@ namespace WindowsFormsApplication1
             try
             {
                 DataRow dr = conn_manager.Select_job(selected_account);
-                
+                if (dr == null)
+                {
+                    limit_comment.Text = "None";
+                    limit_follow.Text = "None";
+                    limit_like.Text = "None";
+                    limit_unfollow.Text = "None";
+
+
+                    delay_follow.Text = "None";
+                    delay_like.Text = "None";
+                    delay_unfollow.Text = "None";
+                    delay_comment.Text = "None";
+
+                    time_start.Text = "None";
+                    time_finish.Text = "None";
+
+                }
+                else
+                {
                     limit_comment.Text = dr["limit_comments"].ToString();
                     limit_follow.Text = dr["limit_follows"].ToString();
                     limit_like.Text = dr["limit_likes"].ToString();
                     //limit_unfollow.Text = dr["unfollows"].ToString();
-                    
+
 
                     delay_follow.Text = dr["delay_follow"].ToString();
                     delay_like.Text = dr["delay_like"].ToString();
@@ -352,14 +371,14 @@ namespace WindowsFormsApplication1
 
                     time_start.Text = dr["hour_between_start"].ToString();
                     time_finish.Text = dr["hour_between_end"].ToString();
-                
+                }
             }
             catch (IndexOutOfRangeException ex)
             {
                 MessageBox.Show("저장된 설정이 없습니다");
             }
 
-            
+
 
 
         }
