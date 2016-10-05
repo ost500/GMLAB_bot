@@ -44,6 +44,7 @@ namespace WindowsFormsApplication1
         private int delay_comment;
         private int delay_follow;
         private int delay_unfollow;
+        public string current_user;
 
         //public string user_id;
 
@@ -85,6 +86,56 @@ namespace WindowsFormsApplication1
             return path;
         }
 
+        //CHECK STATUS OF HASH TAGS FOR A USER
+        public bool checkHashTag() {
+            DataRow row = conn_manager.check_hashtag();
+            if (row == null)
+            {
+                log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
+                log("PLEASE LOG IN HERE: http://easygram.kr/   & ADD FEW HASH TAGS");
+                return false;
+            }
+            else
+            {
+                log("continue");
+                return true;
+            }
+        }
+        //CHECK STATUS OF COMMENTS FOR A USER
+        public bool checkCommentStatus()
+        {
+            DataRow row = conn_manager.check_comments();
+            if (row == null)
+            {
+                log("YOU NEED TO ENTER  COMMENTS");
+                log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD FEW COMMENTS");
+                return false;
+            }
+            else
+            {
+                log("continue");
+                return true;
+            }
+
+        }
+        //CHECK STATUS OF JOB FOR A USER 
+        public bool checkJobStatus(string user_id) {
+
+            
+            DataRow row = conn_manager.Select_job(user_id);
+            if (row == null)
+            {
+                log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR "+ user_id);
+                log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD DELAYS");
+                return false;
+            }
+            else
+            {
+                log("continue");
+                return true;
+            }
+        }
+
 
         //GET delay_like,delay_comment,delay_follow and delay_unfollow from database for current user
         public int getLikeDelay(string user_id)
@@ -93,7 +144,7 @@ namespace WindowsFormsApplication1
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 11;
+                return 12;
             }
             else
             {
@@ -112,7 +163,7 @@ namespace WindowsFormsApplication1
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 1;
+                return 2;
             }
             else
             {
@@ -121,13 +172,14 @@ namespace WindowsFormsApplication1
                 return delay_comment;
             }
         }
+
         public int getFollowDelay(string user_id)
         {
 
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 3;
+                return 4;
             }
             else
             {
@@ -142,7 +194,7 @@ namespace WindowsFormsApplication1
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 3;
+                return 4;
             }
             else
             {
@@ -159,6 +211,7 @@ namespace WindowsFormsApplication1
             DateTime now = DateTime.Now;
             log(now.ToString());
             log(like_time.ToString());
+            log(now.Subtract(follow_time).TotalSeconds.ToString() + "Like_time_gap");
             if (now.Subtract(like_time).TotalSeconds > delay_like)
             {
                 like_time = DateTime.Now;
@@ -220,6 +273,7 @@ namespace WindowsFormsApplication1
         {
             context.textBox1.AppendText(Environment.NewLine);
             context.textBox1.AppendText("[" + DateTime.Now.ToString() + "]" + logging);
+
         }
 
         public void start()
@@ -231,6 +285,8 @@ namespace WindowsFormsApplication1
             r = t.Rows[0];
             log("row[0]" + t.Rows[0]["user_id"]);
             //log("row[1]" + t.Rows[1]);
+
+
 
             //work_number 1 더하기
             conn_manager.Update_worknum();
@@ -245,20 +301,25 @@ namespace WindowsFormsApplication1
 
 
             //String path = "D:\\chrome_cache\\" + r["user_id"].ToString();
-            log(r["user_id"].ToString());
-            string a = r["user_id"].ToString();
+           
+            current_user = r["user_id"].ToString();
 
-            delay_like = getLikeDelay(a);
-            delay_comment = getCommentDealy(a);
-            delay_follow = getFollowDelay(a);
-            delay_unfollow = getUnfollowDelay(a);
+            log("  USER:"+ current_user + " \n");
+         
+            delay_like = getLikeDelay(current_user);
+            delay_comment = getCommentDealy(current_user);
+            delay_follow = getFollowDelay(current_user);
+            delay_unfollow = getUnfollowDelay(current_user);
 
-
+            log(delay_like.ToString());
+            log(delay_comment.ToString());
+            log(delay_follow.ToString());
+            log(delay_unfollow.ToString());
             //Get current directory path and set chrome cache path
             string currentDir = getCurrentPath();
-            string path = currentDir + "\\chrome_cache\\" + a.Trim();
+            string path = currentDir + "\\chrome_cache\\" + current_user.Trim();
 
-            log(path);
+            // log(path);
             ChromeOptions co = new ChromeOptions();
 
             co.AddArguments("user-data-dir=" + path);
@@ -289,22 +350,29 @@ namespace WindowsFormsApplication1
             try
             {
 
-                return false;
-                log(driver.FindElement(By.CssSelector("a._fcn8k")).Text);
+
+                //check for English Log in
                 Assert.AreEqual("Log in", driver.FindElement(By.CssSelector("a._fcn8k")).Text);
 
+                //if matched then change language to Korean otherwise its already korean
                 new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
                 log("Language Changed");
             }
             catch (Exception e)
             {
-                return false;
                 context.log("It's Koreean");
             }
 
 
             try
             {
+
+                //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
+
+                if (!checkHashTag()) { log("STOP"); return true; }
+                if (!checkCommentStatus()) { log("STOP"); return true; }
+                if (!checkJobStatus(current_user)) { log("STOP"); return true; }
+
                 //로그인 버튼이 안뜨고 에러가 난다면 로그인이 돼 있다는 얘기
 
                 wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
@@ -341,24 +409,6 @@ namespace WindowsFormsApplication1
                         //  return false;
                     }
 
-                    /* wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                     myDynamicElement = wait.Until(d => d.FindElement(By.LinkText("로그인")));
-                     //click on profile
-                        driver.FindElement(By.LinkText("프로필")).Click();
-                        log("Profile Clicked");
-
-                        // If Language is not Korean, then Change language to Korean
-                        String lang = driver.FindElement(By.CssSelector("select._nif11")).Text;
-
-                        if (lang != "Korean" || lang != "한국어")
-                        {
-
-                            new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("한국어");
-                            log("Language Changed from pofile");
-
-                        }
-                        else if (lang == "한국어") { log("do nothing man"); }
-                        */
 
                     //안나오면 정상 가동
                     log("계정 인증이 없다");
@@ -373,6 +423,8 @@ namespace WindowsFormsApplication1
 
             log("로그인 버튼이 있다");
             login();
+
+
             return false;
 
         }
@@ -393,7 +445,7 @@ namespace WindowsFormsApplication1
 
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("input._9x5sw._qy55y")));
-            //log("로그인 성공");
+
         }
 
         public void go_to_there(string where_to)
@@ -729,6 +781,7 @@ namespace WindowsFormsApplication1
                 follow_time = DateTime.Now;
 
             }
+        }
 
 
 

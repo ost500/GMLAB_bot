@@ -103,17 +103,18 @@ namespace WindowsFormsApplication1
 
 
                     ////1.해시태그 검색
-                    //insta_run.hash_tag_search();
+                    insta_run.hash_tag_search();
+
 
                     ////좋아요 루프
-                    //insta_run.like_loop(1);
+                    insta_run.like_loop(1);
 
 
 
                     ////2. 등록된 유저 검색
-                    //insta_run.random_user();
+                    insta_run.random_user();
 
-                    //insta_run.like_loop(1);
+                    insta_run.like_loop(1);
 
 
                     //insta_run.logout();
