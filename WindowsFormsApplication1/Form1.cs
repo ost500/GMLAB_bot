@@ -68,6 +68,7 @@ namespace WindowsFormsApplication1
         public void log(string logging)
         {
 
+         
             Invoke(new MethodInvoker(delegate ()
             {
 

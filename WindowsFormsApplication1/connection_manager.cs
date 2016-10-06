@@ -507,6 +507,28 @@ namespace WindowsFormsApplication1
             return null;
         }
 
+        public void insert_followdata(string current_user, string followed,string follow_time)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+                   //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+               
+                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '"+current_user+"', '" + followed + "', '" + follow_time + "');", conn);
+                    
+                    cmd2.ExecuteNonQuery();
+                    context.textBox1.AppendText("########## Inserted Follow Data ##########");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+        }
+
+
         public void insert_insta_job()
         {
             DataSet ds = new DataSet();
