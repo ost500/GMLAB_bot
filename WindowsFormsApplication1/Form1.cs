@@ -19,8 +19,10 @@ namespace WindowsFormsApplication1
 
         public DataRow r;
         public DataTable t;
-        
+
         private IPchange ipchanger;
+
+        public bool ip_changing = false;
 
         private bool finished_follow = true;
         private bool finished_like = true;
@@ -36,22 +38,19 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
 
-            conn_manager = new sql_connection_manager(this);
-
-            DataRow r = conn_manager.version_control();
-
-            textBox1.Text = "EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n";
-
-            conn_manager.like_up();
 
 
-            ipchanger = new IPchange(this, conn_manager);
-
-            insta_procedure.follow_time = DateTime.Now;
-            insta_procedure.like_time = DateTime.Now;
 
 
-            //모바일 연결
+
+
+            //conn_manager.like_up();
+
+
+          
+
+
+            
 
 
 
@@ -60,22 +59,37 @@ namespace WindowsFormsApplication1
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+            conn_manager = new sql_connection_manager(this);
+            DataRow r = conn_manager.version_control();
+            textBox1.Text = "EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n";
+
+
+            //모바일 연결 mobile connection
+            ipchanger = new IPchange(this, conn_manager);
+
+            insta_procedure.follow_time = DateTime.Now;
+            insta_procedure.like_time = DateTime.Now;
+
+
+
             like_thr = new Thread(ipchanger.StartListening);
             like_thr.Start();
+            
         }
 
 
         public void log(string logging)
         {
-            
-                Invoke(new MethodInvoker(delegate () {
 
-                    textBox1.AppendText(Environment.NewLine);
-                    textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+            Invoke(new MethodInvoker(delegate ()
+            {
 
-                }));
-               
-          }
+                textBox1.AppendText(Environment.NewLine);
+                textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+
+            }));
+
+        }
 
         public void like_proc()
         {
@@ -83,11 +97,31 @@ namespace WindowsFormsApplication1
             {
                 try
                 {
+                    
+                    for (int i = 1; i <= 10; i++)
+                    {
+                        if (ip_changing)
+                        {
+                            log("아이피 변경 중입니다 " + i + " / 10");
+                            // Ip is changing
+                            log(ip_changing.ToString());
+                            Thread.Sleep(1500);
+                            if (i == 10)
+                            {
+                                log("아이피 변경에 실패했습니다");
+                                // Ip_change was failed
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
 
                     insta_procedure insta_run = new insta_procedure(this, conn_manager);
 
                     //시작
-
 
 
                     insta_run.start();
@@ -108,7 +142,7 @@ namespace WindowsFormsApplication1
 
                     //좋아요 루프
 
-                   
+
                     insta_run.like_loop(1);
 
 
@@ -123,7 +157,7 @@ namespace WindowsFormsApplication1
                     insta_run.like_loop(1);
 
 
-                    //insta_run.logout();
+
 
                     //3. 요청 유저
                     //팔로우, 좋아요
@@ -135,8 +169,10 @@ namespace WindowsFormsApplication1
                     insta_run.quit();
 
 
-                    new Thread(ipchanger.send_change).Start();
-                    Thread.Sleep(5000);
+                    ipchanger.send_change();
+
+                    
+
 
 
                 }
@@ -149,69 +185,12 @@ namespace WindowsFormsApplication1
                         log(ex.StackTrace);
                         //  textBox1.Text ="ERROR";
                     }));
+                    break;
                 }
 
             }
 
         }
-
-        //public void follow_proc()
-        //{
-
-        //    try
-        //    {
-        //        insta_procedure insta_run2 = new insta_procedure(this, conn_manager);
-
-        //        //시작
-
-
-
-        //        insta_run2.start();
-
-
-        //        if (insta_run2.block_check())
-        //        {
-        //            //막힌 계정이면 끄고 루프 탈출
-        //            insta_run2.quit();
-        //            return;
-        //        }
-        //        //막힌 계정이 아니면 로그인
-
-
-        //        //1.해시태그 검색
-        //        insta_run2.hash_tag_search();
-
-
-        //        //팔로우 루프
-        //        insta_run2.follow_loop();
-
-
-
-        //        //2. 등록된 유저 검색
-        //        insta_run2.random_user();
-
-        //        insta_run2.follow_loop();
-
-
-        //        //insta_run.logout();
-
-        //        //3. 요청 유저
-        //        //팔로우, 좋아요
-
-        //        insta_run2.quit();
-
-        //        finished_follow = true;
-        //        check_finish_proc();
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        textBox1.Text = ex.StackTrace;
-        //    }
-
-
-        //}
 
 
 
@@ -268,7 +247,8 @@ namespace WindowsFormsApplication1
             {
                 ready_login = true;
             }
-            else if (LorP == "phone")
+
+            if (LorP == "phone")
             {
                 ready_phone = true;
             }
@@ -308,7 +288,7 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("저장된 설정이 없습니다");
             }
 
-            
+
 
 
         }
@@ -333,6 +313,7 @@ namespace WindowsFormsApplication1
 
         private void button6_Click(object sender, EventArgs e)
         {
+            log("is it working?");
             conn_manager.insert_insta_job();
         }
 

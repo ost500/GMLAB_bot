@@ -336,30 +336,20 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-<<<<<<< HEAD
-                
-=======
-
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
-
 
                 if (ds.Tables.Count > 0)
                 {
-<<<<<<< HEAD
 
-=======
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
                     context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "---------    \n";
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
 
-<<<<<<< HEAD
+
                     //foreach (DataRow r in ds.Tables[0].Rows)
                     //{
                     //    context.textBox1.AppendText(r["tag"].ToString());
                     //}
-=======
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
+
                     return ds.Tables[0].Rows[0];
                 }
                 else { return null; }
@@ -519,22 +509,25 @@ namespace WindowsFormsApplication1
 
         public void insert_insta_job()
         {
+            context.log("work???????????");
             DataSet ds = new DataSet();
             try
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_account ";
+                string sql = "SELECT * FROM insta_account WHERE mb_id='ost5253'";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "request");
 
+                context.log("working insert");
 
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
+                    context.log("working insert!!");
                     context.log(r["user_id"].ToString());
-                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `account_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`) VALUES(NULL, 'admin', '" + r["user_id"] + "', '3', '11', '11', '3', '0', '0');", conn);
-                    context.textBox1.AppendText("차단 기록");
+                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `user_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`,`limit_comments`,`limit_follows`,`limit_likes`) VALUES(NULL, 'ost5253', '" + r["user_id"] + "', '3', '11', '11', '3', '0', '0','100','1000','1000');", conn);
+                    
                     cmd2.ExecuteNonQuery();
 
                 }
@@ -543,7 +536,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                context.log(e.StackTrace);
             }
 
         }

@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WindowsFormsApplication1;
 
 namespace WindowsFormsApplication1
 {
@@ -25,6 +26,8 @@ namespace WindowsFormsApplication1
 
         public void StartListening()
         {
+            //waiting start
+            context.ip_changing = true;
 
             // Data buffer for incoming data.
             byte[] bytes = new Byte[1024];
@@ -96,19 +99,39 @@ namespace WindowsFormsApplication1
                 Console.WriteLine(e.ToString());
                 context.log(e.ToString());
             }
-            context.log("연결 성공!");
-            context.log("현재 아이피 : " + GetComputer_InternetIP() + "\n");
+
+            context.log("아이피 변경 명령을 내리는 중입니다...");
+            Thread.Sleep(3000);
+
+            while (true)
+            {
+                try
+                {
+                    context.log("현재 아이피 : " + GetComputer_InternetIP() + "\n");
+                    context.log("연결 성공!");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    context.log("연결 실패 다시 시도중...");
+                    Thread.Sleep(1500);
+                }
+            }
+            
 
             //mysql 재연결
             conn.mysql_refresh();
 
             //시작 버튼 활성화 시도
             context.start_button_valid("phone");
+            //waiting done
+            context.ip_changing = false;
 
         }
 
         public void send_change()
         {
+            context.ip_changing = true;
             try
             {
 
@@ -171,6 +194,13 @@ namespace WindowsFormsApplication1
                     break;
                 }
             }
+
+
+            //mysql 재연결
+            conn.mysql_refresh();
+            context.log("데이터베이스 연결 완료");
+
+
             if (IPchange_count > 3)
             {
                 context.log("현재 아이피 : " + GetComputer_InternetIP());
@@ -183,8 +213,10 @@ namespace WindowsFormsApplication1
             }
 
 
-            //mysql 재연결
-            conn.mysql_refresh();
+
+
+            context.ip_changing = false;
+            
         }
 
 
