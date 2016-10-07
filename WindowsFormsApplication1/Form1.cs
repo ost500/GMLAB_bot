@@ -106,12 +106,12 @@ namespace WindowsFormsApplication1
 
 
                     //1.해시태그 검색
-                    insta_run.hash_tag_search();
+                   // insta_run.hash_tag_search();
 
                     //좋아요 루프
 
 
-                    insta_run.like_loop(1);
+                  //  insta_run.like_loop(1);
 
 
 
@@ -120,18 +120,24 @@ namespace WindowsFormsApplication1
 
 
 
-                    insta_run.random_user();
+                  //  insta_run.random_user();
 
-                    insta_run.like_loop(1);
+                //    insta_run.like_loop(1);
 
 
                     //insta_run.logout();
 
                     //3. 요청 유저
                     //팔로우, 좋아요
-                    insta_run.require();
+                 //   insta_run.require();
 
-                    insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
+                //    insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
+
+                    //call unfollow
+                    insta_run.unfollow();
+
+                    //store of two numbers
+                    insta_run.store_followers();
 
 
                     insta_run.quit();

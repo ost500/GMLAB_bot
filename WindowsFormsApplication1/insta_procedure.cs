@@ -87,15 +87,16 @@ namespace WindowsFormsApplication1
             return path;
         }
 
-      
-        //CHECK STATUS OF JOB FOR A USER 
-        public bool checkJobStatus(string user_id) {
 
-            
+        //CHECK STATUS OF JOB FOR A USER 
+        public bool checkJobStatus(string user_id)
+        {
+
+
             DataRow row = conn_manager.Select_job(user_id);
             if (row == null)
             {
-                log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR "+ user_id);
+                log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR " + user_id);
                 log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD DELAYS");
                 return false;
             }
@@ -201,7 +202,7 @@ namespace WindowsFormsApplication1
         public bool follow_time_gap(int delay_follow)
         {
             DateTime now = DateTime.Now;
-          //  log("FOLLOW DELAY:" + follow.ToString());
+            //  log("FOLLOW DELAY:" + follow.ToString());
             log("-----------------");
             log(now.ToString());
             log(follow_time.ToString());
@@ -224,7 +225,7 @@ namespace WindowsFormsApplication1
         public bool comment_time_gap(int delay_comment)
         {
             DateTime now = DateTime.Now;
-          //  log("COMMENT DELAY:" + comment.ToString());
+            //  log("COMMENT DELAY:" + comment.ToString());
             log(now.ToString());
             log(comment_time.ToString());
             log(now.Subtract(comment_time).TotalSeconds.ToString() + "comment_time_gap");
@@ -246,10 +247,10 @@ namespace WindowsFormsApplication1
         public void saveFollowData()
         {
             // Check for exact CSS Selector and save Follow data
-           
+
             if (IsElementPresent(By.CssSelector("a._4zhc5")))
             {
-               
+
                 //find the above followed user
                 string followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
                 log("FFFRRRRRR: " + followed);
@@ -304,11 +305,11 @@ namespace WindowsFormsApplication1
 
 
             //String path = "D:\\chrome_cache\\" + r["user_id"].ToString();
-           
+
             current_user = r["user_id"].ToString();
 
-            log("  USER:"+ current_user + " \n");
-         
+            log("  USER:" + current_user + " \n");
+
             delay_like = getLikeDelay(current_user);
             delay_comment = getCommentDealy(current_user);
             delay_follow = getFollowDelay(current_user);
@@ -372,8 +373,8 @@ namespace WindowsFormsApplication1
 
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
 
-              //  if (!checkHashTag()) { log("STOP"); return true; }
-              //  if (!checkCommentStatus()) { log("STOP"); return true; }
+                //  if (!checkHashTag()) { log("STOP"); return true; }
+                //  if (!checkCommentStatus()) { log("STOP"); return true; }
                 if (!checkJobStatus(current_user)) { log("STOPPED!!"); return true; }
 
                 //로그인 버튼이 안뜨고 에러가 난다면 로그인이 돼 있다는 얘기
@@ -405,11 +406,16 @@ namespace WindowsFormsApplication1
                         //Now Change the language to Korean
                         new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
                         log("Language Changed after login");
+
+
+
                     }
                     catch (Exception exe)
                     {
                         log("korean");
-                        //  return false;
+
+
+
                     }
 
 
@@ -436,7 +442,7 @@ namespace WindowsFormsApplication1
 
         public void login()
         {
-            
+
             driver.FindElement(By.LinkText("로그인")).Click();
             driver.FindElement(By.Name("username")).Clear();
             driver.FindElement(By.Name("username")).SendKeys(r["user_id"].ToString());
@@ -523,17 +529,17 @@ namespace WindowsFormsApplication1
                             .Text);
                     if (follow_time_gap(delay_follow))
                     {
-                       
+
                         driver.FindElement(
                                 By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
                             .Click();
                         //Save Follow data
-                         saveFollowData();
+                        saveFollowData();
 
                         log("팔로우 했습니다1");
                     }
 
-                  
+
                     Thread.Sleep(rnd.Next(1000, 3000));
                 }
                 catch (Exception e) { log("팔로우를 못찾았습니다1"); }
@@ -550,7 +556,7 @@ namespace WindowsFormsApplication1
 
                     if (follow_time_gap(delay_follow))
                     {
-                      
+
                         driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
 
                         //Save Follow data
@@ -558,10 +564,10 @@ namespace WindowsFormsApplication1
 
                         log("팔로우 했습니다2");
                     }
-                   
+
                     Thread.Sleep(rnd.Next(1000, 3000));
                 }
-                catch (Exception e) { }
+                catch (Exception e) {  }
             }
 
 
@@ -723,102 +729,249 @@ namespace WindowsFormsApplication1
                 }
 
             }
-                
 
 
-                log("기다렸다가 팔로우를 할 시간이에요");
 
-                //랜덤 유저검색 후 팔로우
-                if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
+            log("기다렸다가 팔로우를 할 시간이에요");
+
+            //랜덤 유저검색 후 팔로우
+            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
+            {
+                log("333팔로우");
+                try
                 {
-                    log("333팔로우");
-                    try
+                    //팔로우를 찾아서 있으면 진행 없으면 에러
+                    Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")).Text);
+                    if (follow_time_gap(delay_follow))
                     {
-                        //팔로우를 찾아서 있으면 진행 없으면 에러
-                        Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")).Text);
-                        if (follow_time_gap(delay_follow))
-                        {
-                            driver.FindElement(
-                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                                .Click();
+                        driver.FindElement(
+                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
+                            .Click();
 
-                            //Save Follow data
-                            saveFollowData();
+                        //Save Follow data
+                        saveFollowData();
 
 
 
-                            log("팔로우 했습니다3 --이곳입니다");
-                            log(follow_time.ToString() + "팔로우한 시각3");
-                        }
-                        else
-                        {
-                            
-
-                            //대기 타다가 팔로우
-                            DateTime now = DateTime.Now;
-                            log(now.ToString() + "현시각");
-                            log(follow_time.ToString() + "팔로우한 시각");
-                            log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
-                            Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
-                            driver.FindElement(
-                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                                .Click();
-
-                            //Save Follow data
-                            saveFollowData();
-
-                            log("기다렸다가 팔로우 했습니다3 --이곳입니다");
-                        }
-
-                        Thread.Sleep(rnd.Next(1000, 3000));
+                        log("팔로우 했습니다3 --이곳입니다");
+                        log(follow_time.ToString() + "팔로우한 시각3");
                     }
-                    catch (Exception e) { log(e.StackTrace); }
+                    else
+                    {
 
+
+                        //대기 타다가 팔로우
+                        DateTime now = DateTime.Now;
+                        log(now.ToString() + "현시각");
+                        log(follow_time.ToString() + "팔로우한 시각");
+                        log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
+                        Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                        driver.FindElement(
+                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
+                            .Click();
+
+                        //Save Follow data
+                        saveFollowData();
+
+                        log("기다렸다가 팔로우 했습니다3 --이곳입니다");
+                    }
+
+                    Thread.Sleep(rnd.Next(1000, 3000));
                 }
-                //다른모양의 팔로우 
-                else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")))
+                catch (Exception e) { log(e.StackTrace); }
+
+            }
+            //다른모양의 팔로우 
+            else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")))
+            {
+                log("444팔로우");
+                try
                 {
-                    log("444팔로우");
-                    try
+                    //팔로우를 찾아서 있으면 진행 없으면 에러
+                    Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Text);
+
+                    if (follow_time_gap(delay_follow))
                     {
-                        //팔로우를 찾아서 있으면 진행 없으면 에러
-                        Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Text);
+                        driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
 
-                        if (follow_time_gap(delay_follow))
-                        {
-                            driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
+                        //Save Follow data
+                        saveFollowData();
 
-                            //Save Follow data
-                            saveFollowData();
-
-                            log("팔로우 했습니다4 --이곳입니다");
-                        }
-                        else
-                        {
-                            
-                            //대기 타다가 팔로우
-                            DateTime now = DateTime.Now;
-                            Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
-                            driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
-
-                            //Save Follow data
-                            saveFollowData();
-
-                            log("기다렸다가 팔로우 했습니다4 --이곳입니다");
-                        }
-                        Thread.Sleep(rnd.Next(1000, 3000));
+                        log("팔로우 했습니다4 --이곳입니다");
                     }
-                    catch (Exception e) { }
+                    else
+                    {
+
+                        //대기 타다가 팔로우
+                        DateTime now = DateTime.Now;
+                        Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                        driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
+
+                        //Save Follow data
+                        saveFollowData();
+
+                        log("기다렸다가 팔로우 했습니다4 --이곳입니다");
+                    }
+                    Thread.Sleep(rnd.Next(1000, 3000));
                 }
+                catch (Exception e) { }
+            }
 
-                follow_time = DateTime.Now;
+            follow_time = DateTime.Now;
 
-           
+
         }
 
+        //UNFOLLOW PROCEDURE
+        public void unfollow()
+        {
+
+            bool flag = false;
+            try
+            {
+                if (IsElementPresent(By.LinkText("프로필")))
+                {
+                    //Click on profile
+                    driver.FindElement(By.LinkText("프로필")).Click();
+                    log("11111111");
+                    //get the website followers
+                    string followers = driver.FindElement(By.CssSelector("a._s53mj >span._bkw5z")).Text;
+                    int followers_count = Int32.Parse(followers);
+                    //get  followers from db
+                    DataRow row = conn_manager.select_followers_count(current_user);
+                    if (row != null)
+                    {
+                        log("2222222222222");
+                        //subtract db followers from website followers and add 15 to result
+                        int followers_count_new = followers_count - Int32.Parse(row["followers"].ToString());
+                        followers_count_new = followers_count_new + 15;
+
+                        //Click on followers to get all list
+                        driver.FindElement(By.XPath("//li[2]/a")).Click();
+                        log("33333333333333");
+                        //get all followed users of current user
+                        t = conn_manager.select_follows(current_user);
+
+                        //For each  followed users match with website's followers list
+                        foreach (DataRow r in t.Rows)
+                        {
+                            //get the user followed by me and time as well
+                            string followedby_me = r["followed_id"].ToString();
+                            DateTime time_whenfollowed = (DateTime)r["time"];
+                            DateTime now = DateTime.Now;
+                            double duration = now.Subtract(time_whenfollowed).TotalHours;
+                            log(now.Subtract(time_whenfollowed).TotalHours.ToString() + "Duration");
+
+                            for (int i = 0; i < followers_count_new; i++)
+                            {
+                                //get the user from website follower list
+                                string follower_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
+                                //if user is not in the list
+                                if (followedby_me != follower_username && duration > 72 )
+                                {
+
+                                    flag = true;
 
 
-       
+                                }
+                                else { break; }//End of if
+
+                            }//end of for loop 
+
+                            //Unfollow if flag is true [its not found in the follower's list]
+                            if (flag)
+                            {
+                               
+                                try
+                                {
+                                    log("444444444444444");
+                                    // 닫기
+                                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                                    myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+
+                                    //Close followers page
+                                    driver.FindElement(By.CssSelector("button._3eajp")).Click();
+
+                                    //Just Sleep
+                                    Thread.Sleep(rnd.Next(1000, 3000));
+
+                                    //Click on following to get all list
+                                    driver.FindElement(By.XPath("//li[3]/a")).Click();
+                                    log("5555555555555555");
+                                    for (int i = 0; i < followers_count_new; i++)
+                                    {
+                                        //get the user from website follower list
+                                        string following_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
+
+                                        //if he or she is our following list
+                                        if (followedby_me == following_username)
+                                        {
+                                            try
+                                            { //then unfollow him or her 
+                                                driver.FindElement(By.XPath("//li[" + i + "]/div/div/span/button")).Click();
+
+                                                //Delete from db
+                                                conn_manager.remove_followdata(current_user, followedby_me);
+                                                //Wait
+                                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                                                myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+
+                                                //Close followers page
+                                                driver.FindElement(By.CssSelector("button._3eajp")).Click();
+
+                                                break;
+                                            }
+                                            catch { log("Not able to Unfollow"); }
+                                        }//End of If
+                                    }//End of For loop
+                                }
+                                catch (Exception e)
+                                {
+                                    //닫기가 없으면 그냥 패스~
+                                    log("Some Error in UnFollow");
+                                }
+                            }//End of if [Flag Check]
+
+                        }//End of foreach loop
+
+                    }
+                    else
+                    {
+                        log("Will not Unfollow as Followers count is not available now");
+                    }//End of if-else
+
+                }//end of if(IsElementPresent)
+            }
+            catch (Exception) { log("Profile or followers not found"); }
+
+
+        } //End of Unfollow Procedure
+
+        //STORE FOLLOWERS PROCEDURE
+        public void store_followers()
+        {
+            try
+            {
+                
+                if (IsElementPresent(By.LinkText("프로필")))
+                {   //ERRoR
+                    log("INSIDE STOREOOOOOOOOOOOOO");
+                    driver.FindElement(By.LinkText("프로필")).Click();
+                    try
+                    {
+                        //ERRoR
+                        string followers_count = driver.FindElement(By.CssSelector("a._s53mj >span._bkw5z")).Text;
+                        string created_at = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        conn_manager.insert_followersCount(current_user, followers_count, created_at);
+                    }
+                    catch { log("Followers not Found!!"); }
+
+                }
+            }
+            catch (Exception) { log("Profile not found!!"); }
+
+
+        }
 
 
 

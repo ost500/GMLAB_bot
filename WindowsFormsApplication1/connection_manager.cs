@@ -200,7 +200,7 @@ namespace WindowsFormsApplication1
                 context.textBox1.AppendText(context.user);
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
-                context.log(sql);
+             
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "comments");
 
@@ -506,10 +506,62 @@ namespace WindowsFormsApplication1
             }
             return null;
         }
-
-        public void insert_followdata(string current_user, string followed,string follow_time)
+        //Select user follows 
+        public DataTable select_follows(string user_id)
         {
             DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "' order time DESC";
+
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "followers");
+
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
+            }
+
+        }
+        //Select Followers Count
+        public DataRow select_followers_count(string user_id)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_status WHERE user_id ='" + user_id + "' order by followers DESC";
+                          
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "followers");
+
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
+            }
+            
+        }
+
+        //STORE Follow Data
+        public void insert_followdata(string current_user, string followed,string follow_time)
+        {
             try
             {
 
@@ -527,7 +579,48 @@ namespace WindowsFormsApplication1
             }
 
         }
+        //Remove Follow Data
+        public void remove_followdata(string current_user, string followed)
+        {
+            try
+            {
 
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+
+                MySqlCommand cmd2 = new MySqlCommand("Delete from insta_follows where user_id='" + current_user + "' and followed_id= '" + followed + "');", conn);
+
+                cmd2.ExecuteNonQuery();
+                context.textBox1.AppendText("########## Deleted Followed Data ##########");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+        }
+
+
+        //STORE FOLLOWERS COUNT
+        public void insert_followersCount(string current_user, string followers_count, string created_at)
+        {
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+
+                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followers_count + "', '" + created_at + "');", conn);
+                context.log(cmd2.ToString());
+                cmd2.ExecuteNonQuery();
+                context.textBox1.AppendText("########## Inserted Followers Count ##########");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+        }
 
         public void insert_insta_job()
         {
