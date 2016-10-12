@@ -137,7 +137,7 @@ namespace WindowsFormsApplication1
                     insta_run.unfollow();
 
                     //store of two numbers
-                    insta_run.store_followers();
+                 //  insta_run.store_followers();
 
 
                     insta_run.quit();

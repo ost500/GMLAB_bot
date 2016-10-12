@@ -116,7 +116,7 @@ namespace WindowsFormsApplication1
 
         public DataRow check_comments()
         {
-           DataSet  ds_comment = new DataSet();
+            DataSet ds_comment = new DataSet();
             try
             {
 
@@ -124,18 +124,18 @@ namespace WindowsFormsApplication1
                 context.textBox1.AppendText(context.user);
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
-             //   context.log(sql);
+                //   context.log(sql);
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds_comment, "comments");
 
                 if (ds_comment.Tables.Count > 0)
                 {
-                  // foreach (DataRow r in ds.Tables[0].Rows)
-                   // {
+                    // foreach (DataRow r in ds.Tables[0].Rows)
+                    // {
                     //    Console.WriteLine(r["ID"]);
-                     // context.textBox1.Text += r["ID"].ToString();
+                    // context.textBox1.Text += r["ID"].ToString();
                     //}
-                  
+
                     return ds_comment.Tables[0].Rows[0];
                 }
                 else { return null; }
@@ -157,7 +157,7 @@ namespace WindowsFormsApplication1
         {
 
             ds = new DataSet();
-           
+
             try
             {
 
@@ -169,8 +169,8 @@ namespace WindowsFormsApplication1
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "tags");
-               
-                
+
+
                 if (ds.Tables.Count > 0)
                 {
                     return ds.Tables[0].Rows[0];
@@ -200,20 +200,20 @@ namespace WindowsFormsApplication1
                 context.textBox1.AppendText(context.user);
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
-             
+
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "comments");
 
-      
-               
-               if (ds.Tables.Count > 0)
+
+
+                if (ds.Tables.Count > 0)
                 {
                     //foreach (DataRow r in ds.Tables[0].Rows)
                     //{
                     //    Console.WriteLine(r["ID"]);
                     //    textBox1.Text += r["ID"].ToString();
                     //}
-                  
+
                     return ds.Tables[0];
                 }
                 else { return null; }
@@ -439,7 +439,7 @@ namespace WindowsFormsApplication1
             cmd2.ExecuteNonQuery();
         }
 
-       
+
 
         public void mysql_refresh()
         {
@@ -506,6 +506,7 @@ namespace WindowsFormsApplication1
             }
             return null;
         }
+
         //Select user follows 
         public DataTable select_follows(string user_id)
         {
@@ -514,20 +515,24 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "' order time DESC";
-
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "'";
+               
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "followers");
 
+              
+
                 if (ds.Tables.Count > 0)
                 {
+                    
                     return ds.Tables[0];
                 }
-                else { return null; }
+                else {  return null; }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+                
                 return null;
             }
 
@@ -540,8 +545,8 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_status WHERE user_id ='" + user_id + "' order by followers DESC";
-                          
+                string sql = "SELECT * FROM insta_status WHERE user_id ='" + user_id + "' order by created_at DESC";
+
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "followers");
 
@@ -556,21 +561,21 @@ namespace WindowsFormsApplication1
                 Console.WriteLine(e.StackTrace);
                 return null;
             }
-            
+
         }
 
         //STORE Follow Data
-        public void insert_followdata(string current_user, string followed,string follow_time)
+        public void insert_followdata(string current_user, string followed, string follow_time)
         {
             try
             {
 
-                   //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-               
-                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '"+current_user+"', '" + followed + "', '" + follow_time + "');", conn);
-                    
-                    cmd2.ExecuteNonQuery();
-                    context.textBox1.AppendText("########## Inserted Follow Data ##########");
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+
+                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
+
+                cmd2.ExecuteNonQuery();
+                context.textBox1.AppendText("########## Inserted Follow Data ##########");
 
             }
             catch (Exception e)
@@ -587,7 +592,7 @@ namespace WindowsFormsApplication1
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
-                MySqlCommand cmd2 = new MySqlCommand("Delete from insta_follows where user_id='" + current_user + "' and followed_id= '" + followed + "');", conn);
+                MySqlCommand cmd2 = new MySqlCommand("delete from insta_follows where user_id='" + current_user + "' and followed_id= '" + followed + "'", conn);
 
                 cmd2.ExecuteNonQuery();
                 context.textBox1.AppendText("########## Deleted Followed Data ##########");
@@ -595,6 +600,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
+                context.log("Delete Query Problem!!!! ");
                 Console.WriteLine(e.StackTrace);
             }
 
@@ -602,18 +608,21 @@ namespace WindowsFormsApplication1
 
 
         //STORE FOLLOWERS COUNT
-        public void insert_followersCount(string current_user, string followers_count, string created_at)
+        public void insert_followersCount(string current_user, int followers_count, string created_at)
         {
             try
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                
 
-                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followers_count + "', '" + created_at + "');", conn);
-                context.log(cmd2.ToString());
-                cmd2.ExecuteNonQuery();
-                context.textBox1.AppendText("########## Inserted Followers Count ##########");
-
+                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_status` (`no`, `user_id`, `followers`, `created_at`) VALUES(NULL, '" + current_user + "', '" + followers_count + "', '" + created_at + "');", conn);
+                // context.log(cmd2.ToString());
+               if (cmd2.ExecuteNonQuery() > 0)
+                {
+                    context.textBox1.AppendText("########## Inserted Followers Count  ##########");
+                }
+                else { context.log(" Followers Count Not Inserted"); }
             }
             catch (Exception e)
             {
