@@ -130,6 +130,7 @@
             // 
             // button2
             // 
+            this.button2.Enabled = false;
             this.button2.Location = new System.Drawing.Point(237, 18);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
@@ -197,7 +198,7 @@
             // account_label
             // 
             this.account_label.AutoSize = true;
-            this.account_label.Font = new System.Drawing.Font("Gulim", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.account_label.Font = new System.Drawing.Font("굴림", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.account_label.Location = new System.Drawing.Point(21, 26);
             this.account_label.Name = "account_label";
             this.account_label.Size = new System.Drawing.Size(110, 19);
@@ -449,7 +450,7 @@
             this.button3.TabIndex = 12;
             this.button3.Text = "재연결";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            
             // 
             // button7
             // 

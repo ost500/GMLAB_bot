@@ -13,6 +13,7 @@ namespace WindowsFormsApplication1
         public MySqlConnection conn;
         public Form1 context;
         public DataSet ds;
+        private DataSet request_ds;
 
         public sql_connection_manager(Form1 context)
         {
@@ -38,14 +39,14 @@ namespace WindowsFormsApplication1
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 context.textBox1.AppendText(context.user);
                 context.log(context.user + " <= contect user");
-                string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' ORDER BY work_number";
+                string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' AND `status` = 1 AND is_profile = 1 AND posting_number_log > 2 ORDER BY work_number";
 
 
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-
+                context.log(ds.Tables.Count.ToString());
 
                 context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + " 여기 확인   \n";
                 context.textBox1.Text += ds.Tables[0].Rows[0]["work_number"] + " 여기 확인   \n";
@@ -345,6 +346,7 @@ namespace WindowsFormsApplication1
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
 
+
                     //foreach (DataRow r in ds.Tables[0].Rows)
                     //{
                     //    context.textBox1.AppendText(r["tag"].ToString());
@@ -460,7 +462,7 @@ namespace WindowsFormsApplication1
 
         public DataRow select_request()
         {
-            DataSet ds = new DataSet();
+            request_ds = new DataSet();
             try
             {
 
@@ -469,18 +471,18 @@ namespace WindowsFormsApplication1
                              "WHERE request_follow > done_follow " +
                              "OR request_like > done_like ";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
-                adpt.Fill(ds, "request");
+                adpt.Fill(request_ds, "request");
 
-                if (ds.Tables.Count > 0)
+                if (request_ds.Tables.Count > 0)
                 {
-                    return ds.Tables[0].Rows[0];
+                    return request_ds.Tables[0].Rows[0];
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
             }
-            return ds.Tables[0].Rows[0];
+            return request_ds.Tables[0].Rows[0];
         }
 
         public DataRow select_configuration()
@@ -507,14 +509,17 @@ namespace WindowsFormsApplication1
             return null;
         }
 
+
         //Select user follows 
         public DataTable select_follows(string user_id)
+
         {
             DataSet ds = new DataSet();
             try
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+
                 string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "'";
                
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
@@ -543,6 +548,7 @@ namespace WindowsFormsApplication1
             DataSet ds = new DataSet();
             try
             {
+
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 string sql = "SELECT * FROM insta_status WHERE user_id ='" + user_id + "' order by created_at DESC";
@@ -633,22 +639,25 @@ namespace WindowsFormsApplication1
 
         public void insert_insta_job()
         {
+            context.log("work???????????");
             DataSet ds = new DataSet();
             try
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_account ";
+                string sql = "SELECT * FROM insta_account WHERE mb_id='ost5253'";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "request");
 
+                context.log("working insert");
 
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
+                    context.log("working insert!!");
                     context.log(r["user_id"].ToString());
-                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `account_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`) VALUES(NULL, 'admin', '" + r["user_id"] + "', '3', '11', '11', '3', '0', '0');", conn);
-                    context.textBox1.AppendText("차단 기록");
+                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `user_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`,`limit_comments`,`limit_follows`,`limit_likes`) VALUES(NULL, 'ost5253', '" + r["user_id"] + "', '3', '11', '11', '3', '0', '0','100','1000','1000');", conn);
+
                     cmd2.ExecuteNonQuery();
 
                 }
@@ -657,9 +666,44 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                context.log(e.StackTrace);
             }
 
+        }
+
+        public void update_follow_done()
+        {
+            try
+            {
+                MySqlCommand cmd2 =
+                    new MySqlCommand(
+                        "UPDATE insta_request_job SET done_follow = done_follow + 1 WHERE no = " +
+                        request_ds.Tables[0].Rows[0]["no"], conn);
+
+                cmd2.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                context.log("요청 계정 팔로우 업데이트 에러");
+            }
+
+        }
+
+        public void update_like_done()
+        {
+            try
+            {
+                MySqlCommand cmd2 =
+                    new MySqlCommand(
+                        "UPDATE insta_request_job SET done_like = done_like + 1 WHERE no = " +
+                        request_ds.Tables[0].Rows[0]["no"], conn);
+
+                cmd2.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                context.log("요청 계정 좋아요 업데이트 에러");
+            }
         }
 
     }

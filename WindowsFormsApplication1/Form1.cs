@@ -11,7 +11,7 @@ namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
-        public sql_connection_manager conn_manager;
+        
 
         int i = 0;
 
@@ -20,7 +20,9 @@ namespace WindowsFormsApplication1
         public DataRow r;
         public DataTable t;
 
-        private IPchange ipchanger;
+        
+
+        
 
         private bool finished_follow = true;
         private bool finished_like = true;
@@ -29,203 +31,52 @@ namespace WindowsFormsApplication1
         private bool ready_login = false;
         private bool ready_phone = false;
 
-        //Thread
-        private Thread like_thr;
+        Main_Manager manager;
+
+
 
         public Form1()
         {
             InitializeComponent();
+            
+            //conn_manager.like_up();
 
-            conn_manager = new sql_connection_manager(this);
-
-            DataRow r = conn_manager.version_control();
-
-            textBox1.Text = "EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n";
-
-            conn_manager.like_up();
-
-
-            ipchanger = new IPchange(this, conn_manager);
-
-            insta_procedure.follow_time = DateTime.Now;
-            insta_procedure.like_time = DateTime.Now;
-
-
-            //모바일 연결
-
-
+            
+            
 
         }
 
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            like_thr = new Thread(ipchanger.StartListening);
-            like_thr.Start();
+            manager = new Main_Manager(this);
         }
 
 
         public void log(string logging)
         {
 
-         
+
             Invoke(new MethodInvoker(delegate ()
             {
 
                 textBox1.AppendText(Environment.NewLine);
-                textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+            textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+
 
             }));
 
         }
 
-        public void like_proc()
-        {
-            while (true)
-            {
-                try
-                {
-
-                    insta_procedure insta_run = new insta_procedure(this, conn_manager);
-
-                    //시작
 
 
 
-                    insta_run.start();
-
-
-                    if (insta_run.block_check())
-                    {
-                        //막힌 계정이면 끄고 루프 탈출
-                        insta_run.quit();
-                        return;
-                    }
-                    //막힌 계정이 아니면 로그인
-
-
-
-                    //1.해시태그 검색
-                   // insta_run.hash_tag_search();
-
-                    //좋아요 루프
-
-
-                  //  insta_run.like_loop(1);
-
-
-
-
-                    //2. 등록된 유저 검색
-
-
-
-                  //  insta_run.random_user();
-
-                //    insta_run.like_loop(1);
-
-
-                    //insta_run.logout();
-
-                    //3. 요청 유저
-                    //팔로우, 좋아요
-                 //   insta_run.require();
-
-                //    insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
-
-                    //call unfollow
-                    insta_run.unfollow();
-
-                    //store of two numbers
-                 //  insta_run.store_followers();
-
-
-                    insta_run.quit();
-
-
-                    new Thread(ipchanger.send_change).Start();
-                    Thread.Sleep(5000);
-
-
-                }
-
-                catch (Exception ex)
-                {
-
-                    Invoke(new MethodInvoker(delegate ()
-                    {
-                        log(ex.StackTrace);
-                        //  textBox1.Text ="ERROR";
-                    }));
-                }
-
-            }
-
-        }
-
-        //public void follow_proc()
-        //{
-
-        //    try
-        //    {
-        //        insta_procedure insta_run2 = new insta_procedure(this, conn_manager);
-
-        //        //시작
-
-
-
-        //        insta_run2.start();
-
-
-        //        if (insta_run2.block_check())
-        //        {
-        //            //막힌 계정이면 끄고 루프 탈출
-        //            insta_run2.quit();
-        //            return;
-        //        }
-        //        //막힌 계정이 아니면 로그인
-
-
-        //        //1.해시태그 검색
-        //        insta_run2.hash_tag_search();
-
-
-        //        //팔로우 루프
-        //        insta_run2.follow_loop();
-
-
-
-        //        //2. 등록된 유저 검색
-        //        insta_run2.random_user();
-
-        //        insta_run2.follow_loop();
-
-
-        //        //insta_run.logout();
-
-        //        //3. 요청 유저
-        //        //팔로우, 좋아요
-
-        //        insta_run2.quit();
-
-        //        finished_follow = true;
-        //        check_finish_proc();
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        textBox1.Text = ex.StackTrace;
-        //    }
-
-
-        //}
 
 
         //CHECK STATUS OF HASH TAGS FOR A USER
         public bool checkHashTag()
         {
-            DataRow row = conn_manager.check_hashtag();
+            DataRow row = manager.conn_manager.check_hashtag();
             if (row == null)
             {
                 log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
@@ -241,7 +92,7 @@ namespace WindowsFormsApplication1
         //CHECK STATUS OF COMMENTS FOR A USER
         public bool checkCommentStatus()
         {
-            DataRow row = conn_manager.check_comments();
+            DataRow row = manager.conn_manager.check_comments();
             if (row == null)
             {
                 log("YOU NEED TO ENTER  COMMENTS");
@@ -259,7 +110,7 @@ namespace WindowsFormsApplication1
         private void button1_Click(object sender, EventArgs e)
         {
 
-            Thread like_thr = new Thread(like_proc);
+            Thread like_thr = new Thread(manager.like_proc);
             like_thr.Start();
 
         }
@@ -288,7 +139,7 @@ namespace WindowsFormsApplication1
 
 
 
-                    t = conn_manager.SelectData();
+                    t = manager.conn_manager.SelectData();
                     r = t.Rows[0];
 
                     foreach (DataRow r in t.Rows)
@@ -333,6 +184,7 @@ namespace WindowsFormsApplication1
             if (ready_login && ready_phone)
             {
                 button1.Enabled = true;
+                button2.Enabled = true;
             }
         }
 
@@ -345,7 +197,7 @@ namespace WindowsFormsApplication1
 
             try
             {
-                DataRow dr = conn_manager.Select_job(selected_account);
+                DataRow dr = manager.conn_manager.Select_job(selected_account);
                 if (dr == null)
                 {
                     limit_comment.Text = "None";
@@ -393,13 +245,13 @@ namespace WindowsFormsApplication1
 
         private void button4_Click(object sender, EventArgs e)
         {
-            log(conn_manager.select_request()["mb_id"].ToString());
+            log(manager.conn_manager.select_request()["mb_id"].ToString());
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            log(conn_manager.Select_content()["content"].ToString());
-            t = conn_manager.SelectData();
+            log(manager.conn_manager.Select_content()["content"].ToString());
+            t = manager.conn_manager.SelectData();
             r = t.Rows[0];
 
             foreach (DataRow r in t.Rows)
@@ -410,7 +262,8 @@ namespace WindowsFormsApplication1
 
         private void button6_Click(object sender, EventArgs e)
         {
-            conn_manager.insert_insta_job();
+            log("is it working?");
+            manager.conn_manager.insert_insta_job();
         }
 
 
@@ -427,17 +280,11 @@ namespace WindowsFormsApplication1
             IPchange.listener.Close();
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            ipchanger.refresh_connection();
-            like_thr.Join();
-            like_thr = new Thread(ipchanger.StartListening);
-            like_thr.Start();
-        }
+   
 
         private void button7_Click(object sender, EventArgs e)
         {
-            if (ipchanger.socket_check())
+            if (Main_Manager.ipchanger.socket_check())
             {
                 log("socket connected");
             }
@@ -449,7 +296,7 @@ namespace WindowsFormsApplication1
 
         private void button8_Click(object sender, EventArgs e)
         {
-            new Thread(ipchanger.send_change).Start();
+            new Thread(Main_Manager.ipchanger.send_change).Start();
         }
     }
 }

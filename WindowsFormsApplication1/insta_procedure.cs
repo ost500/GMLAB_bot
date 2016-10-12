@@ -15,14 +15,14 @@ namespace WindowsFormsApplication1
     class insta_procedure
     {
 
-        private static ChromeDriver driver;
+        protected static ChromeDriver driver;
         private StringBuilder verificationErrors;
-        private string baseURL;
+        protected string baseURL = "https://www.instagram.com";
         private bool acceptNextAlert = true;
-        Form1 context;
-        WebDriverWait wait;
+        protected Form1 context;
+        protected WebDriverWait wait;
 
-        IWebElement myDynamicElement;
+        protected IWebElement myDynamicElement;
         int sleep_t;
 
         protected sql_connection_manager conn_manager;
@@ -34,18 +34,18 @@ namespace WindowsFormsApplication1
         DataRow r;
 
         //follow 시간 like 시간
-        static public DateTime follow_time;
-        static public DateTime like_time;
-        static public DateTime comment_time;
-        static public string save_follow_time;
+        public static DateTime follow_time;
+        public static DateTime like_time;
+        public static DateTime comment_time;
+        public static string save_follow_time;
 
         private int like_time_sec = 11;
         private int follow_time_min = 3;
-        public int delay_like;
-        public int delay_comment;
-        public int delay_follow;
-        public int delay_unfollow;
-        public string current_user;
+        public static int delay_like;
+        public static int delay_comment;
+        public static int delay_follow;
+        public static int delay_unfollow;
+        public static string current_user;
 
         //public string user_id;
 
@@ -98,7 +98,8 @@ namespace WindowsFormsApplication1
             {
                 log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR " + user_id);
                 log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD DELAYS");
-                return false;
+                //return false;
+                return true;
             }
             else
             {
@@ -127,7 +128,6 @@ namespace WindowsFormsApplication1
 
         }
 
-
         public int getCommentDealy(string user_id)
         {
 
@@ -150,13 +150,15 @@ namespace WindowsFormsApplication1
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 3;
+                //return 3;
+                return 1;
             }
             else
             {
                 delay_follow = Int32.Parse(jobrow["delay_follow"].ToString());
 
-                return delay_follow;
+                //return delay_follow;
+                return 1;
             }
         }
 
@@ -228,9 +230,11 @@ namespace WindowsFormsApplication1
             //  log("COMMENT DELAY:" + comment.ToString());
             log(now.ToString());
             log(comment_time.ToString());
+
             log(now.Subtract(comment_time).TotalSeconds.ToString() + "comment_time_gap");
 
             if (now.Subtract(comment_time).TotalSeconds > delay_comment)
+
             {
                 comment_time = DateTime.Now;
                 return true;
@@ -360,13 +364,14 @@ namespace WindowsFormsApplication1
             //driver = new ChromeDriver("C:\\Program Files (x86)\\Google\\Chrome\\Application");
 
 
-            baseURL = "https://www.instagram.com";
+
             verificationErrors = new StringBuilder();
 
             log("시작했습니다");
 
             driver.Navigate().GoToUrl(baseURL + "/");
             log("메인으로 갔습니다");
+
 
 
         }
@@ -464,60 +469,51 @@ namespace WindowsFormsApplication1
 
         public void go_to_there(string where_to)
         {
-            driver.Navigate().GoToUrl(baseURL + where_to);
-            //log(where_to + "(으)로 이동");
-        }
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            for (int i = 0; i <= 150; i += 10)
+            {
+                js.ExecuteScript("window.scrollTo(" + i + ", " + (i + 10) + ");");
+                Thread.Sleep(rnd.Next(100, 300));
+            }
+            for (int i = 150; i <= 0; i -= 10)
+            {
+                js.ExecuteScript("window.scrollTo(" + i + ", " + (i - 10) + ");");
+                Thread.Sleep(rnd.Next(100, 300));
+            }
 
 
 
-        public void random_user()
-        {
-            DataTable random_user_table = conn_manager.Select_RandomUser(2);
 
-            go_to_there("/" + random_user_table.Rows[0]["user_id"]);
             Thread.Sleep(rnd.Next(1000, 3000));
-            //like_follow_loop();
 
-            //log("유저 검색");
-
-        }
-
-        public void hash_tag_search()
-        {
-            go_to_there("/explore/tags/" + conn_manager.Select_tag()["tag"]);
-            //log("해쉬태그 검색");
+            driver.FindElement(By.CssSelector("input._9x5sw._qy55y")).Clear();
             Thread.Sleep(rnd.Next(1000, 3000));
-        }
-
-        public void require()
-        {
-            DataRow require_table = conn_manager.select_request();
-            go_to_there("/" + require_table["account"]);
+            driver.FindElement(By.CssSelector("input._9x5sw._qy55y")).SendKeys(where_to);
             Thread.Sleep(rnd.Next(1000, 3000));
+            driver.FindElement(By.XPath("//div[2]/div/a/div/div[2]")).Click();
+
+
+
+            //driver.Navigate().GoToUrl(baseURL + where_to);
+            log(where_to + "(으)로 이동");
         }
 
-        public int require_follow_count()
-        {
-            DataRow require_table = conn_manager.select_request();
-            context.log("follow required" + ((int)require_table["request_follow"] - (int)require_table["done_follow"]).ToString());
-            return (int)require_table["request_follow"] - (int)require_table["done_follow"];
 
-        }
 
-        public int require_like_count()
-        {
-            DataRow require_table = conn_manager.select_request();
-            context.log("like required" + ((int)require_table["request_like"] - (int)require_table["done_like"]).ToString());
-            return (int)require_table["request_like"] - (int)require_table["done_like"];
 
-        }
+
+
+
+
+
+
 
         public void like_loop(int follow_count, int like_count = 1000)
         {
 
 
             int i = 0;
-
+            Thread.Sleep(rnd.Next(1000, 3000));
 
 
             //팔로우
@@ -576,13 +572,11 @@ namespace WindowsFormsApplication1
 
 
 
-            if (IsElementPresent(By.Id("pImage_" + i)))
+            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div")))
             {
-                IWebElement img_element = driver.FindElement(By.Id("pImage_" + i));
-                img_element = img_element.FindElement(By.XPath(".."));
-                img_element = img_element.FindElement(By.XPath(".."));
-                img_element = img_element.FindElement(By.XPath(".."));
-
+                context.log("FOUND FIRST PICTURE##################");
+                IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
+                
                 img_element.Click();
 
                 int k = 0;
@@ -618,71 +612,92 @@ namespace WindowsFormsApplication1
 
 
 
-                    if (follow_time_gap(delay_follow))
-                    {
+                    //if (follow_time_gap(delay_follow))
+                    //{
                         //팔로우
-                        if (IsElementPresent(By.XPath("//button")))
+                        if (IsElementPresent(By.XPath("//header/span/button")))
                         {
                             try
                             {
                                 //팔로우를 찾아서 있으면 진행 없으면 에러
-                                Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//button")).Text);
-                                driver.FindElement(By.XPath("//button")).Click();
+                                Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
+                                driver.FindElement(By.XPath("//header/span/button")).Click();
+
 
                                 //Save Follow data
                                 saveFollowData();
 
+                                
                                 follow_count--;
+                                
+
+
+                                ////팔로우하면 댓글 자동
+                                //t = conn_manager.Select_comments();
+
+                                //string comment = t.Rows[0]["comment"].ToString();
+
+                                ////팔로우를 찾아서 있으면 진행 없으면 에러
+                                //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
+                                //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
+                                ////update worknumber  of comment
+                                //conn_manager.Update_comment_worknum(comment);
+
+
                                 Thread.Sleep(rnd.Next(1000, 3000));
                             }
-                            catch (Exception e) { }
+                            catch (Exception e)
+                            {
+                                break;
+                            }
                             log("팔로우 했습니다");
                         }
 
-                    }
+                    //}
 
 
-                    if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
-                    //"좋아요"가 클릭 돼 있지 않을 때
-                    {
-                        if (like_time_gap(delay_like))
-                        {
-                            driver.FindElement(By.CssSelector("span._soakw.coreSpriteHeartOpen")).Click();
-                        }
+                    //if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
+                    ////"좋아요"가 클릭 돼 있지 않을 때
+                    //{
+                    //    if (like_time_gap(delay_like))
+                    //    {
+                    //        driver.FindElement(By.CssSelector("span._soakw.coreSpriteHeartOpen")).Click();
+                    //    }
 
 
-                        //"좋아요" 클릭! 
-                        //log("좋아요를 눌렀습니다");
-                        Thread.Sleep(rnd.Next(1000, 3000));
-                    }
-                    else
-                    //"좋아요"가 클릭 돼 있을 때
-                    {
+                    //    //"좋아요" 클릭! 
+                    //    //log("좋아요를 눌렀습니다");
+                    //    Thread.Sleep(rnd.Next(1000, 3000));
+                    //}
+                    //else
+                    ////"좋아요"가 클릭 돼 있을 때
+                    //{
 
-                    }
+                    //}
 
-                    //comment portion
-                    if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
-                    {
-                        if (comment_time_gap(delay_comment))
-                        {
+                    ////comment portion
+                    //if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
+                    //{
+                    //    if (comment_time_gap(delay_comment))
+                    //    {
 
-                            t = conn_manager.Select_comments();
+                    //        t = conn_manager.Select_comments();
 
-                            string comment = t.Rows[0]["comment"].ToString();
+                    //        string comment = t.Rows[0]["comment"].ToString();
 
-                            //팔로우를 찾아서 있으면 진행 없으면 에러
-                            driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-                            driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
-                            //update worknumber  of comment
-                            conn_manager.Update_comment_worknum(comment);
+                    //        //팔로우를 찾아서 있으면 진행 없으면 에러
+                    //        driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
+                    //        driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
+                    //        //update worknumber  of comment
+                    //        conn_manager.Update_comment_worknum(comment);
 
-                        }
-                        Thread.Sleep(rnd.Next(1000, 3000));
-                    }
+                    //    }
+                    //    Thread.Sleep(rnd.Next(1000, 3000));
+                    //    Thread.Sleep(rnd.Next(1000, 3000));
+                    //}
 
 
-                    if (!IsElementPresent(By.LinkText("다음")))  //"다음"이 없을 때
+                    if (!IsElementPresent(By.LinkText("다음"))) //"다음"이 없을 때
                     {
 
                         //다음이 없고 follow는 안했을 때 대기
@@ -703,10 +718,14 @@ namespace WindowsFormsApplication1
 
                                 //팔로우 
                             }
-                            catch (Exception ex) { log("이미 팔로우 했습니다"); }
+                            catch (Exception ex)
+                            {
+                                log("이미 팔로우 했습니다");
+                            }
                             break;
 
                         }
+
 
                     }
                     else
@@ -714,6 +733,7 @@ namespace WindowsFormsApplication1
 
                         //"다음"이 있을 때
                         driver.FindElement(By.LinkText("다음")).Click();
+
 
                         log("다음 게시물로 넘어갑니다");
                     }
@@ -725,6 +745,7 @@ namespace WindowsFormsApplication1
                     wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                     myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
 
+
                     driver.FindElement(By.CssSelector("button._3eajp")).Click();
                 }
                 catch (Exception e)
@@ -732,7 +753,9 @@ namespace WindowsFormsApplication1
                     //닫기가 없으면 그냥 패스~
                 }
 
+
             }
+
 
 
 
@@ -741,6 +764,7 @@ namespace WindowsFormsApplication1
             //랜덤 유저검색 후 팔로우
             if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
             {
+
                 log("333팔로우");
                 try
                 {
@@ -778,6 +802,7 @@ namespace WindowsFormsApplication1
                         saveFollowData();
 
                         log("기다렸다가 팔로우 했습니다3 --이곳입니다");
+
                     }
 
                     Thread.Sleep(rnd.Next(1000, 3000));
@@ -1127,8 +1152,8 @@ namespace WindowsFormsApplication1
             catch (Exception) { log("Profile not found!!"); }
 
 
-        }
 
+        }
 
 
         public void logout()
@@ -1174,7 +1199,7 @@ namespace WindowsFormsApplication1
 
         }
 
-        private bool IsElementPresent(By by)
+        protected bool IsElementPresent(By by)
         {
             try
             {
