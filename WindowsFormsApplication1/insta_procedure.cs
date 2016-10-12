@@ -576,7 +576,7 @@ namespace WindowsFormsApplication1
             {
                 context.log("FOUND FIRST PICTURE##################");
                 IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
-                
+
                 img_element.Click();
 
                 int k = 0;
@@ -614,44 +614,44 @@ namespace WindowsFormsApplication1
 
                     //if (follow_time_gap(delay_follow))
                     //{
-                        //팔로우
-                        if (IsElementPresent(By.XPath("//header/span/button")))
+                    //팔로우
+                    if (IsElementPresent(By.XPath("//header/span/button")))
+                    {
+                        try
                         {
-                            try
-                            {
-                                //팔로우를 찾아서 있으면 진행 없으면 에러
-                                Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
-                                driver.FindElement(By.XPath("//header/span/button")).Click();
+                            //팔로우를 찾아서 있으면 진행 없으면 에러
+                            Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
+                            driver.FindElement(By.XPath("//header/span/button")).Click();
 
 
-                                //Save Follow data
-                                saveFollowData();
-
-                                
-                                follow_count--;
-                                
+                            //Save Follow data
+                            saveFollowData();
 
 
-                                ////팔로우하면 댓글 자동
-                                //t = conn_manager.Select_comments();
-
-                                //string comment = t.Rows[0]["comment"].ToString();
-
-                                ////팔로우를 찾아서 있으면 진행 없으면 에러
-                                //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-                                //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
-                                ////update worknumber  of comment
-                                //conn_manager.Update_comment_worknum(comment);
+                            follow_count--;
 
 
-                                Thread.Sleep(rnd.Next(1000, 3000));
-                            }
-                            catch (Exception e)
-                            {
-                                break;
-                            }
-                            log("팔로우 했습니다");
+
+                            ////팔로우하면 댓글 자동
+                            //t = conn_manager.Select_comments();
+
+                            //string comment = t.Rows[0]["comment"].ToString();
+
+                            ////팔로우를 찾아서 있으면 진행 없으면 에러
+                            //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
+                            //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
+                            ////update worknumber  of comment
+                            //conn_manager.Update_comment_worknum(comment);
+
+
+                            Thread.Sleep(rnd.Next(1000, 3000));
                         }
+                        catch (Exception e)
+                        {
+                            break;
+                        }
+                        log("팔로우 했습니다");
+                    }
 
                     //}
 
@@ -889,9 +889,9 @@ namespace WindowsFormsApplication1
 
                             //subtract db followers from website followers and add 15 to result
                             int followers_count_new = followers_count - Int32.Parse(row["followers"].ToString());
-
+                            log("Check_COUNT: " + followers_count_new.ToString());
                             // followers_count_new = followers_count_new + 25;
-                            if (followers_count > 0) { followers_count_new = 100; } else { followers_count_new = 100; }
+                            if (followers_count > 0) { followers_count_new = followers_count_new + 25; } else { followers_count_new = 25; }
 
                             log("WEB_COUNT: " + followers_count.ToString());
 
@@ -900,11 +900,14 @@ namespace WindowsFormsApplication1
                             //get all followed users of current user
                             t = conn_manager.select_follows(current_user);
 
+                            
                             if (t != null)
                             {
                                 //For each  followed users match with website's followers list
                                 foreach (DataRow r in t.Rows)
                                 {
+
+                                    //Set the intial scroll Delay
                                     scroll = 5;
 
 
@@ -971,9 +974,14 @@ namespace WindowsFormsApplication1
 
                                     }
                                     else { log("Duration is not greater than 72 hours. Check next followed_id"); }
+                                  
+                                    ////////////////////RESET PART BEGINS////////////////////////////////////////////////
+
+                                    //Reset the scroll delay to initial value
+                                    scroll = 5;
 
                                     //Reset scroll to Top of list
-                                    scroll = 5;
+
                                     for (int j = followers_count_new; j >= 0; j -= 20)
                                     {
 
@@ -982,8 +990,10 @@ namespace WindowsFormsApplication1
                                         Thread.Sleep(rnd.Next(1000, 1000));
 
                                     }
+                                    /////////////////////////////RESET PART END ////////////////////////////////////////
 
-                                    ///////////////////// Unfollow if flag is true [its not found in the follower's list]   /////////////////////////
+
+                                    /////// Unfollow if flag is true [its not found in the follower's list] ////////////
                                     if (unfollow_flag == true)
                                     {
 
@@ -1016,9 +1026,6 @@ namespace WindowsFormsApplication1
                                                     //get the  user from website following list
                                                     following_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
 
-
-
-
                                                     if (i == scroll)
                                                     {
                                                         // Scroll inside web element vertically (e.g. 100 pixel)
@@ -1029,8 +1036,6 @@ namespace WindowsFormsApplication1
                                                         scroll = scroll + 3;
                                                         log("scroll:" + scroll.ToString());
                                                     }
-
-
 
                                                     //if he or she is our following list
                                                     if (followedby_me == following_username)
@@ -1090,7 +1095,7 @@ namespace WindowsFormsApplication1
                                         catch (Exception e)
                                         {
                                             //닫기가 없으면 그냥 패스~
-                                            log("Some Error in UnFollow");
+                                            log("UnFollow Error:May be unable to click on Following ");
                                         }
                                     }//End of if [Flag Check]
 
