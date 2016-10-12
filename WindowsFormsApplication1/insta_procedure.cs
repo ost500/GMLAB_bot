@@ -1019,7 +1019,7 @@ namespace WindowsFormsApplication1
                                                             conn_manager.remove_followdata(current_user, followedby_me);
                                                             log("<<<<<<<<<<<<<<< UNFOLLOWED>>>>>>>>>>>>>>>");
                                                             Thread.Sleep(rnd.Next(1000, 3000));
-                                                           
+
                                                             //Wait
                                                             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                                                             myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
@@ -1039,7 +1039,9 @@ namespace WindowsFormsApplication1
                                                         }
                                                         catch { log("Not able to find Following button"); }
                                                     }
-                                                    else { log("Not Found in Following List"); Thread.Sleep(rnd.Next(1000, 1000)); }
+                                                    else
+                                                    { //log("Not Found in Following List"); Thread.Sleep(rnd.Next(1000, 1000)); 
+                                                    }
                                                     //End of If-ELSE
 
                                                 }
