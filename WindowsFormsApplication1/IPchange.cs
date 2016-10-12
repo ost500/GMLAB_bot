@@ -27,7 +27,7 @@ namespace WindowsFormsApplication1
         public void StartListening()
         {
             //waiting start
-            context.ip_changing = true;
+            Main_Manager.ip_changing = true;
 
             // Data buffer for incoming data.
             byte[] bytes = new Byte[1024];
@@ -123,15 +123,16 @@ namespace WindowsFormsApplication1
             conn.mysql_refresh();
 
             //시작 버튼 활성화 시도
+          
             context.start_button_valid("phone");
             //waiting done
-            context.ip_changing = false;
+            Main_Manager.ip_changing = false;
 
         }
 
         public void send_change()
         {
-            context.ip_changing = true;
+            Main_Manager.ip_changing = true;
             try
             {
 
@@ -215,7 +216,7 @@ namespace WindowsFormsApplication1
 
 
 
-            context.ip_changing = false;
+            Main_Manager.ip_changing = false;
             
         }
 

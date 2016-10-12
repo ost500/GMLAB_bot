@@ -19,6 +19,7 @@ namespace WindowsFormsApplication1
         public void hash_tag_search()
         {
             go_to_there("/explore/tags/" + conn_manager.Select_tag()["tag"]);
+            log(baseURL + "/explore/tags/" + conn_manager.Select_tag()["tag"]);
             //log("해쉬태그 검색");
             Thread.Sleep(rnd.Next(1000, 3000));
         }

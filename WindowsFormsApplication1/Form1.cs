@@ -11,7 +11,7 @@ namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
-        public sql_connection_manager conn_manager;
+        
 
         int i = 0;
 
@@ -20,9 +20,9 @@ namespace WindowsFormsApplication1
         public DataRow r;
         public DataTable t;
 
-        private IPchange ipchanger;
+        
 
-        public bool ip_changing = false;
+        
 
         private bool finished_follow = true;
         private bool finished_like = true;
@@ -31,174 +31,86 @@ namespace WindowsFormsApplication1
         private bool ready_login = false;
         private bool ready_phone = false;
 
-        //Thread
-        private Thread like_thr;
+        Main_Manager manager;
+
+
 
         public Form1()
         {
             InitializeComponent();
-
-
-
-
-
-
-
+            
             //conn_manager.like_up();
 
-
-          
-
-
             
-
-
+            
 
         }
 
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            conn_manager = new sql_connection_manager(this);
-            DataRow r = conn_manager.version_control();
-            textBox1.Text = "EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n";
-
-
-            //모바일 연결 mobile connection
-            ipchanger = new IPchange(this, conn_manager);
-
-            insta_procedure.follow_time = DateTime.Now;
-            insta_procedure.like_time = DateTime.Now;
-
-
-
-            like_thr = new Thread(ipchanger.StartListening);
-            like_thr.Start();
-            
+            manager = new Main_Manager(this);
         }
 
 
         public void log(string logging)
         {
 
+
             Invoke(new MethodInvoker(delegate ()
             {
 
                 textBox1.AppendText(Environment.NewLine);
-                textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+            textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+
 
             }));
 
         }
 
-        public void like_proc()
+
+
+
+
+
+        //CHECK STATUS OF HASH TAGS FOR A USER
+        public bool checkHashTag()
         {
-            while (true)
+            DataRow row = manager.conn_manager.check_hashtag();
+            if (row == null)
             {
-                try
-                {
-                    
-                    for (int i = 1; i <= 10; i++)
-                    {
-                        if (ip_changing)
-                        {
-                            log("아이피 변경 중입니다 " + i + " / 10");
-                            // Ip is changing
-                            log(ip_changing.ToString());
-                            Thread.Sleep(1500);
-                            if (i == 10)
-                            {
-                                log("아이피 변경에 실패했습니다");
-                                // Ip_change was failed
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    insta_procedure insta_run = new insta_procedure(this, conn_manager);
-
-                    //시작
-
-
-                    insta_run.start();
-
-
-                    if (insta_run.block_check())
-                    {
-                        //막힌 계정이면 끄고 루프 탈출
-                        insta_run.quit();
-                        return;
-                    }
-                    //막힌 계정이 아니면 로그인
-
-
-
-                    //1.해시태그 검색
-                    insta_run.hash_tag_search();
-
-                    //좋아요 루프
-
-
-                    insta_run.like_loop(1);
-
-
-
-
-                    //2. 등록된 유저 검색
-
-
-
-                    insta_run.random_user();
-
-                    insta_run.like_loop(1);
-
-
-
-
-                    //3. 요청 유저
-                    //팔로우, 좋아요
-                    insta_run.require();
-
-                    insta_run.like_loop(insta_run.require_follow_count(), insta_run.require_like_count());
-
-
-                    insta_run.quit();
-
-
-                    ipchanger.send_change();
-
-                    
-
-
-
-                }
-
-                catch (Exception ex)
-                {
-
-                    Invoke(new MethodInvoker(delegate ()
-                    {
-                        log(ex.StackTrace);
-                        //  textBox1.Text ="ERROR";
-                    }));
-                    break;
-                }
-
+                log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
+                log("PLEASE LOG IN HERE: http://easygram.kr/   & ADD FEW HASH TAGS");
+                return false;
+            }
+            else
+            {
+                log("continue");
+                return true;
+            }
+        }
+        //CHECK STATUS OF COMMENTS FOR A USER
+        public bool checkCommentStatus()
+        {
+            DataRow row = manager.conn_manager.check_comments();
+            if (row == null)
+            {
+                log("YOU NEED TO ENTER  COMMENTS");
+                log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD FEW COMMENTS");
+                return false;
+            }
+            else
+            {
+                log("continue");
+                return true;
             }
 
         }
 
-
-
-
         private void button1_Click(object sender, EventArgs e)
         {
 
-            Thread like_thr = new Thread(like_proc);
+            Thread like_thr = new Thread(manager.like_proc);
             like_thr.Start();
 
         }
@@ -218,20 +130,31 @@ namespace WindowsFormsApplication1
 
                 if (responseString == "clear")
                 {
+
+
+
                     MessageBox.Show("success");
                     textBox1.AppendText("로그인 성공");
                     user = values["mb_id"];
 
-                    //시작 버튼 활성화 시도
-                    start_button_valid("login");
 
-                    t = conn_manager.SelectData();
+
+                    t = manager.conn_manager.SelectData();
                     r = t.Rows[0];
 
                     foreach (DataRow r in t.Rows)
                     {
                         listBox1.Items.Add(r["user_id"]);
                     }
+
+                    //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
+
+                    if (checkCommentStatus() && checkHashTag())
+                    { //시작 버튼 활성화 시도
+                        start_button_valid("login");
+                    }
+                    else { MessageBox.Show("Some Initial Data Required "); }
+
                 }
                 else
                 {
@@ -245,17 +168,23 @@ namespace WindowsFormsApplication1
         {
             if (LorP == "login")
             {
+
                 ready_login = true;
+                ready_phone = true;//testing only
             }
 
             if (LorP == "phone")
             {
                 ready_phone = true;
+                ready_login = true;//testing only
             }
+
+            // log("LN "+ready_login.ToString()); log("PH "+ready_phone.ToString());
 
             if (ready_login && ready_phone)
             {
                 button1.Enabled = true;
+                button2.Enabled = true;
             }
         }
 
@@ -268,20 +197,40 @@ namespace WindowsFormsApplication1
 
             try
             {
-                DataRow dr = conn_manager.Select_job(selected_account);
-                limit_comment.Text = dr["comments"].ToString();
-                limit_follow.Text = dr["follows"].ToString();
-                limit_like.Text = dr["likes"].ToString();
-                limit_unfollow.Text = dr["unfollows"].ToString();
+                DataRow dr = manager.conn_manager.Select_job(selected_account);
+                if (dr == null)
+                {
+                    limit_comment.Text = "None";
+                    limit_follow.Text = "None";
+                    limit_like.Text = "None";
+                    limit_unfollow.Text = "None";
 
 
-                delay_follow.Text = dr["delay_follow"].ToString();
-                delay_like.Text = dr["delay_like"].ToString();
-                delay_unfollow.Text = dr["delay_unfollow"].ToString();
-                delay_comment.Text = dr["delay_comment"].ToString();
+                    delay_follow.Text = "None";
+                    delay_like.Text = "None";
+                    delay_unfollow.Text = "None";
+                    delay_comment.Text = "None";
 
-                time_start.Text = dr["hour_between_start"].ToString();
-                time_finish.Text = dr["hour_between_end"].ToString();
+                    time_start.Text = "None";
+                    time_finish.Text = "None";
+
+                }
+                else
+                {
+                    limit_comment.Text = dr["limit_comments"].ToString();
+                    limit_follow.Text = dr["limit_follows"].ToString();
+                    limit_like.Text = dr["limit_likes"].ToString();
+                    //limit_unfollow.Text = dr["unfollows"].ToString();
+
+
+                    delay_follow.Text = dr["delay_follow"].ToString();
+                    delay_like.Text = dr["delay_like"].ToString();
+                    delay_unfollow.Text = dr["delay_unfollow"].ToString();
+                    delay_comment.Text = dr["delay_comment"].ToString();
+
+                    time_start.Text = dr["hour_between_start"].ToString();
+                    time_finish.Text = dr["hour_between_end"].ToString();
+                }
             }
             catch (IndexOutOfRangeException ex)
             {
@@ -296,13 +245,13 @@ namespace WindowsFormsApplication1
 
         private void button4_Click(object sender, EventArgs e)
         {
-            log(conn_manager.select_request()["mb_id"].ToString());
+            log(manager.conn_manager.select_request()["mb_id"].ToString());
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            log(conn_manager.Select_content()["content"].ToString());
-            t = conn_manager.SelectData();
+            log(manager.conn_manager.Select_content()["content"].ToString());
+            t = manager.conn_manager.SelectData();
             r = t.Rows[0];
 
             foreach (DataRow r in t.Rows)
@@ -314,7 +263,7 @@ namespace WindowsFormsApplication1
         private void button6_Click(object sender, EventArgs e)
         {
             log("is it working?");
-            conn_manager.insert_insta_job();
+            manager.conn_manager.insert_insta_job();
         }
 
 
@@ -331,17 +280,11 @@ namespace WindowsFormsApplication1
             IPchange.listener.Close();
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            ipchanger.refresh_connection();
-            like_thr.Join();
-            like_thr = new Thread(ipchanger.StartListening);
-            like_thr.Start();
-        }
+   
 
         private void button7_Click(object sender, EventArgs e)
         {
-            if (ipchanger.socket_check())
+            if (Main_Manager.ipchanger.socket_check())
             {
                 log("socket connected");
             }
@@ -353,7 +296,7 @@ namespace WindowsFormsApplication1
 
         private void button8_Click(object sender, EventArgs e)
         {
-            new Thread(ipchanger.send_change).Start();
+            new Thread(Main_Manager.ipchanger.send_change).Start();
         }
     }
 }
