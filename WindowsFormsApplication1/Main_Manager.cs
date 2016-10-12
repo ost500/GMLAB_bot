@@ -126,7 +126,14 @@ namespace WindowsFormsApplication1
                     req_run.require();
 
                     req_run.like_loop(1, req_run.require_like_count());
-                    
+
+
+                    //call unfollow
+                    insta_run.unfollow();
+
+                    //store of two numbers
+                    insta_run.store_followers();
+
 
                     insta_run.quit();
 

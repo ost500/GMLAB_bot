@@ -7,7 +7,7 @@ using System.Data;
 using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using System.Globalization;
 
 
 namespace WindowsFormsApplication1
@@ -276,6 +276,28 @@ namespace WindowsFormsApplication1
 
         }
 
+        public void changeLanguageOnProfile()
+        {
+            try
+            {
+
+                //check for Profile Keyword 
+                Assert.AreEqual("Profile", driver.FindElement(By.LinkText("Profile")).Text);
+                //if Profile Word exist [means lanuage is English] then click on the Profile 
+                driver.FindElement(By.LinkText("Profile")).Click();
+                //Now Change the language to Korean
+                new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
+                log("Language Changed after clicking on Profile");
+
+            }
+            catch (Exception exe)
+            {
+                log("Profile is already in korean");
+            }
+
+        }
+
+
 
         public void log(string logging)
         {
@@ -401,22 +423,9 @@ namespace WindowsFormsApplication1
                 }
                 catch (Exception e)
                 {
-                    try
-                    {
 
-                        //check for Profile Keyword 
-                        Assert.AreEqual("Profile", driver.FindElement(By.LinkText("Profile")).Text);
-                        //if Profile Word exist [means lanuage is English] then click on the Profile 
-                        driver.FindElement(By.LinkText("Profile")).Click();
-                        //Now Change the language to Korean
-                        new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
-                        log("Language Changed after login");
-                    }
-                    catch (Exception exe)
-                    {
-                        log("korean");
-                        //  return false;
-                    }
+                    //Change Language to Korean If Profile is in English
+                    changeLanguageOnProfile();
 
 
                     //안나오면 정상 가동
@@ -750,8 +759,10 @@ namespace WindowsFormsApplication1
 
 
 
+            log("기다렸다가 팔로우를 할 시간이에요");
 
-            try
+            //랜덤 유저검색 후 팔로우
+            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
             {
 
                 log("333팔로우");
@@ -791,18 +802,17 @@ namespace WindowsFormsApplication1
                         saveFollowData();
 
                         log("기다렸다가 팔로우 했습니다3 --이곳입니다");
+
                     }
 
                     Thread.Sleep(rnd.Next(1000, 3000));
                 }
-                catch (Exception e) { }
+                catch (Exception e) { log(e.StackTrace); }
 
-
-                driver.FindElement(By.CssSelector("button._3eajp")).Click();
             }
-            catch (Exception e)
+            //다른모양의 팔로우 
+            else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")))
             {
-
                 log("444팔로우");
                 try
                 {
@@ -833,7 +843,7 @@ namespace WindowsFormsApplication1
                     }
                     Thread.Sleep(rnd.Next(1000, 3000));
                 }
-                catch (Exception ex) { }
+                catch (Exception e) { }
             }
 
             follow_time = DateTime.Now;
@@ -841,11 +851,307 @@ namespace WindowsFormsApplication1
 
         }
 
+        //UNFOLLOW PROCEDURE
+        public void unfollow()
+        {
+
+            bool unfollow_flag = false;
+            string web_followers;
+            string follower_username;
+            string following_username;
+            IWebElement Box;
+            int DivHeight;
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            int scroll;
+
+            try
+            {
+                if (IsElementPresent(By.LinkText("프로필")))
+                {
+                    //Click on profile
+                    driver.FindElement(By.LinkText("프로필")).Click();
+
+                    Thread.Sleep(rnd.Next(1000, 3000));
+                    try
+                    {
+
+                        web_followers = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/ul/li[2]/a/span")).Text;
+                        //span[@id='react-root']/section/main/article/header/div[2]/ul/li[2]/a/span         
+
+                        Thread.Sleep(rnd.Next(1000, 3000));
+                        int followers_count = Int32.Parse(web_followers, NumberStyles.Integer | NumberStyles.AllowThousands, new CultureInfo("en-US"));
+
+                        //get  followers from db
+                        DataRow row = conn_manager.select_followers_count(current_user);
+
+                        if (row != null)
+                        {
+
+                            //subtract db followers from website followers and add 15 to result
+                            int followers_count_new = followers_count - Int32.Parse(row["followers"].ToString());
+
+                            // followers_count_new = followers_count_new + 25;
+                            if (followers_count > 0) { followers_count_new = 100; } else { followers_count_new = 100; }
+
+                            log("WEB_COUNT: " + followers_count.ToString());
+
+                            log(" POSSIBILITY_COUNT: " + followers_count_new);
+
+                            //get all followed users of current user
+                            t = conn_manager.select_follows(current_user);
+
+                            if (t != null)
+                            {
+                                //For each  followed users match with website's followers list
+                                foreach (DataRow r in t.Rows)
+                                {
+                                    scroll = 5;
+
+
+                                    //get the user followed by me and time as well
+                                    string followedby_me = r["followed_id"].ToString();
+                                    log("User Followed by Me: " + followedby_me + " \n");
+
+                                    DateTime time_whenfollowed = (DateTime)r["time"];
+                                    DateTime now = DateTime.Now;
+                                    double duration = now.Subtract(time_whenfollowed).TotalHours;
+
+                                    log(" Duration =" + now.Subtract(time_whenfollowed).TotalHours.ToString() + " \n");
+
+                                    //Click on followers to get all list
+                                    driver.FindElement(By.XPath("//li[2]/a")).Click();
+                                    //GET the BOX height
+                                    Box = driver.FindElement(By.ClassName("_4gt3b"));
+                                    DivHeight = Box.Size.Height;
+                                    //Add Delay
+                                    Thread.Sleep(rnd.Next(1000, 3000));
+
+                                    if (duration > 72)
+                                    {
+                                        for (int i = 1; i < followers_count_new; i++)
+                                        {
+                                            try
+                                            {
+
+
+                                                //get the user from website follower list
+                                                follower_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
+
+
+                                                if (i == scroll)
+                                                {
+
+                                                    // Scroll inside web element vertically (e.g. 100 pixel)
+
+                                                    DivHeight = DivHeight + scroll * 10;
+                                                    js.ExecuteScript("arguments[0].scrollTop = arguments[1];", driver.FindElement(By.ClassName("_4gt3b")), DivHeight);
+                                                    Thread.Sleep(rnd.Next(1000, 2000));
+                                                    scroll = scroll + 3;
+                                                    log("Scroll" + scroll);
+
+                                                }
+
+                                                //if user is not in the list
+                                                if (followedby_me != follower_username)
+                                                {
+
+                                                    unfollow_flag = true;
+                                                }
+                                                else
+                                                {
+                                                    unfollow_flag = false;
+                                                    log(" MATCHED AND FOLLOWING ME"); Thread.Sleep(rnd.Next(1000, 3000));
+                                                    break;
+                                                }//End of if-else
+                                            }
+                                            catch { log("Wrong Followers Index: " + i); break; }
+                                        }//end of for loop
+
+
+
+                                    }
+                                    else { log("Duration is not greater than 72 hours. Check next followed_id"); }
+
+                                    //Reset scroll to Top of list
+                                    scroll = 5;
+                                    for (int j = followers_count_new; j >= 0; j -= 20)
+                                    {
+
+                                        // Scroll inside web element vertically (e.g. 100 pixel)
+                                        js.ExecuteScript("arguments[0].scrollTop = arguments[1];", driver.FindElement(By.ClassName("_4gt3b")), j);
+                                        Thread.Sleep(rnd.Next(1000, 1000));
+
+                                    }
+
+                                    ///////////////////// Unfollow if flag is true [its not found in the follower's list]   /////////////////////////
+                                    if (unfollow_flag == true)
+                                    {
+
+                                        try
+                                        {
+
+                                            // 닫기
+                                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                                            myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+
+                                            //Close followers page
+                                            driver.FindElement(By.CssSelector("button._3eajp")).Click();
+                                            log("Opening following.....");
+                                            //Just Sleep
+                                            Thread.Sleep(rnd.Next(1000, 3000));
+
+                                            //Click on following to get all list
+                                            driver.FindElement(By.XPath("//li[3]/a")).Click();
+                                            //Find the Height
+                                            Box = driver.FindElement(By.ClassName("_4gt3b"));
+                                            DivHeight = Box.Size.Height;
+                                            log("Opened");
+                                            Thread.Sleep(rnd.Next(1000, 3000));
+
+                                            for (int i = 1; i < followers_count_new; i++)
+                                            {
+                                                try
+                                                {
+
+                                                    //get the  user from website following list
+                                                    following_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
 
 
 
 
+                                                    if (i == scroll)
+                                                    {
+                                                        // Scroll inside web element vertically (e.g. 100 pixel)
 
+                                                        DivHeight = DivHeight + scroll * 10;
+                                                        js.ExecuteScript("arguments[0].scrollTop = arguments[1];", driver.FindElement(By.ClassName("_4gt3b")), DivHeight);
+                                                        Thread.Sleep(rnd.Next(1000, 2000));
+                                                        scroll = scroll + 3;
+                                                        log("scroll:" + scroll.ToString());
+                                                    }
+
+
+
+                                                    //if he or she is our following list
+                                                    if (followedby_me == following_username)
+                                                    {
+                                                        try
+                                                        {
+
+                                                            //then unfollow him or her 
+                                                            driver.FindElement(By.XPath("//li[" + i + "]/div/div/span/button")).Click();
+                                                            //Delete from db
+                                                            conn_manager.remove_followdata(current_user, followedby_me);
+                                                            log("<<<<<<<<<<<<<<< UNFOLLOWED>>>>>>>>>>>>>>>");
+                                                            Thread.Sleep(rnd.Next(1000, 3000));
+                                                           
+                                                            //Wait
+                                                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                                                            myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+
+                                                            for (int j = followers_count_new; j >= 0; j -= 20)
+                                                            {
+                                                                // Scroll inside web element vertically (e.g. 100 pixel)
+                                                                js.ExecuteScript("arguments[0].scrollTop = arguments[1];", driver.FindElement(By.ClassName("_4gt3b")), j);
+                                                                Thread.Sleep(rnd.Next(1000, 1000));
+                                                                ///////////////////// Unfollow if flag is true [its not found in the follower's list]   /////////////////////////
+                                                            }
+
+                                                            //Close following page
+                                                            driver.FindElement(By.CssSelector("button._3eajp")).Click();
+
+                                                            break;
+                                                        }
+                                                        catch { log("Not able to find Following button"); }
+                                                    }
+                                                    else { log("Not Found in Following List"); Thread.Sleep(rnd.Next(1000, 1000)); }
+                                                    //End of If-ELSE
+
+                                                }
+                                                catch { log("Wrong Following Index: " + i); Thread.Sleep(rnd.Next(1000, 1000)); break; }
+
+                                            }//End of For loop
+
+                                            for (int j = followers_count_new; j >= 0; j -= 20)
+                                            {
+                                                // Scroll inside web element vertically (e.g. 100 pixel)
+                                                js.ExecuteScript("arguments[0].scrollTop = arguments[1];", driver.FindElement(By.ClassName("_4gt3b")), j);
+                                                Thread.Sleep(rnd.Next(1000, 1000));
+                                                ///////////////////// Unfollow if flag is true [its not found in the follower's list]   /////////////////////////
+                                            }
+                                            //Wait
+                                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                                            myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+                                            //Close following page
+                                            driver.FindElement(By.CssSelector("button._3eajp")).Click();
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            //닫기가 없으면 그냥 패스~
+                                            log("Some Error in UnFollow");
+                                        }
+                                    }//End of if [Flag Check]
+
+                                }//End of foreach loop
+                            }
+                            else
+                            {
+                                log("Not following Anyone");
+                            }
+                        }
+                        else
+                        {
+                            log("Will not Unfollow as Followers count is not available now");
+                        }//End of if-else
+
+                    }
+                    catch { log("Not able to access Follwers Count from website"); }
+                }//end of if(IsElementPresent)
+            }
+            catch (Exception) { log("Profile not in Korean"); }
+
+
+        } //End of Unfollow Procedure
+
+
+        //STORE FOLLOWERS PROCEDURE
+        public void store_followers()
+        {
+            //Change Language to Korean If Profile is in English
+            changeLanguageOnProfile();
+            //Just Sleep
+            Thread.Sleep(rnd.Next(1000, 3000));
+
+            try
+            {
+
+                if (IsElementPresent(By.LinkText("프로필")))
+                {
+
+                    driver.FindElement(By.LinkText("프로필")).Click();
+                    Thread.Sleep(rnd.Next(1000, 3000));
+                    try
+                    {
+
+                        string followers_num = driver.FindElement(By.CssSelector("a._s53mj >span._bkw5z")).Text;
+
+                        Thread.Sleep(rnd.Next(1000, 3000));
+                        int followers_count = Int32.Parse(followers_num, NumberStyles.Integer | NumberStyles.AllowThousands, new CultureInfo("en-US"));
+
+                        string created_at = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        conn_manager.insert_followersCount(current_user, followers_count, created_at);
+                        //Just Sleep
+                        Thread.Sleep(rnd.Next(1000, 3000));
+                    }
+                    catch { log("Followers Word not Found!!"); }
+
+                }
+            }
+            catch (Exception) { log("Profile not found!!"); }
+
+
+
+        }
 
 
         public void logout()
@@ -867,7 +1173,6 @@ namespace WindowsFormsApplication1
 
             driver.FindElement(By.CssSelector("button._4y3e3")).Click();
             //log("로그아웃 성공");
-
         }
 
         public void quit()
