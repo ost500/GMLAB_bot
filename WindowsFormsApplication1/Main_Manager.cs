@@ -25,29 +25,37 @@ namespace WindowsFormsApplication1
         public static bool ip_changing = false;
 
 
-        
+
 
 
         public Main_Manager(Form1 context)
         {
-            this.context = context;
-            conn_manager = new sql_connection_manager(context);
+            try
+            {
+                this.context = context;
+                conn_manager = new sql_connection_manager(context);
 
 
-            DataRow r = conn_manager.version_control();
-            context.log("EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n");
+                DataRow r = conn_manager.version_control();
+                if (r == null) { throw new NullReferenceException(); }
+
+                context.log("EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n");
 
 
-            //모바일 연결 mobile connection
-            ipchanger = new IPchange(context, conn_manager);
+                //모바일 연결 mobile connection
+                ipchanger = new IPchange(context, conn_manager);
 
-            insta_procedure.follow_time = DateTime.Now;
-            insta_procedure.like_time = DateTime.Now;
+                insta_procedure.follow_time = DateTime.Now;
+                insta_procedure.like_time = DateTime.Now;
 
 
 
-            like_thr = new Thread(ipchanger.StartListening);
-            like_thr.Start();
+                like_thr = new Thread(ipchanger.StartListening);
+                like_thr.Start();
+            }
+            catch (NullReferenceException ex) { context.log("No Result Found!!!!"); }
+
+
         }
 
         public void like_proc()
@@ -87,6 +95,7 @@ namespace WindowsFormsApplication1
 
                     insta_run.start();
 
+                    insta_run.language_check();
 
                     if (insta_run.block_check())
                     {
@@ -145,12 +154,16 @@ namespace WindowsFormsApplication1
 
 
                 }
+                catch (NullReferenceException ex)
+                {
+                    context.log("No Result Found!!!!");
+                }
 
                 catch (Exception ex)
                 {
 
 
-                    insta_run.quit();
+
 
 
                     context.log("에러 발생");
@@ -159,6 +172,10 @@ namespace WindowsFormsApplication1
 
 
 
+                }
+                finally
+                {
+                    insta_run.quit();
                 }
 
 

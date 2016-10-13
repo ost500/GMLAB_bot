@@ -23,8 +23,6 @@ namespace WindowsFormsApplication1
         protected WebDriverWait wait;
 
         protected IWebElement myDynamicElement;
-        int sleep_t;
-
         protected sql_connection_manager conn_manager;
 
         protected Random rnd = new Random();
@@ -39,8 +37,7 @@ namespace WindowsFormsApplication1
         public static DateTime comment_time;
         public static string save_follow_time;
 
-        private int like_time_sec = 11;
-        private int follow_time_min = 3;
+
         public static int delay_like;
         public static int delay_comment;
         public static int delay_follow;
@@ -66,16 +63,7 @@ namespace WindowsFormsApplication1
             follow_time = DateTime.Now;
             comment_time = DateTime.Now;
 
-            //int time;
 
-            //if ((time = (int) conn_manager.select_configuration()["delay_like"]) != null)
-            //{
-            //    like_time_sec = time;
-            //}
-            //if ((time = (int)conn_manager.select_configuration()["delay_follow"]) != null)
-            //{
-            //    follow_time_min = time;
-            //}
 
         }
 
@@ -98,12 +86,11 @@ namespace WindowsFormsApplication1
             {
                 log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR " + user_id);
                 log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD DELAYS");
-                //return false;
-                return true;
+
+                return false;
             }
             else
             {
-                log("continue");
                 return true;
             }
         }
@@ -134,7 +121,7 @@ namespace WindowsFormsApplication1
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 1;
+                return 25;
             }
             else
             {
@@ -150,15 +137,14 @@ namespace WindowsFormsApplication1
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                //return 3;
-                return 1;
+                return 3;
             }
             else
             {
                 delay_follow = Int32.Parse(jobrow["delay_follow"].ToString());
 
-                //return delay_follow;
-                return 1;
+                return delay_follow;
+
             }
         }
 
@@ -257,7 +243,7 @@ namespace WindowsFormsApplication1
 
                 //find the above followed user
                 string followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
-                log("FFFRRRRRR: " + followed);
+
                 //set time
                 save_follow_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 //insert followed id into database
@@ -267,7 +253,7 @@ namespace WindowsFormsApplication1
             {
                 //find the above followed user
                 string followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
-                log("FFFFFFFFFFFFFFF: " + followed);
+
                 //set time
                 save_follow_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 //insert followed id into database
@@ -290,7 +276,7 @@ namespace WindowsFormsApplication1
                 log("Language Changed after clicking on Profile");
 
             }
-            catch (Exception exe)
+            catch (Exception exc)
             {
                 log("Profile is already in korean");
             }
@@ -312,11 +298,10 @@ namespace WindowsFormsApplication1
 
 
             t = conn_manager.SelectData();
+            if (t == null) { throw new NullReferenceException(); }
+
             r = t.Rows[0];
             log("row[0]" + t.Rows[0]["user_id"]);
-            //log("row[1]" + t.Rows[1]);
-
-
 
             //work_number 1 더하기
             conn_manager.Update_worknum();
@@ -341,15 +326,11 @@ namespace WindowsFormsApplication1
             delay_follow = getFollowDelay(current_user);
             delay_unfollow = getUnfollowDelay(current_user);
 
-            log(delay_like.ToString());
-            log(delay_comment.ToString());
-            log(delay_follow.ToString());
-            log(delay_unfollow.ToString());
+
             //Get current directory path and set chrome cache path
             string currentDir = getCurrentPath();
             string path = currentDir + "\\chrome_cache\\" + current_user.Trim();
 
-            // log(path);
             ChromeOptions co = new ChromeOptions();
 
             co.AddArguments("user-data-dir=" + path);
@@ -372,12 +353,11 @@ namespace WindowsFormsApplication1
             driver.Navigate().GoToUrl(baseURL + "/");
             log("메인으로 갔습니다");
 
-
-
         }
 
-        public bool block_check()
+        public void language_check()
         {
+
             try
             {
 
@@ -391,18 +371,22 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                context.log("It's Koreean");
+                context.log("It's already Korean");
             }
 
+
+        }
+
+
+        public bool block_check()
+        {
 
             try
             {
 
-                //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
+                //Check job status ..IF Ok then Proceed Otherwise Stop
 
-                //  if (!checkHashTag()) { log("STOP"); return true; }
-                //  if (!checkCommentStatus()) { log("STOP"); return true; }
-                if (!checkJobStatus(current_user)) { log("STOPPED!!"); return true; }
+                if (!checkJobStatus(current_user)) {  return true; }
 
                 //로그인 버튼이 안뜨고 에러가 난다면 로그인이 돼 있다는 얘기
 
@@ -427,7 +411,6 @@ namespace WindowsFormsApplication1
                     //Change Language to Korean If Profile is in English
                     changeLanguageOnProfile();
 
-
                     //안나오면 정상 가동
                     log("계정 인증이 없다");
                     return false;
@@ -443,9 +426,7 @@ namespace WindowsFormsApplication1
             log("로그인 버튼이 있다");
             login(); //instagram login
 
-
             return false;
-
         }
 
 
@@ -482,8 +463,6 @@ namespace WindowsFormsApplication1
             }
 
 
-
-
             Thread.Sleep(rnd.Next(1000, 3000));
 
             driver.FindElement(By.CssSelector("input._9x5sw._qy55y")).Clear();
@@ -492,17 +471,8 @@ namespace WindowsFormsApplication1
             Thread.Sleep(rnd.Next(1000, 3000));
             driver.FindElement(By.XPath("//div[2]/div/a/div/div[2]")).Click();
 
-
-
-            //driver.Navigate().GoToUrl(baseURL + where_to);
             log(where_to + "(으)로 이동");
         }
-
-
-
-
-
-
 
 
 
@@ -574,7 +544,7 @@ namespace WindowsFormsApplication1
 
             if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div")))
             {
-                context.log("FOUND FIRST PICTURE##################");
+               
                 IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
 
                 img_element.Click();
@@ -900,7 +870,7 @@ namespace WindowsFormsApplication1
                             //get all followed users of current user
                             t = conn_manager.select_follows(current_user);
 
-                            
+
                             if (t != null)
                             {
                                 //For each  followed users match with website's followers list
@@ -974,7 +944,7 @@ namespace WindowsFormsApplication1
 
                                     }
                                     else { log("Duration is not greater than 72 hours. Check next followed_id"); }
-                                  
+
                                     ////////////////////RESET PART BEGINS////////////////////////////////////////////////
 
                                     //Reset the scroll delay to initial value

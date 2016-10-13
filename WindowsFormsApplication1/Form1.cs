@@ -85,7 +85,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                log("continue");
+                
                 return true;
             }
         }
@@ -101,7 +101,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                log("continue");
+               
                 return true;
             }
 
