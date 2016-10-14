@@ -96,7 +96,8 @@ namespace WindowsFormsApplication1
 
                     insta_run.start();
 
-                    insta_run.language_check();
+                    //Check Login Language
+                    insta_run.changeLanguageOnLogin();
 
                     if (insta_run.block_check())
                     {
@@ -108,38 +109,41 @@ namespace WindowsFormsApplication1
 
 
 
-                    ////1.해시태그 검색
-                    //HashTag_proc hash_run = new HashTag_proc(this, conn_manager);
-                    //hash_run.hash_tag_search();
+                    ////1.해시태그 검색 Run Hash Tag procedure if it is checked
+                    HashTag_proc hash_run = new HashTag_proc(context, conn_manager);
 
-                    ////좋아요 루프
-                    //hash_run.like_loop(1);
+                    if (context.hash_tag_checked)
+                    {
+                        hash_run.hash_tag_search();
+                        ////좋아요 루프
+                        hash_run.like_loop(1);
+                    }
+
+                    ////2. 등록된 유저 검색  Run Random User procedure if it is checked
+
+                    RegisteredUser_proc regiuser_run = new RegisteredUser_proc(context, conn_manager);
+
+                    if (context.random_user_checked)
+                    {
+                        regiuser_run.random_user();
+                        regiuser_run.like_loop(1);
+                    }
 
 
-
-
-                    ////2. 등록된 유저 검색
-
-
-
-                    //RegisteredUser_proc regiuser_run = new RegisteredUser_proc(this, conn_manager);
-                    //regiuser_run.random_user();
-
-                    //regiuser_run.like_loop(1);
-
-
-
-
-                    //3. 요청 유저
+                    //3. 요청 유저   This Procedure is Mandatory
                     //팔로우, 좋아요
                     Request_proc req_run = new Request_proc(context, conn_manager);
+
                     req_run.require();
 
                     req_run.like_loop(1, req_run.require_like_count());
 
 
-                    //call unfollow
-                    insta_run.unfollow();
+                    //Run Unfollow Procedure if is checked
+                    if (context.unfollow_checked)
+                    {
+                        insta_run.unfollow();
+                    }
 
                     //store of two numbers
                     insta_run.store_followers();

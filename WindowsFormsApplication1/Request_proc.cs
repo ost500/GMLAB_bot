@@ -22,6 +22,17 @@ namespace WindowsFormsApplication1
         public void like_loop(int follow_count, int like_count = 1000)
         {
 
+            //Reset the delay_follow if Hash tag and random user is not checked 
+            if (!context.hash_tag_checked && !context.random_user_checked)
+            {
+
+                delay_follow = 2.66667 - context.total_user * 0.333333;
+                
+
+            }
+
+
+
 
             int i = 0;
             Thread.Sleep(rnd.Next(1000, 3000));
@@ -130,6 +141,7 @@ namespace WindowsFormsApplication1
                     }
 
 
+
                     if (like_count > 0)
                     {
                         if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
@@ -151,8 +163,10 @@ namespace WindowsFormsApplication1
                         //"좋아요"가 클릭 돼 있을 때
                         {
 
+
                         }
                     }
+
 
 
                     if (follow_count > 0)
@@ -175,6 +189,7 @@ namespace WindowsFormsApplication1
                                     conn_manager.update_follow_done();
 
 
+
                                     follow_count--;
 
 
@@ -183,6 +198,7 @@ namespace WindowsFormsApplication1
                                     //t = conn_manager.Select_comments();
 
                                     //string comment = t.Rows[0]["comment"].ToString();
+
 
                                     ////팔로우를 찾아서 있으면 진행 없으면 에러
                                     //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);

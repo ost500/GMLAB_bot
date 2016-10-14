@@ -20,9 +20,9 @@ namespace WindowsFormsApplication1
         public DataRow r;
         public DataTable t;
 
-        
+        public int total_user;
 
-        
+
 
         private bool finished_follow = true;
         private bool finished_like = true;
@@ -30,6 +30,10 @@ namespace WindowsFormsApplication1
         //로그인 레디, 테더링 레디
         private bool ready_login = false;
         private bool ready_phone = false;
+
+        public bool hash_tag_checked ;
+        public bool random_user_checked;
+        public bool unfollow_checked;
 
         Main_Manager manager;
 
@@ -138,22 +142,33 @@ namespace WindowsFormsApplication1
                     user = values["mb_id"];
 
 
-
-                    t = manager.conn_manager.SelectData();
-                    r = t.Rows[0];
-
-                    foreach (DataRow r in t.Rows)
+                    try
                     {
-                        listBox1.Items.Add(r["user_id"]);
+                        t = manager.conn_manager.SelectData();
+                        r = t.Rows[0];
+
+
+                        foreach (DataRow r in t.Rows)
+                        {
+                            listBox1.Items.Add(r["user_id"]);
+                        }
+
+                        //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
+
+                        if (checkCommentStatus() && checkHashTag())
+                        { //시작 버튼 활성화 시도
+                          //get the total users and login
+                           total_user = t.Rows.Count;
+                            //total_user = 2;
+                            start_button_valid("login");
+                        }
+                        else { MessageBox.Show("Some Initial Data Required "); }
                     }
 
-                    //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
+                    //else { MessageBox.Show("먼저 로그인하세요 "); }
 
-                    if (checkCommentStatus() && checkHashTag())
-                    { //시작 버튼 활성화 시도
-                        start_button_valid("login");
-                    }
-                    else { MessageBox.Show("먼저 로그인하세요 "); }
+
+                    catch { log("No Users Record found!!!"); }
 
                 }
                 else
@@ -170,22 +185,18 @@ namespace WindowsFormsApplication1
             {
 
                 ready_login = true;
-                ready_phone = true;//testing only
+                button1.Enabled = true;
+                //  ready_phone = true;//testing only
             }
 
             if (LorP == "phone")
             {
                 ready_phone = true;
-                ready_login = true;//testing only
-            }
-
-            // log("LN "+ready_login.ToString()); log("PH "+ready_phone.ToString());
-
-            if (ready_login && ready_phone)
-            {
-                button1.Enabled = true;
                 button2.Enabled = true;
+                // ready_login = true;//testing only
             }
+
+          
         }
 
 
@@ -297,6 +308,24 @@ namespace WindowsFormsApplication1
         private void button8_Click(object sender, EventArgs e)
         {
             new Thread(Main_Manager.ipchanger.send_change).Start();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+             hash_tag_checked = checkBox1.Checked;
+          
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            random_user_checked= checkBox2.Checked;
+
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            unfollow_checked= checkBox3.Checked;
         }
     }
 }

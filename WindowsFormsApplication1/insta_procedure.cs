@@ -38,12 +38,12 @@ namespace WindowsFormsApplication1
         public static string save_follow_time;
 
 
-        public static int delay_like;
-        public static int delay_comment;
-        public static int delay_follow;
-        public static int delay_unfollow;
+        public static double delay_like;
+        public static double delay_comment;
+        public static double delay_follow;
+        public static double delay_unfollow;
         public static string current_user;
-
+        public static string user_agent;
         //public string user_id;
 
 
@@ -99,7 +99,7 @@ namespace WindowsFormsApplication1
 
 
         //GET delay_like,delay_comment,delay_follow and delay_unfollow from database for current user
-        public int getLikeDelay(string user_id)
+        public double getLikeDelay(string user_id)
         {
 
             DataRow jobrow = conn_manager.Select_job(user_id);
@@ -117,7 +117,7 @@ namespace WindowsFormsApplication1
 
         }
 
-        public int getCommentDealy(string user_id)
+        public double getCommentDealy(string user_id)
         {
 
             DataRow jobrow = conn_manager.Select_job(user_id);
@@ -133,7 +133,7 @@ namespace WindowsFormsApplication1
             }
         }
 
-        public int getFollowDelay(string user_id)
+        public double getFollowDelay(string user_id)
         {
 
             DataRow jobrow = conn_manager.Select_job(user_id);
@@ -150,7 +150,7 @@ namespace WindowsFormsApplication1
             }
         }
 
-        public int getUnfollowDelay(string user_id)
+        public double getUnfollowDelay(string user_id)
         {
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
@@ -167,7 +167,7 @@ namespace WindowsFormsApplication1
 
 
         //SET TIME DELAY TO LIKE PICTURES
-        public bool like_time_gap(int delay_like)
+        public bool like_time_gap(double delay_like)
         {
             //log("LIKE DELAY:"+like.ToString());
             DateTime now = DateTime.Now;
@@ -189,10 +189,10 @@ namespace WindowsFormsApplication1
         }
 
         //SET TIME DELAY TO FOLLOW OTHERS
-        public bool follow_time_gap(int delay_follow)
+        public bool follow_time_gap(double delay_follow)
         {
             DateTime now = DateTime.Now;
-            //  log("FOLLOW DELAY:" + follow.ToString());
+            log("FOLLOW DELAY:" + delay_follow.ToString());
             log("-----------------");
             log(now.ToString());
             log(follow_time.ToString());
@@ -212,7 +212,7 @@ namespace WindowsFormsApplication1
         }
 
         //SET TIME DELAY TO COMMENT ON PICTURES
-        public bool comment_time_gap(int delay_comment)
+        public bool comment_time_gap(double delay_comment)
         {
             DateTime now = DateTime.Now;
             //  log("COMMENT DELAY:" + comment.ToString());
@@ -264,6 +264,29 @@ namespace WindowsFormsApplication1
 
         }
 
+        public void changeLanguageOnLogin()
+        {
+
+            try
+            {
+
+
+                //check for English Log in
+                Assert.AreEqual("Log in", driver.FindElement(By.CssSelector("a._fcn8k")).Text);
+
+                //if matched then change language to Korean otherwise its already korean
+                new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
+                log("Login Language Changed");
+            }
+            catch (Exception e)
+            {
+                context.log("Login is already Korean");
+            }
+
+
+        }
+
+
         public void changeLanguageOnProfile()
         {
             try
@@ -283,6 +306,36 @@ namespace WindowsFormsApplication1
                 //log("Profile is already in korean");
             }
 
+        }
+        public void update_user_agent()
+        {
+            try
+            {
+                //Select agent from insta_user_agent
+                DataTable agent_tbl = conn_manager.Select_agent();
+              
+                if (agent_tbl != null)
+                {
+                 
+                    //get the random  user agent
+                    int agent_rows_num = agent_tbl.Rows.Count;
+                    int range = rnd.Next(1, agent_rows_num);
+                 
+                   
+                    DataRow agent_row = agent_tbl.Rows[range];
+                    string agent = agent_row["agent"].ToString();
+                    //Update the user agent
+                    conn_manager.Update_user_agent(current_user, agent);
+                    //set new user agent
+                    user_agent = agent_row["agent"].ToString();
+
+                }
+                else
+                {
+                    log("No user agents are there");
+                }
+            }
+            catch { log("User agent not updated"); }
         }
 
 
@@ -336,8 +389,20 @@ namespace WindowsFormsApplication1
             ChromeOptions co = new ChromeOptions();
 
             co.AddArguments("user-data-dir=" + path);
-            
 
+            /*
+            //get the Browser User Agent For current user
+            user_agent = r["user_agent"].ToString();
+
+
+            if (user_agent == "")
+            {
+                update_user_agent();
+
+            }
+            //Set the Browser User Agent For current user
+            co.AddArguments("--user-agent=" + user_agent);
+            */
             var driverService = ChromeDriverService.CreateDefaultService("C:\\Program Files (x86)\\Google\\Chrome\\Application");
             driverService.HideCommandPromptWindow = true;
             //driverService.Port = my_port;
@@ -358,31 +423,10 @@ namespace WindowsFormsApplication1
 
         }
 
-        public void language_check()
-        {
-
-            try
-            {
-
-
-                //check for English Log in
-                Assert.AreEqual("Log in", driver.FindElement(By.CssSelector("a._fcn8k")).Text);
-
-                //if matched then change language to Korean otherwise its already korean
-                new SelectElement(driver.FindElement(By.CssSelector("select._nif11"))).SelectByText("Korean");
-                log("Language Changed");
-            }
-            catch (Exception e)
-            {
-                context.log("It's already Korean");
-            }
-
-
-        }
-
-
+      
         public bool block_check()
         {
+         
 
             try
             {

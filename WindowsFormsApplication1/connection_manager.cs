@@ -39,11 +39,8 @@ namespace WindowsFormsApplication1
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 context.textBox1.AppendText(context.user);
                 context.log(context.user + " <= contect user");
-                string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' AND `status` = 1 AND is_profile = 1 AND posting_number_log > 2 ORDER BY work_number";
-
-
-
-                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                string sql = "SELECT a.*,b.ip,b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
+                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
                 context.log(ds.Tables.Count.ToString());
@@ -108,7 +105,30 @@ namespace WindowsFormsApplication1
             
         }
 
+        public DataTable Select_agent()
+        {
+            ds = new DataSet();
+            try
+            {
 
+                string sql = "SELECT * FROM insta_user_agent ";
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "agent");
+
+                if (ds.Tables.Count > 0) 
+                {
+
+                    return ds.Tables[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
+            }
+
+        }
 
         public DataRow check_comments()
         {
@@ -236,6 +256,14 @@ namespace WindowsFormsApplication1
 
         }
 
+        public void Update_user_agent(string current_user, string user_agent  )
+        {
+           // context.log("current_user " + current_user);
+           // context.log(" user_agent " + user_agent);
+            MySqlCommand cmd4 = new MySqlCommand("UPDATE insta_account_info SET user_agent ='"+user_agent+"' WHERE user_id = '" + current_user + "'", conn);
+            if(cmd4.ExecuteNonQuery() >0 ) { context.log("Agent Updated"); }
+
+        }
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)
         {
@@ -461,6 +489,9 @@ namespace WindowsFormsApplication1
                 return null;
                 
             }
+
+
+
         }
 
         public DataRow select_configuration()
