@@ -16,11 +16,22 @@ namespace WindowsFormsApplication1
 
         public Request_proc(Form1 context, sql_connection_manager conn_manager) : base(context, conn_manager)
         {
-            
+
         }
 
         public void like_loop(int follow_count, int like_count = 1000)
         {
+
+            //Reset the delay_follow if Hash tag and random user is not checked 
+            if (!context.hash_tag_checked && !context.random_user_checked)
+            {
+
+                delay_follow = 2.66667 - context.total_user * 0.333333;
+                
+
+            }
+
+
 
 
             int i = 0;
@@ -127,50 +138,50 @@ namespace WindowsFormsApplication1
 
 
 
-                    //if (follow_time_gap(delay_follow))
-                    //{
-                    //팔로우
-                    if (IsElementPresent(By.XPath("//header/span/button")))
+                    if (follow_time_gap(delay_follow))
                     {
-                        try
+                        //팔로우
+                        if (IsElementPresent(By.XPath("//header/span/button")))
                         {
-                            //팔로우를 찾아서 있으면 진행 없으면 에러
-                            Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
-                            driver.FindElement(By.XPath("//header/span/button")).Click();
+                            try
+                            {
+                                //팔로우를 찾아서 있으면 진행 없으면 에러
+                                Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
+                                driver.FindElement(By.XPath("//header/span/button")).Click();
 
 
-                            //Save Follow data
-                            saveFollowData();
-                            //Update request follow done
-                            conn_manager.update_follow_done();
+                                //Save Follow data
+                                saveFollowData();
+                                //Update request follow done
+                                conn_manager.update_follow_done();
 
 
-                            follow_count--;
+                                follow_count--;
 
 
 
-                            ////팔로우하면 댓글 자동
-                            //t = conn_manager.Select_comments();
+                                ////팔로우하면 댓글 자동
+                                //t = conn_manager.Select_comments();
 
-                            //string comment = t.Rows[0]["comment"].ToString();
+                                //string comment = t.Rows[0]["comment"].ToString();
 
-                            ////팔로우를 찾아서 있으면 진행 없으면 에러
-                            //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-                            //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
-                            ////update worknumber  of comment
-                            //conn_manager.Update_comment_worknum(comment);
+                                ////팔로우를 찾아서 있으면 진행 없으면 에러
+                                //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
+                                //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
+                                ////update worknumber  of comment
+                                //conn_manager.Update_comment_worknum(comment);
 
 
-                            Thread.Sleep(rnd.Next(1000, 3000));
+                                Thread.Sleep(rnd.Next(1000, 3000));
+                            }
+                            catch (Exception e)
+                            {
+                                break;
+                            }
+                            log("팔로우 했습니다");
                         }
-                        catch (Exception e)
-                        {
-                            break;
-                        }
-                        log("팔로우 했습니다");
+
                     }
-
-                    //}
 
 
                     //if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
@@ -400,7 +411,7 @@ namespace WindowsFormsApplication1
             Thread.Sleep(rnd.Next(1000, 3000));
         }
 
-       
+
 
 
     }
