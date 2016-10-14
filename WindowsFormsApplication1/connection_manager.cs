@@ -65,7 +65,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
                 return null;
             }
 
@@ -94,20 +94,18 @@ namespace WindowsFormsApplication1
 
                 if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
+                 
                     return ds.Tables[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                //context.button1.Text = "Failed";
+                
+                
+                return null;
             }
-            return ds.Tables[0];
+            
         }
 
 
@@ -126,13 +124,10 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds_comment, "comments");
 
+
+
                 if (ds_comment.Tables.Count > 0)
                 {
-                    // foreach (DataRow r in ds.Tables[0].Rows)
-                    // {
-                    //    Console.WriteLine(r["ID"]);
-                    // context.textBox1.Text += r["ID"].ToString();
-                    //}
 
                     return ds_comment.Tables[0].Rows[0];
                 }
@@ -140,7 +135,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
                 return null;
                 //context.button1.Text = "Failed";
             }
@@ -177,7 +172,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
                 return null;
 
             }
@@ -204,13 +199,9 @@ namespace WindowsFormsApplication1
 
 
 
+
                 if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
 
                     return ds.Tables[0];
                 }
@@ -218,9 +209,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
+
                 return null;
-                //context.button1.Text = "Failed";
             }
 
         }
@@ -267,7 +258,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
 
                 return null;
             }
@@ -297,23 +288,19 @@ namespace WindowsFormsApplication1
                 }
 
 
-
                 if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
+
                     return ds.Tables[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                //context.button1.Text = "Failed";
+                
+
+                return null;
             }
-            return ds.Tables[0];
         }
 
 
@@ -343,21 +330,15 @@ namespace WindowsFormsApplication1
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
 
-
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    context.textBox1.AppendText(r["tag"].ToString());
-                    //}
-
                     return ds.Tables[0].Rows[0];
                 }
                 else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
                 return null;
-                //context.button1.Text = "Failed";
+                
             }
 
         }
@@ -376,22 +357,20 @@ namespace WindowsFormsApplication1
                 adpt.Fill(ds, "members");
 
 
+
                 if (ds.Tables.Count > 0)
                 {
 
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    context.textBox1.AppendText(r["tag"].ToString());
-                    //}
                     return ds.Tables[0].Rows[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                //context.button1.Text = "Failed";
+                
+                return null;
+                
             }
-            return ds.Tables[0].Rows[0];
         }
 
 
@@ -422,9 +401,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
                 return null;
-                //context.button1.Text = "Failed";
+                
             }
 
         }
@@ -468,16 +447,20 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(request_ds, "request");
 
+
                 if (request_ds.Tables.Count > 0)
                 {
+
                     return request_ds.Tables[0].Rows[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
+                return null;
+                
             }
-            return request_ds.Tables[0].Rows[0];
         }
 
         public DataRow select_configuration()
@@ -499,7 +482,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
             }
             return null;
         }
@@ -531,7 +514,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
 
                 return null;
             }
@@ -559,7 +542,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
                 return null;
             }
 
@@ -576,12 +559,13 @@ namespace WindowsFormsApplication1
                 MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
 
                 cmd2.ExecuteNonQuery();
-                context.textBox1.AppendText("########## Inserted Follow Data ##########");
+                //context.textBox1.AppendText("########## Inserted Follow Data ##########");
+                //context.log("[데이터베이스]");
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
             }
 
         }
@@ -596,13 +580,13 @@ namespace WindowsFormsApplication1
                 MySqlCommand cmd2 = new MySqlCommand("delete from insta_follows where user_id='" + current_user + "' and followed_id= '" + followed + "'", conn);
 
                 cmd2.ExecuteNonQuery();
-                context.textBox1.AppendText("########## Deleted Followed Data ##########");
+                //context.textBox1.AppendText("########## Deleted Followed Data ##########");
 
             }
             catch (Exception e)
             {
                 context.log("Delete Query Problem!!!! ");
-                Console.WriteLine(e.StackTrace);
+                
             }
 
         }
@@ -621,20 +605,20 @@ namespace WindowsFormsApplication1
                 // context.log(cmd2.ToString());
                 if (cmd2.ExecuteNonQuery() > 0)
                 {
-                    context.textBox1.AppendText("########## Inserted Followers Count  ##########");
+                    //context.textBox1.AppendText("########## Inserted Followers Count  ##########");
                 }
-                else { context.log(" Followers Count Not Inserted"); }
+                
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                
             }
 
         }
 
         public void insert_insta_job()
         {
-            context.log("work???????????");
+            //context.log("work???????????");
             DataSet ds = new DataSet();
             try
             {
@@ -649,8 +633,8 @@ namespace WindowsFormsApplication1
 
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
-                    context.log("working insert!!");
-                    context.log(r["user_id"].ToString());
+                    //context.log("working insert!!");
+                    //context.log(r["user_id"].ToString());
                     MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `user_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`,`limit_comments`,`limit_follows`,`limit_likes`) VALUES(NULL, 'ost5253', '" + r["user_id"] + "', '3', '11', '11', '3', '0', '0','100','1000','1000');", conn);
 
                     cmd2.ExecuteNonQuery();
@@ -679,7 +663,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception)
             {
-                context.log("요청 계정 팔로우 업데이트 에러");
+                //context.log("요청 계정 팔로우 업데이트 에러");
             }
 
         }
@@ -697,9 +681,11 @@ namespace WindowsFormsApplication1
             }
             catch (Exception)
             {
-                context.log("요청 계정 좋아요 업데이트 에러");
+                //context.log("요청 계정 좋아요 업데이트 에러");
             }
         }
+      
+
 
     }
 }

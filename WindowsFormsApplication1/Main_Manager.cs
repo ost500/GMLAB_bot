@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace WindowsFormsApplication1
 {
@@ -156,27 +157,24 @@ namespace WindowsFormsApplication1
                 }
                 catch (NullReferenceException ex)
                 {
-                    context.log("No Result Found!!!!");
+                    context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
+                    insta_run.quit();
+                }
+
+                catch (MySqlException ex)
+                {
+                    context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
+                    insta_run.quit();
                 }
 
                 catch (Exception ex)
                 {
-
-
-
-
-
-                    context.log("에러 발생");
-
-                    //  textBox1.Text ="ERROR";
-
-
-
-                }
-                finally
-                {
+                    context.log(" [이지그램] : 에러 발생");
                     insta_run.quit();
                 }
+                
+                
+                
 
 
             }

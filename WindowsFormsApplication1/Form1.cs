@@ -134,7 +134,7 @@ namespace WindowsFormsApplication1
 
 
                     MessageBox.Show("success");
-                    textBox1.AppendText("로그인 성공");
+                    log("로그인 성공");
                     user = values["mb_id"];
 
 
@@ -153,13 +153,13 @@ namespace WindowsFormsApplication1
                     { //시작 버튼 활성화 시도
                         start_button_valid("login");
                     }
-                    else { MessageBox.Show("Some Initial Data Required "); }
+                    else { MessageBox.Show("먼저 로그인하세요 "); }
 
                 }
                 else
                 {
                     MessageBox.Show("계정 정보를 다시 확인 하세요");
-                    textBox1.AppendText("로그인 실패");
+                    log("로그인 실패");
                 }
             }
         }

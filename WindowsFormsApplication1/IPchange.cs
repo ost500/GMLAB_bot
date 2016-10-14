@@ -45,9 +45,9 @@ namespace WindowsFormsApplication1
 
 
 
-            context.log("아이피 변경을 시작합니다");
-            context.log("모바일에서 다음의 아이피와 포트를 입력해주세요");
-            context.log(localEndPoint.Address.ToString() + " port  " + localEndPoint.Port.ToString());
+            context.log(" [아이피 변경] : 아이피 변경을 시작합니다");
+            context.log(" [아이피 변경] : 모바일에서 다음의 아이피와 포트를 입력해주세요");
+            context.log(" [아이피 변경] : "+localEndPoint.Address.ToString() + " port  " + localEndPoint.Port.ToString());
 
 
             // Bind the socket to the local endpoint and 
@@ -64,7 +64,7 @@ namespace WindowsFormsApplication1
                 // Start listening for connections.
 
 
-                context.log("연결을 기다리는 중입니다");
+                context.log(" [아이피 변경] : 연결을 기다리는 중입니다");
 
 
                 // Program is suspended while waiting for an incoming connection.
@@ -100,20 +100,19 @@ namespace WindowsFormsApplication1
                 context.log(e.ToString());
             }
 
-            context.log("아이피 변경 명령을 내리는 중입니다...");
-            Thread.Sleep(3000);
+            context.log(" [아이피 변경] : 아이피 변경 명령을 내리는 중입니다...");
 
             while (true)
             {
                 try
                 {
-                    context.log("현재 아이피 : " + GetComputer_InternetIP() + "\n");
-                    context.log("연결 성공!");
+                    context.log(" [아이피 변경] : 현재 아이피 : " + GetComputer_InternetIP() + "\n");
+                    
                     break;
                 }
                 catch (Exception ex)
                 {
-                    context.log("연결 실패 다시 시도중...");
+                    context.log(" [아이피 변경] : 연결 실패 다시 시도중...");
                     Thread.Sleep(1500);
                 }
             }
@@ -121,9 +120,10 @@ namespace WindowsFormsApplication1
 
             //mysql 재연결
             conn.mysql_refresh();
+            context.log(" [아이피 변경] : 연결 성공!");
 
             //시작 버튼 활성화 시도
-          
+
             context.start_button_valid("phone");
             //waiting done
             Main_Manager.ip_changing = false;
@@ -139,7 +139,7 @@ namespace WindowsFormsApplication1
                 // Start listening for connections.
 
 
-                context.log("\n" + "IP 변경 명령을 내리는 중입니다");
+                context.log(" [아이피 변경] : " + "IP 변경 명령을 내리는 중입니다");
 
 
                 // Program is suspended while waiting for an incoming connection.
@@ -185,7 +185,7 @@ namespace WindowsFormsApplication1
                 if (GetComputer_InternetIP() == current_IP && IPchange_count > 3)
                 {
                     IPchange_count--;
-                    context.log("IP변경 시도중 " + IPchange_count);
+                    context.log(" [아이피 변경] : IP변경 시도중 " + IPchange_count);
 
                     Thread.Sleep(1000);
 
@@ -199,18 +199,18 @@ namespace WindowsFormsApplication1
 
             //mysql 재연결
             conn.mysql_refresh();
-            context.log("데이터베이스 연결 완료");
+            context.log(" [아이피 변경] : 데이터베이스 연결 완료");
 
 
             if (IPchange_count > 3)
             {
-                context.log("현재 아이피 : " + GetComputer_InternetIP());
-                context.log("변경 실패");
+                context.log(" [아이피 변경] : 현재 아이피 : " + GetComputer_InternetIP());
+                context.log(" [아이피 변경] : 변경 실패");
             }
             else
             {
-                context.log("현재 아이피 : " + GetComputer_InternetIP());
-                context.log("변경 완료");
+                context.log(" [아이피 변경] : 현재 아이피 : " + GetComputer_InternetIP());
+                context.log(" [아이피 변경] : 변경 완료");
             }
 
 
