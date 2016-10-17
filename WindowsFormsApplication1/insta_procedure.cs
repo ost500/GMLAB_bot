@@ -84,12 +84,12 @@ namespace WindowsFormsApplication1
             DataRow row = conn_manager.Select_job(user_id);
             if (row == null)
             {
-                log("좋아요, 팔로우, 댓글 딜레이 시간을 입력하세요 " + user_id);
-                log("이지그램 로그인 : http://easygram.kr/ & 딜레이 시간 입력");
+                log(" [이지그램] : 좋아요, 팔로우, 댓글 딜레이 시간을 입력하세요 " + user_id);
+                log(" [이지그램] :  로그인 http://easygram.kr/ & 딜레이 시간 입력");
                 //log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR " + user_id);
                 //log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD DELAYS");
 
-                return false;
+                return true;
             }
             else
             {
@@ -171,9 +171,9 @@ namespace WindowsFormsApplication1
         {
             //log("LIKE DELAY:"+like.ToString());
             DateTime now = DateTime.Now;
-            log(now.ToString());
-            log(like_time.ToString());
-            log(now.Subtract(follow_time).TotalSeconds.ToString() + "Like_time_gap");
+            //log(now.ToString());
+            //log(like_time.ToString());
+            //log(now.Subtract(follow_time).TotalSeconds.ToString() + "Like_time_gap");
             if (now.Subtract(like_time).TotalSeconds > delay_like)
             {
                 like_time = DateTime.Now;
@@ -183,7 +183,9 @@ namespace WindowsFormsApplication1
             {
                 //Thread.Sleep(11000);
                 //like_time = DateTime.Now;
-                log("no like");
+                //log("no like");
+                log(" [인스타 루프] 좋아요 : 딜레이 간격을 위해 휴식합니다");
+                log(" [인스타 루프] 좋아요 : " + delay_like.ToString("##.###") + "초 간격");
                 return false;
             }
         }
@@ -192,11 +194,10 @@ namespace WindowsFormsApplication1
         public bool follow_time_gap(double delay_follow)
         {
             DateTime now = DateTime.Now;
-            log("FOLLOW DELAY:" + delay_follow.ToString());
-            log("-----------------");
-            log(now.ToString());
-            log(follow_time.ToString());
-            log(now.Subtract(follow_time).TotalMinutes.ToString() + "follow_time_gap");
+            //log("-----------------");
+            //log(now.ToString());
+            //log(follow_time.ToString());
+            //log(now.Subtract(follow_time).TotalMinutes.ToString() + "follow_time_gap");
 
             if (now.Subtract(follow_time).TotalMinutes > delay_follow)
             {
@@ -206,7 +207,9 @@ namespace WindowsFormsApplication1
             else
             {
                 //Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
-                log("no follow");
+                //log("no follow");
+                log(" [인스타 루프] 팔로우 : 딜레이 간격을 위해 휴식합니다");
+                log(" [인스타 루프] 팔로우 : " + delay_follow.ToString("##.###") + "분 간격");
                 return false;
             }
         }
@@ -216,10 +219,10 @@ namespace WindowsFormsApplication1
         {
             DateTime now = DateTime.Now;
             //  log("COMMENT DELAY:" + comment.ToString());
-            log(now.ToString());
-            log(comment_time.ToString());
+            //log(now.ToString());
+            //log(comment_time.ToString());
 
-            log(now.Subtract(comment_time).TotalSeconds.ToString() + "comment_time_gap");
+            //log(now.Subtract(comment_time).TotalSeconds.ToString() + "comment_time_gap");
 
             if (now.Subtract(comment_time).TotalSeconds > delay_comment)
 
@@ -229,8 +232,10 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                log("no work");
+                //log("no work");
                 //Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                log(" [인스타 루프] 댓글 : 딜레이 간격을 위해 휴식합니다");
+                log(" [인스타 루프] 댓글 : " + delay_comment.ToString("##.###") + "초 간격");
                 return false;
             }
         }
@@ -313,15 +318,15 @@ namespace WindowsFormsApplication1
             {
                 //Select agent from insta_user_agent
                 DataTable agent_tbl = conn_manager.Select_agent();
-              
+
                 if (agent_tbl != null)
                 {
-                 
+
                     //get the random  user agent
                     int agent_rows_num = agent_tbl.Rows.Count;
                     int range = rnd.Next(1, agent_rows_num);
-                 
-                   
+
+
                     DataRow agent_row = agent_tbl.Rows[range];
                     string agent = agent_row["agent"].ToString();
                     //Update the user agent
@@ -374,7 +379,9 @@ namespace WindowsFormsApplication1
 
             current_user = r["user_id"].ToString();
 
-            log("  USER:" + current_user + " \n");
+
+            //log(" USER:" + current_user + " \n");
+            log(" [이지그램] 로그인 유저 :  " + current_user + " \n");
 
             delay_like = getLikeDelay(current_user);
             delay_comment = getCommentDealy(current_user);
@@ -416,17 +423,17 @@ namespace WindowsFormsApplication1
 
             verificationErrors = new StringBuilder();
 
-            log("시작했습니다");
+            log(" [인스타 루프] : 시작했습니다");
 
             driver.Navigate().GoToUrl(baseURL + "/");
-            log("메인으로 갔습니다");
+            log(" [인스타 루프] : 메인으로 갔습니다");
 
         }
 
-      
+
         public bool block_check()
         {
-         
+
 
             try
             {
@@ -451,7 +458,7 @@ namespace WindowsFormsApplication1
                     Assert.AreEqual("계정 인증", driver.FindElement(By.CssSelector("h2")).Text);
                     //계정 인증 메세지가 나오면 막힌 계정임
                     //Error
-                    log("에러가 있습니다");
+                    log(" [인스타 루프] : 에러가 있습니다");
                 }
                 catch (Exception e)
                 {
@@ -466,14 +473,14 @@ namespace WindowsFormsApplication1
                     return false;
                 }
                 //verify your account
-                log("계정 인증 존재");
+                log(" [인스타 루프] : 계정 인증 존재");
                 //DB 기록
                 conn_manager.blocked_update();
                 Thread.Sleep(rnd.Next(15000, 20000));//to verify
                 return true;
             }
             //login button exists
-            log("로그인 버튼 존재");
+            log(" [인스타 루프] : 로그인 버튼 존재");
             login(); //instagram login
 
             return false;
@@ -556,7 +563,7 @@ namespace WindowsFormsApplication1
                         //Save Follow data
                         saveFollowData();
                         //clicked follow button
-                        log("[인스타 루프]팔로우 했습니다");
+                        log(" [인스타 루프] : 팔로우 했습니다");
                     }
 
 
@@ -581,7 +588,7 @@ namespace WindowsFormsApplication1
                         //Save Follow data
                         saveFollowData();
 
-                        log("[인스타 루프]팔로우 했습니다");
+                        log(" [인스타 루프] 팔로우 했습니다");
                     }
 
                     Thread.Sleep(rnd.Next(1000, 3000));
@@ -625,7 +632,7 @@ namespace WindowsFormsApplication1
                     catch (Exception e)
                     {
                         //failed to load the page
-                        log("[인스타 루프]페이지 로딩에 실패했습니다");
+                        log(" [인스타 루프] 페이지 로딩에 실패했습니다");
 
                         Thread.Sleep(rnd.Next(1000, 3000));
 
@@ -692,7 +699,7 @@ namespace WindowsFormsApplication1
                             }
                             catch (Exception e)
                             {
-                                
+
                             }
                             break;
 
@@ -847,7 +854,7 @@ namespace WindowsFormsApplication1
                 catch (Exception e)
                 {
                     //failed to follow after waiting
-                    log("[인스타 루프]팔로우에 실패했습니다");
+                    log(" [인스타 루프] : 팔로우에 실패했습니다");
                 }
 
             }
@@ -873,7 +880,7 @@ namespace WindowsFormsApplication1
                         //Save Follow data
                         saveFollowData();
 
-                        log("[인스타 루프]팔로우 했습니다");
+                        log(" [인스타 루프] : 팔로우 했습니다");
                     }
                     else
                     {
@@ -888,14 +895,14 @@ namespace WindowsFormsApplication1
                         //Save Follow data
                         saveFollowData();
 
-                        log("[인스타 루프]팔로우 했습니다");
+                        log(" [인스타 루프] : 팔로우 했습니다");
                     }
                     Thread.Sleep(rnd.Next(1000, 3000));
                 }
                 catch (Exception e)
                 {
                     //failed to follow after waiting
-                    log("[인스타 루프]팔로우에 실패했습니다");
+                    log(" [인스타 루프] : 팔로우에 실패했습니다");
                 }
             }
 
@@ -959,7 +966,7 @@ namespace WindowsFormsApplication1
 
                             //log("WEB_COUNT: " + followers_count.ToString());
 
-                            log("[언팔로우]" + followers_count_new + "개의 팔로우 계정을 검사합니다");
+                            log(" [언팔로우] : " + followers_count_new + "개의 팔로우 계정을 검사합니다");
                             //log(" POSSIBILITY_COUNT: " + followers_count_new);
 
                             //get all followed users of current user
@@ -998,7 +1005,7 @@ namespace WindowsFormsApplication1
                                     if (duration > 72)
                                     {
 
-                                        log(followedby_me + "(을)를 검사합니다");
+                                        log(" [언팔로우] : " + followedby_me + "(을)를 검사합니다");
 
                                         for (int i = 1; i < followers_count_new; i++)
                                         {
@@ -1037,14 +1044,14 @@ namespace WindowsFormsApplication1
                                                 {
                                                     unfollow_flag = false;
                                                     //log(" MATCHED AND FOLLOWING ME");
-                                                    log("[언팔로우]맞팔을 확인했습니다");
+                                                    log("[언팔로우] : 맞팔을 확인했습니다");
                                                     Thread.Sleep(rnd.Next(1000, 3000));
                                                     break;
                                                 } //End of if-else
                                             }
                                             catch
                                             {
-                                                log("[언팔로우]가능한 팔로워 인덱스를 넘었습니다 " + i);
+                                                log("[언팔로우] : 가능한 팔로워 인덱스를 넘었습니다 " + i);
                                                 break;
                                                 //log("Wrong Followers Index: " + i); break;
                                             }
@@ -1097,7 +1104,7 @@ namespace WindowsFormsApplication1
                                             Box = driver.FindElement(By.ClassName("_4gt3b"));
                                             DivHeight = Box.Size.Height;
                                             //log("Opened");
-                                            log("[언팔로우]팔로잉 리스트를 엽니다");
+                                            log("[언팔로우] : 팔로잉 리스트를 엽니다");
                                             Thread.Sleep(rnd.Next(1000, 3000));
 
                                             //unfollow proc
@@ -1135,7 +1142,7 @@ namespace WindowsFormsApplication1
                                                             //Delete from db
                                                             conn_manager.remove_followdata(current_user, followedby_me);
                                                             //log("<<<<<<<<<<<<<<< UNFOLLOWED>>>>>>>>>>>>>>>");
-                                                            log("[언팔로우]언팔로우 했습니다");
+                                                            log("[언팔로우] : 언팔로우 했습니다");
                                                             Thread.Sleep(rnd.Next(1000, 3000));
 
                                                             //Wait
@@ -1163,7 +1170,7 @@ namespace WindowsFormsApplication1
                                                         catch
                                                         {
                                                             //log("Not able to find Following button");
-                                                            log("[언팔로우]팔로인 버튼을 찾지 못했습니다");
+                                                            log("[언팔로우] : 팔로인 버튼을 찾지 못했습니다");
                                                         }
                                                     }
                                                     else
@@ -1176,7 +1183,7 @@ namespace WindowsFormsApplication1
                                                 catch
                                                 {
                                                     //log("Wrong Following Index: " + i);
-                                                    log("[언팔로우]가능한 인덱스를 넘었습니다 : " + i);
+                                                    log("[언팔로우] : 가능한 인덱스를 넘었습니다 : " + i);
                                                     Thread.Sleep(rnd.Next(1000, 1000));
                                                     break;
                                                 }
@@ -1203,7 +1210,7 @@ namespace WindowsFormsApplication1
                                         {
                                             //닫기가 없으면 그냥 패스~
                                             //log("UnFollow Error:May be unable to click on Following ");
-                                            log("[언팔로우]언팔로우에 실패했습니다");
+                                            log("[언팔로우] : 언팔로우에 실패했습니다");
                                         }
                                     } //End of if [Flag Check]
 
@@ -1212,27 +1219,27 @@ namespace WindowsFormsApplication1
                             else
                             {
                                 //log("Not following Anyone");
-                                log("[언팔로우]팔로우가 0 입니다");
+                                log("[언팔로우] : 팔로우가 0 입니다");
                             }
                         }
                         else
                         {
                             //log("Will not Unfollow as Followers count is not available now");
-                            log("[언팔로우]그동안 아무도 팔로우 하지 않았습니다");
+                            log("[언팔로우] : 그동안 아무도 팔로우 하지 않았습니다");
                         } //End of if-else
 
                     }
                     catch
                     {
                         //log("Not able to access Follwers Count from website");
-                        log("[언팔로우]팔로워가 0 입니다");
+                        log("[언팔로우] : 팔로워가 0 입니다");
                     }
                 } //end of if(IsElementPresent)
             }
             catch (Exception)
             {
                 //log("Profile not in Korean");
-                log("[언팔로우]실패했습니다");
+                log("[언팔로우] : 실패했습니다");
             }
 
 
@@ -1271,7 +1278,7 @@ namespace WindowsFormsApplication1
                     }
                     catch
                     {
-                        log("[언팔로우]팔로워를 찾지 못했습니다");
+                        log("[언팔로우] : 팔로워를 찾지 못했습니다");
                         //log("Followers Word not Found!!");
                     }
 
@@ -1279,7 +1286,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception)
             {
-                log("[언팔로우]프로필을 찾지 못했습니다");
+                log("[언팔로우] : 프로필을 찾지 못했습니다");
                 //log("Profile not found!!");
             }
 

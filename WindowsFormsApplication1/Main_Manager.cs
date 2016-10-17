@@ -72,13 +72,13 @@ namespace WindowsFormsApplication1
                     {
                         if (ip_changing)
                         {
-                            context.log("아이피 변경 중입니다 " + i + " / 10");
+                            context.log(" [아이피 변경] 아이피 변경 중입니다 " + i + " / 10");
                             // Ip is changing
                             context.log(ip_changing.ToString());
                             Thread.Sleep(1500);
                             if (i == 10)
                             {
-                                context.log("아이피 변경에 실패했습니다");
+                                context.log(" [아이피 변경] 아이피 변경에 실패했습니다");
                                 // Ip_change was failed
                                 return;
                             }
@@ -112,7 +112,7 @@ namespace WindowsFormsApplication1
                     ////1.해시태그 검색 Run Hash Tag procedure if it is checked
                     HashTag_proc hash_run = new HashTag_proc(context, conn_manager);
 
-                    if (context.hash_tag_checked)
+                    if (context.checkBox1.Checked)
                     {
                         hash_run.hash_tag_search();
                         ////좋아요 루프
@@ -123,7 +123,7 @@ namespace WindowsFormsApplication1
 
                     RegisteredUser_proc regiuser_run = new RegisteredUser_proc(context, conn_manager);
 
-                    if (context.random_user_checked)
+                    if (context.checkBox2.Checked)
                     {
                         regiuser_run.random_user();
                         regiuser_run.like_loop(1);
@@ -140,7 +140,7 @@ namespace WindowsFormsApplication1
 
 
                     //Run Unfollow Procedure if is checked
-                    if (context.unfollow_checked)
+                    if (context.checkBox3.Checked)
                     {
                         insta_run.unfollow();
                     }
@@ -161,18 +161,21 @@ namespace WindowsFormsApplication1
                 }
                 catch (NullReferenceException ex)
                 {
+                    //context.log(ex.StackTrace);
                     context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
                     insta_run.quit();
                 }
 
                 catch (MySqlException ex)
                 {
+                    //context.log(ex.StackTrace);
                     context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
                     insta_run.quit();
                 }
 
                 catch (Exception ex)
                 {
+                    //context.log(ex.StackTrace);
                     context.log(" [이지그램] : 에러 발생");
                     insta_run.quit();
                 }

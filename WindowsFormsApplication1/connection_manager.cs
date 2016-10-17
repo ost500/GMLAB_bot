@@ -37,20 +37,13 @@ namespace WindowsFormsApplication1
 
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
-                context.log(context.user + " <= contect user");
+
+                context.log(" [데이터베이스] : " + context.user + "의 인스타그램 계정을 가져옵니다");
                 string sql = "SELECT a.*,b.ip,b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
-                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-                context.log(ds.Tables.Count.ToString());
-
-                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[0]["work_number"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[1]["no"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[0]["work_number"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[2]["no"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[0]["work_number"] + " 여기 확인   \n";
+                
 
 
                 if (ds.Tables.Count > 0)
@@ -62,7 +55,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
             }
 
@@ -75,7 +68,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
+                
                 string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' ORDER BY work_number";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
@@ -84,25 +77,22 @@ namespace WindowsFormsApplication1
 
 
 
-                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "    \n";
-
-
 
 
                 if (ds.Tables.Count > 0)
                 {
-                 
+
                     return ds.Tables[0];
                 }
                 else { return null; }
             }
             catch (Exception e)
             {
-                
-                
+
+
                 return null;
             }
-            
+
         }
 
         public DataTable Select_agent()
@@ -115,7 +105,7 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "agent");
 
-                if (ds.Tables.Count > 0) 
+                if (ds.Tables.Count > 0)
                 {
 
                     return ds.Tables[0];
@@ -137,7 +127,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
+                
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
                 //   context.log(sql);
@@ -155,7 +145,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
                 //context.button1.Text = "Failed";
             }
@@ -175,7 +165,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
+               
 
                 string sql = "SELECT * FROM insta_tag_my WHERE mb_id = '" + context.user + "'";
 
@@ -192,7 +182,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
 
             }
@@ -210,7 +200,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
+                
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
 
@@ -229,7 +219,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
 
                 return null;
             }
@@ -243,7 +233,7 @@ namespace WindowsFormsApplication1
         public void Update_worknum()
         {
             MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
-            context.textBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
+            
             cmd2.ExecuteNonQuery();
 
         }
@@ -256,12 +246,12 @@ namespace WindowsFormsApplication1
 
         }
 
-        public void Update_user_agent(string current_user, string user_agent  )
+        public void Update_user_agent(string current_user, string user_agent)
         {
-           // context.log("current_user " + current_user);
-           // context.log(" user_agent " + user_agent);
-            MySqlCommand cmd4 = new MySqlCommand("UPDATE insta_account_info SET user_agent ='"+user_agent+"' WHERE user_id = '" + current_user + "'", conn);
-            if(cmd4.ExecuteNonQuery() >0 ) { context.log("Agent Updated"); }
+            // context.log("current_user " + current_user);
+            // context.log(" user_agent " + user_agent);
+            MySqlCommand cmd4 = new MySqlCommand("UPDATE insta_account_info SET user_agent ='" + user_agent + "' WHERE user_id = '" + current_user + "'", conn);
+            if (cmd4.ExecuteNonQuery() > 0) { context.log("Agent Updated"); }
 
         }
         ////////// check_job and select_job function begins   //////////
@@ -286,7 +276,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
 
                 return null;
             }
@@ -307,7 +297,7 @@ namespace WindowsFormsApplication1
                 adpt.Fill(ds, "members");
 
 
-                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "    \n";
+                
 
                 for (int i = 0; i < num_random_user; i++)
                 {
@@ -325,7 +315,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
 
                 return null;
             }
@@ -354,7 +344,7 @@ namespace WindowsFormsApplication1
                 if (ds.Tables.Count > 0)
                 {
 
-                    context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "---------    \n";
+                    
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
 
@@ -364,9 +354,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
-                
+
             }
 
         }
@@ -395,9 +385,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
-                
+
             }
         }
 
@@ -429,9 +419,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
-                
+
             }
 
         }
@@ -439,7 +429,7 @@ namespace WindowsFormsApplication1
         public void blocked_update()
         {
             MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_account SET blocked = 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
-            context.textBox1.AppendText("차단 기록");
+            
             cmd2.ExecuteNonQuery();
         }
 
@@ -485,9 +475,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
-                
+
             }
 
 
@@ -513,7 +503,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
             }
             return null;
         }
@@ -545,7 +535,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
 
                 return null;
             }
@@ -573,7 +563,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
                 return null;
             }
 
@@ -596,7 +586,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                
+
             }
 
         }
@@ -616,8 +606,8 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                context.log("Delete Query Problem!!!! ");
-                
+                //context.log("Delete Query Problem!!!! ");
+
             }
 
         }
@@ -638,11 +628,11 @@ namespace WindowsFormsApplication1
                 {
                     //context.textBox1.AppendText("########## Inserted Followers Count  ##########");
                 }
-                
+
             }
             catch (Exception e)
             {
-                
+
             }
 
         }
@@ -660,7 +650,7 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "request");
 
-                context.log("working insert");
+                
 
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
@@ -715,7 +705,7 @@ namespace WindowsFormsApplication1
                 //context.log("요청 계정 좋아요 업데이트 에러");
             }
         }
-      
+
 
 
     }

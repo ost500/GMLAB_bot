@@ -11,7 +11,7 @@ namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
-        
+
 
         int i = 0;
 
@@ -31,7 +31,7 @@ namespace WindowsFormsApplication1
         private bool ready_login = false;
         private bool ready_phone = false;
 
-        public bool hash_tag_checked ;
+        public bool hash_tag_checked;
         public bool random_user_checked;
         public bool unfollow_checked;
 
@@ -42,11 +42,11 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
-            
+
             //conn_manager.like_up();
 
-            
-            
+
+
 
         }
 
@@ -65,7 +65,7 @@ namespace WindowsFormsApplication1
             {
 
                 textBox1.AppendText(Environment.NewLine);
-            textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+                textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
 
 
             }));
@@ -83,13 +83,15 @@ namespace WindowsFormsApplication1
             DataRow row = manager.conn_manager.check_hashtag();
             if (row == null)
             {
-                log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
-                log("PLEASE LOG IN HERE: http://easygram.kr/   & ADD FEW HASH TAGS");
+                //log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
+                //log("PLEASE LOG IN HERE: http://easygram.kr/   & ADD FEW HASH TAGS");
+                log(" [이지그램] 입력할 해시태그를 저장하세요");
+                log(" [이지그램] http://easygram.kr/");
                 return false;
             }
             else
             {
-                
+
                 return true;
             }
         }
@@ -99,13 +101,15 @@ namespace WindowsFormsApplication1
             DataRow row = manager.conn_manager.check_comments();
             if (row == null)
             {
-                log("YOU NEED TO ENTER  COMMENTS");
-                log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD FEW COMMENTS");
+                //log("YOU NEED TO ENTER  COMMENTS");
+                //log("PLEASE LOG IN HERE: http://easygram.kr/ & ADD FEW COMMENTS");
+                log(" [이지그램] 입력할 댓글을 저장하세요");
+                log(" [이지그램] http://easygram.kr/");
                 return false;
             }
             else
             {
-               
+
                 return true;
             }
 
@@ -138,7 +142,7 @@ namespace WindowsFormsApplication1
 
 
                     MessageBox.Show("success");
-                    log("로그인 성공");
+                    log(" [이지그램] : 로그인 성공");
                     user = values["mb_id"];
 
 
@@ -156,13 +160,17 @@ namespace WindowsFormsApplication1
                         //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
 
                         if (checkCommentStatus() && checkHashTag())
-                        { //시작 버튼 활성화 시도
-                          //get the total users and login
-                           total_user = t.Rows.Count;
+                        {
+                            //시작 버튼 활성화 시도
+                            //get the total users and login
+                            total_user = t.Rows.Count;
                             //total_user = 2;
                             start_button_valid("login");
                         }
-                        else { MessageBox.Show("Some Initial Data Required "); }
+                        else
+                        {
+                            MessageBox.Show(" [데이터베이스] 기본 데이터를 입력하세요");
+                        }
                     }
 
                     //else { MessageBox.Show("먼저 로그인하세요 "); }
@@ -173,8 +181,8 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    MessageBox.Show("계정 정보를 다시 확인 하세요");
-                    log("로그인 실패");
+                    MessageBox.Show(" [이지그램] : 계정 정보를 다시 확인 하세요");
+                    log(" [이지그램] 로그인 실패");
                 }
             }
         }
@@ -196,7 +204,7 @@ namespace WindowsFormsApplication1
                 // ready_login = true;//testing only
             }
 
-          
+
         }
 
 
@@ -291,7 +299,7 @@ namespace WindowsFormsApplication1
             IPchange.listener.Close();
         }
 
-   
+
 
         private void button7_Click(object sender, EventArgs e)
         {
@@ -313,19 +321,19 @@ namespace WindowsFormsApplication1
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
-             hash_tag_checked = checkBox1.Checked;
-          
+            hash_tag_checked = checkBox1.Checked;
+
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            random_user_checked= checkBox2.Checked;
+            random_user_checked = checkBox2.Checked;
 
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            unfollow_checked= checkBox3.Checked;
+            unfollow_checked = checkBox3.Checked;
         }
     }
 }

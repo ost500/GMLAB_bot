@@ -27,8 +27,10 @@ namespace WindowsFormsApplication1
             {
 
                 delay_follow = 2.66667 - context.total_user * 0.333333;
-                
-
+                if (delay_follow < 0)
+                {
+                    delay_follow = 0;
+                }
             }
 
 
@@ -62,7 +64,7 @@ namespace WindowsFormsApplication1
                             //Update request follow done
                             conn_manager.update_follow_done();
 
-                            log("[인스타 루프]팔로우 했습니다");
+                            log("[인스타 루프] : 팔로우 했습니다");
                         }
 
 
@@ -90,7 +92,7 @@ namespace WindowsFormsApplication1
                             //Update request follow done
                             conn_manager.update_follow_done();
 
-                            log("팔로우 했습니다2");
+                            log(" [인스타 루프] 팔로우 했습니다");
                         }
 
                         Thread.Sleep(rnd.Next(1000, 3000));
@@ -113,7 +115,7 @@ namespace WindowsFormsApplication1
 
                 DateTime currentTime = DateTime.Now;
                 DateTime future = currentTime.AddMinutes(6);
-                while (follow_count > 0 && like_count > 0)
+                while (follow_count > 0 || like_count > 0)
                 {
                     currentTime = DateTime.Now;
 
@@ -134,7 +136,7 @@ namespace WindowsFormsApplication1
                     }
                     catch (Exception e)
                     {
-                        log("[인스타 루프]페이지 로딩에 실패했습니다");
+                        log("[인스타 루프] : 페이지 로딩에 실패했습니다");
                         Thread.Sleep(rnd.Next(1000, 3000));
 
                         break;
@@ -193,18 +195,7 @@ namespace WindowsFormsApplication1
                                     follow_count--;
 
 
-
-                                    ////팔로우하면 댓글 자동
-                                    //t = conn_manager.Select_comments();
-
-                                    //string comment = t.Rows[0]["comment"].ToString();
-
-
-                                    ////팔로우를 찾아서 있으면 진행 없으면 에러
-                                    //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-                                    //driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
-                                    ////update worknumber  of comment
-                                    //conn_manager.Update_comment_worknum(comment);
+                                    
 
 
                                     Thread.Sleep(rnd.Next(1000, 3000));
@@ -221,27 +212,6 @@ namespace WindowsFormsApplication1
                     }
 
 
-
-                    ////comment portion
-                    //if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
-                    //{
-                    //    if (comment_time_gap(delay_comment))
-                    //    {
-
-                    //        t = conn_manager.Select_comments();
-
-                    //        string comment = t.Rows[0]["comment"].ToString();
-
-                    //        //팔로우를 찾아서 있으면 진행 없으면 에러
-                    //        driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-                    //        driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
-                    //        //update worknumber  of comment
-                    //        conn_manager.Update_comment_worknum(comment);
-                    //        log(" [인스타 루프] : 댓글을 입력했습니다");
-                    //    }
-                    //    Thread.Sleep(rnd.Next(1000, 3000));
-                    //    Thread.Sleep(rnd.Next(1000, 3000));
-                    //}
 
 
                     if (!IsElementPresent(By.LinkText("다음"))) //"다음"이 없을 때
@@ -284,7 +254,8 @@ namespace WindowsFormsApplication1
 
                         log(" [인스타 루프] : 다음 게시물로 넘어갑니다");
                     }
-
+                    // while loop goes once
+                    break;
                 }
                 try
                 {

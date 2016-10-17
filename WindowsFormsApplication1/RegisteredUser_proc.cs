@@ -20,7 +20,7 @@ namespace WindowsFormsApplication1
         {
             DataTable random_user_table = conn_manager.Select_RandomUser(2);
 
-            go_to_there("/" + random_user_table.Rows[0]["user_id"]);
+            go_to_there(random_user_table.Rows[0]["user_id"].ToString());
             Thread.Sleep(rnd.Next(1000, 3000));
             //like_follow_loop();
 
