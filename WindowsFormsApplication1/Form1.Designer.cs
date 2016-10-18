@@ -28,13 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -63,33 +58,24 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.iTalk_ThemeContainer1 = new iTalk.iTalk_ThemeContainer();
+            this.button1 = new iTalk.iTalk_Button_2();
+            this.iTalk_RadioButton1 = new iTalk.iTalk_RadioButton();
+            this.iTalk_HeaderLabel1 = new iTalk.iTalk_HeaderLabel();
+            this.iTalk_ControlBox1 = new iTalk.iTalk_ControlBox();
+            this.iTalk_GroupBox1 = new iTalk.iTalk_GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.groupBox1.SuspendLayout();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.iTalk_Button_11 = new iTalk.iTalk_Button_1();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.groupBox7.SuspendLayout();
+            this.iTalk_ThemeContainer1.SuspendLayout();
+            this.iTalk_GroupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(275, 606);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(168, 48);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "시작";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
             // 
@@ -100,7 +86,7 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(534, 292);
+            this.textBox1.Size = new System.Drawing.Size(534, 281);
             this.textBox1.TabIndex = 1;
             // 
             // listBox1
@@ -109,59 +95,21 @@
             this.listBox1.ItemHeight = 12;
             this.listBox1.Location = new System.Drawing.Point(6, 33);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 292);
+            this.listBox1.Size = new System.Drawing.Size(120, 280);
             this.listBox1.TabIndex = 2;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(25, 20);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 21);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "admin";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(131, 20);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.PasswordChar = '*';
-            this.textBox3.Size = new System.Drawing.Size(100, 21);
-            this.textBox3.TabIndex = 3;
-            this.textBox3.Text = "1a2s3d4f";
-            // 
-            // button2
-            // 
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(237, 18);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "로그인";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.textBox3);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(340, 55);
-            this.groupBox1.TabIndex = 5;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "로그인";
-            // 
             // groupBox2
             // 
+            this.groupBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.textBox1);
             this.groupBox2.Controls.Add(this.listBox1);
-            this.groupBox2.Location = new System.Drawing.Point(12, 73);
+            this.groupBox2.Location = new System.Drawing.Point(12, 93);
+            this.groupBox2.MinimumSize = new System.Drawing.Size(126, 39);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(672, 340);
+            this.groupBox2.Size = new System.Drawing.Size(672, 320);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "내용";
@@ -414,107 +362,160 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "팔로우";
             // 
-            // button3
+            // iTalk_ThemeContainer1
             // 
-            this.button3.Location = new System.Drawing.Point(560, 629);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 12;
-            this.button3.Text = "재연결";
-            this.button3.UseVisualStyleBackColor = true;
+            this.iTalk_ThemeContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_Button_11);
+            this.iTalk_ThemeContainer1.Controls.Add(this.button1);
+            this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_RadioButton1);
+            this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_HeaderLabel1);
+            this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_ControlBox1);
+            this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_GroupBox1);
+            this.iTalk_ThemeContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.iTalk_ThemeContainer1.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.iTalk_ThemeContainer1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(142)))), ((int)(((byte)(142)))));
+            this.iTalk_ThemeContainer1.Location = new System.Drawing.Point(0, 0);
+            this.iTalk_ThemeContainer1.Name = "iTalk_ThemeContainer1";
+            this.iTalk_ThemeContainer1.Padding = new System.Windows.Forms.Padding(3, 28, 3, 28);
+            this.iTalk_ThemeContainer1.Sizable = true;
+            this.iTalk_ThemeContainer1.Size = new System.Drawing.Size(698, 664);
+            this.iTalk_ThemeContainer1.SmartBounds = false;
+            this.iTalk_ThemeContainer1.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultLocation;
+            this.iTalk_ThemeContainer1.TabIndex = 18;
+            this.iTalk_ThemeContainer1.Text = "이지그램";
             // 
-            // button7
+            // button1
             // 
-            this.button7.Location = new System.Drawing.Point(478, 629);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(75, 23);
-            this.button7.TabIndex = 13;
-            this.button7.Text = "Check_socket";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.Enabled = false;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.Image = null;
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button1.Location = new System.Drawing.Point(212, 606);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(166, 40);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "시작";
+            this.button1.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.button1.Click += new System.EventHandler(this.iTalk_Button_21_Click);
+            // 
+            // iTalk_RadioButton1
+            // 
+            this.iTalk_RadioButton1.BackColor = System.Drawing.Color.Transparent;
+            this.iTalk_RadioButton1.Checked = false;
+            this.iTalk_RadioButton1.Enabled = false;
+            this.iTalk_RadioButton1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.iTalk_RadioButton1.Location = new System.Drawing.Point(258, 59);
+            this.iTalk_RadioButton1.Name = "iTalk_RadioButton1";
+            this.iTalk_RadioButton1.Size = new System.Drawing.Size(72, 15);
+            this.iTalk_RadioButton1.TabIndex = 20;
+            this.iTalk_RadioButton1.Text = "테더링";
+            this.iTalk_RadioButton1.CheckedChanged += new iTalk.iTalk_RadioButton.CheckedChangedEventHandler(this.iTalk_RadioButton1_CheckedChanged);
+            // 
+            // iTalk_HeaderLabel1
+            // 
+            this.iTalk_HeaderLabel1.AutoSize = true;
+            this.iTalk_HeaderLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.iTalk_HeaderLabel1.Font = new System.Drawing.Font("Segoe UI", 25F);
+            this.iTalk_HeaderLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.iTalk_HeaderLabel1.Location = new System.Drawing.Point(29, 33);
+            this.iTalk_HeaderLabel1.Name = "iTalk_HeaderLabel1";
+            this.iTalk_HeaderLabel1.Size = new System.Drawing.Size(191, 46);
+            this.iTalk_HeaderLabel1.TabIndex = 19;
+            this.iTalk_HeaderLabel1.Text = "EASYGRAM";
+            // 
+            // iTalk_ControlBox1
+            // 
+            this.iTalk_ControlBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.iTalk_ControlBox1.BackColor = System.Drawing.Color.Transparent;
+            this.iTalk_ControlBox1.Location = new System.Drawing.Point(617, -1);
+            this.iTalk_ControlBox1.Name = "iTalk_ControlBox1";
+            this.iTalk_ControlBox1.Size = new System.Drawing.Size(77, 19);
+            this.iTalk_ControlBox1.TabIndex = 18;
+            this.iTalk_ControlBox1.Text = "iTalk_ControlBox1";
+            // 
+            // iTalk_GroupBox1
+            // 
+            this.iTalk_GroupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.iTalk_GroupBox1.Controls.Add(this.checkBox1);
+            this.iTalk_GroupBox1.Controls.Add(this.checkBox3);
+            this.iTalk_GroupBox1.Controls.Add(this.checkBox2);
+            this.iTalk_GroupBox1.Location = new System.Drawing.Point(364, 32);
+            this.iTalk_GroupBox1.MinimumSize = new System.Drawing.Size(136, 50);
+            this.iTalk_GroupBox1.Name = "iTalk_GroupBox1";
+            this.iTalk_GroupBox1.Padding = new System.Windows.Forms.Padding(5, 28, 5, 5);
+            this.iTalk_GroupBox1.Size = new System.Drawing.Size(296, 55);
+            this.iTalk_GroupBox1.TabIndex = 17;
+            this.iTalk_GroupBox1.Text = "프로세스";
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(6, 18);
+            this.checkBox1.Location = new System.Drawing.Point(48, 25);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(98, 16);
+            this.checkBox1.Size = new System.Drawing.Size(70, 17);
             this.checkBox1.TabIndex = 14;
-            this.checkBox1.Text = "By Hash Tag";
+            this.checkBox1.Text = "해시태그";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(108, 18);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(120, 16);
-            this.checkBox2.TabIndex = 15;
-            this.checkBox2.Text = "By Random User";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
             this.checkBox3.Checked = true;
             this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(234, 18);
+            this.checkBox3.Location = new System.Drawing.Point(208, 25);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(72, 16);
+            this.checkBox3.Size = new System.Drawing.Size(48, 17);
             this.checkBox3.TabIndex = 16;
-            this.checkBox3.Text = "Unfollow";
+            this.checkBox3.Text = "언팔";
             this.checkBox3.UseVisualStyleBackColor = true;
             this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
-            // groupBox7
+            // checkBox2
             // 
-            this.groupBox7.Controls.Add(this.checkBox4);
-            this.groupBox7.Controls.Add(this.checkBox1);
-            this.groupBox7.Controls.Add(this.checkBox3);
-            this.groupBox7.Controls.Add(this.checkBox2);
-            this.groupBox7.Location = new System.Drawing.Point(358, 12);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(326, 55);
-            this.groupBox7.TabIndex = 17;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Select Operations";
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Location = new System.Drawing.Point(126, 25);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(73, 17);
+            this.checkBox2.TabIndex = 15;
+            this.checkBox2.Text = "서로 맞팔";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
-            // checkBox4
+            // iTalk_Button_11
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Checked = true;
-            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox4.Enabled = false;
-            this.checkBox4.Location = new System.Drawing.Point(6, 33);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(74, 16);
-            this.checkBox4.TabIndex = 17;
-            this.checkBox4.Text = "Required";
-            this.checkBox4.UseVisualStyleBackColor = true;
+            this.iTalk_Button_11.BackColor = System.Drawing.Color.Transparent;
+            this.iTalk_Button_11.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.iTalk_Button_11.Image = null;
+            this.iTalk_Button_11.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iTalk_Button_11.Location = new System.Drawing.Point(384, 606);
+            this.iTalk_Button_11.Name = "iTalk_Button_11";
+            this.iTalk_Button_11.Size = new System.Drawing.Size(98, 40);
+            this.iTalk_Button_11.TabIndex = 21;
+            this.iTalk_Button_11.Text = "취소";
+            this.iTalk_Button_11.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.iTalk_Button_11.Click += new System.EventHandler(this.iTalk_Button_11_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 664);
-            this.Controls.Add(this.groupBox7);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button3);
+            this.ClientSize = new System.Drawing.Size(698, 664);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.iTalk_ThemeContainer1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MinimumSize = new System.Drawing.Size(126, 39);
             this.Name = "Form1";
-            this.Text = "EASYGRAM";
+            this.Text = "이지그램";
+            this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -525,20 +526,17 @@
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
+            this.iTalk_ThemeContainer1.ResumeLayout(false);
+            this.iTalk_ThemeContainer1.PerformLayout();
+            this.iTalk_GroupBox1.ResumeLayout(false);
+            this.iTalk_GroupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        public System.Windows.Forms.Button button1;
         public System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -567,13 +565,16 @@
         private System.Windows.Forms.TextBox limit_follow;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label account_label;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.CheckBox checkBox4;
         public System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.CheckBox checkBox2;
         public System.Windows.Forms.CheckBox checkBox3;
+        private iTalk.iTalk_ThemeContainer iTalk_ThemeContainer1;
+        private iTalk.iTalk_GroupBox iTalk_GroupBox1;
+        private iTalk.iTalk_ControlBox iTalk_ControlBox1;
+        private iTalk.iTalk_HeaderLabel iTalk_HeaderLabel1;
+        public iTalk.iTalk_RadioButton iTalk_RadioButton1;
+        public iTalk.iTalk_Button_2 button1;
+        private iTalk.iTalk_Button_1 iTalk_Button_11;
     }
 }
 
