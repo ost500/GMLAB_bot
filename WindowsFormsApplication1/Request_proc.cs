@@ -19,7 +19,7 @@ namespace WindowsFormsApplication1
 
         }
 
-        public void like_loop(int follow_count, int like_count = 1000)
+        public new void like_loop(int follow_count, int like_count = 1000)
         {
 
             //Reset the delay_follow if Hash tag and random user is not checked 
@@ -321,8 +321,8 @@ namespace WindowsFormsApplication1
                             saveFollowData();
                             //Update request follow done
                             conn_manager.update_follow_done();
+                            context.log(" [인스타 루프] : 팔로우 했습니다");
 
-                           context.log(" [인스타 루프] : 팔로우 했습니다");
                         }
 
                         Thread.Sleep(rnd.Next(1000, 3000));

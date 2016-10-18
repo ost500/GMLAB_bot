@@ -35,39 +35,74 @@ namespace WindowsFormsApplication1
 
         Main_Manager manager;
 
+        private Thread like_thr;
 
 
-        public Form1()
+
+        public Form1(string user)
         {
             InitializeComponent();
 
             //conn_manager.like_up();
 
+            this.user = user;
 
-
+            Thread thr = new Thread(this.form_start);
+            thr.Start();
 
         }
 
-        protected override void OnShown(EventArgs e)
+    
+        public void form_start()
         {
-            base.OnShown(e);
             manager = new Main_Manager(this);
+
+            try
+            {
+                t = manager.conn_manager.SelectData();
+                r = t.Rows[0];
+
+
+                foreach (DataRow r in t.Rows)
+                {
+                    listBox1.Items.Add(r["user_id"]);
+                }
+
+                //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
+
+                if (checkCommentStatus() && checkHashTag())
+                {
+                    //시작 버튼 활성화 시도
+                    //get the total users and login
+                    total_user = t.Rows.Count;
+                    //total_user = 2;
+                    
+
+                }
+                else
+                {
+                    MessageBox.Show(" [데이터베이스] 기본 데이터를 입력하세요");
+                }
+                
+                
+            }
+
+            //else { MessageBox.Show("먼저 로그인하세요 "); }
+
+
+            catch { log("No Users Record found!!!"); }
+
+            
+
         }
 
 
         public void log(string logging)
         {
-
-
-            Invoke(new MethodInvoker(delegate ()
-            {
-
+            
                 textBox1.AppendText(Environment.NewLine);
                 textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-
-
-            }));
-
+            
         }
 
 
@@ -113,76 +148,16 @@ namespace WindowsFormsApplication1
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void iTalk_Button_21_Click(object sender, EventArgs e)
         {
-
-            Thread like_thr = new Thread(manager.like_proc);
+            like_thr = new Thread(manager.like_proc);
             like_thr.Start();
-
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
-            using (var client = new WebClient())
-            {
-                var values = new NameValueCollection();
-                values["mb_id"] = textBox2.Text;
-                values["mb_password"] = textBox3.Text;
-                values["easygram"] = "K";
-
-                var response = client.UploadValues("http://www.easygram.kr/manager/bbs/login_check.php", values);
-
-                var responseString = Encoding.Default.GetString(response);
-
-                if (responseString == "clear")
-                {
-
-
-
-                    MessageBox.Show("success");
-                    log(" [이지그램] : 로그인 성공");
-                    user = values["mb_id"];
-
-
-                    try
-                    {
-                        t = manager.conn_manager.SelectData();
-                        r = t.Rows[0];
-
-
-                        foreach (DataRow r in t.Rows)
-                        {
-                            listBox1.Items.Add(r["user_id"]);
-                        }
-
-                        //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
-
-                        if (checkCommentStatus() && checkHashTag())
-                        {
-                            //시작 버튼 활성화 시도
-                            //get the total users and login
-                            total_user = t.Rows.Count;
-                            //total_user = 2;
-                            start_button_valid("login");
-                        }
-                        else
-                        {
-                            MessageBox.Show(" [데이터베이스] 기본 데이터를 입력하세요");
-                        }
-                    }
-
-                    //else { MessageBox.Show("먼저 로그인하세요 "); }
-
-
-                    catch { log("No Users Record found!!!"); }
-
-                }
-                else
-                {
-                    MessageBox.Show(" [이지그램] : 계정 정보를 다시 확인 하세요");
-                    log(" [이지그램] 로그인 실패");
-                }
-            }
+           
         }
 
         public void start_button_valid(string LorP)
@@ -198,7 +173,7 @@ namespace WindowsFormsApplication1
             if (LorP == "phone")
             {
                 ready_phone = true;
-                button2.Enabled = true;
+                //button2.Enabled = true;
                 // ready_login = true;//testing only
             }
 
@@ -287,14 +262,24 @@ namespace WindowsFormsApplication1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Process[] processList = Process.GetProcessesByName("chromedriver");
-
-            if (processList.Length > 0)
+            try
             {
-                processList[0].Kill();
-            }
+                Process[] processList = Process.GetProcessesByName("chromedriver");
 
-            IPchange.listener.Close();
+                if (processList.Length > 0)
+                {
+                    processList[0].Kill();
+                }
+
+            }
+            catch (Exception) { }
+            try
+            {
+
+                IPchange.listener.Close();
+            }
+            catch (Exception) { }
+
         }
 
 
@@ -332,6 +317,17 @@ namespace WindowsFormsApplication1
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
            
+        }
+
+        private void iTalk_RadioButton1_CheckedChanged(object sender)
+        {
+            manager.mobile_connection();
+        }
+
+        private void iTalk_Button_11_Click(object sender, EventArgs e)
+        {
+            manager.insta_run.quit();
+            like_thr.Abort();
         }
     }
 }

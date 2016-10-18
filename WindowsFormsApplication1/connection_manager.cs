@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WindowsFormsApplication1
@@ -14,13 +15,20 @@ namespace WindowsFormsApplication1
         public Form1 context;
         public DataSet ds;
         private DataSet request_ds;
+        
 
         public sql_connection_manager(Form1 context)
         {
+
+            
             String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
             conn = new MySqlConnection(strConn);
 
             conn.Open();
+            
+
+            context.iTalk_RadioButton1.Enabled = true;
+
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
             //context.textBox1.Text += cmd.ExecuteNonQuery();
 
@@ -448,10 +456,12 @@ namespace WindowsFormsApplication1
         {
             try
             {
+                
                 String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
                 conn = new MySqlConnection(strConn);
 
                 conn.Open();
+                
             }
             catch (Exception ex)
             {

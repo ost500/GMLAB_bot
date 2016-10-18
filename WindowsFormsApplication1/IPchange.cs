@@ -35,7 +35,7 @@ namespace WindowsFormsApplication1
             // Establish the local endpoint for the socket.
             // Dns.GetHostName returns the name of the 
             // host running the application.
-            IPHostEntry ipHostInfo =  Dns.Resolve(Dns.GetHostName());
+            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 2222);
 
@@ -47,7 +47,7 @@ namespace WindowsFormsApplication1
 
             context.log(" [아이피 변경] : 아이피 변경을 시작합니다");
             context.log(" [아이피 변경] : 모바일에서 다음의 아이피와 포트를 입력해주세요");
-            context.log(" [아이피 변경] : "+localEndPoint.Address.ToString() + " port  " + localEndPoint.Port.ToString());
+            context.log(" [아이피 변경] : " + localEndPoint.Address.ToString() + " port  " + localEndPoint.Port.ToString());
 
 
             // Bind the socket to the local endpoint and 
@@ -107,7 +107,7 @@ namespace WindowsFormsApplication1
                 try
                 {
                     context.log(" [아이피 변경] : 현재 아이피 : " + GetComputer_InternetIP() + "\n");
-                    
+
                     break;
                 }
                 catch (Exception ex)
@@ -116,7 +116,12 @@ namespace WindowsFormsApplication1
                     Thread.Sleep(1500);
                 }
             }
-            
+
+            while (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                Thread.Sleep(500);
+                context.log(" [아이피 변경] : 대기");
+            }
 
             //mysql 재연결
             conn.mysql_refresh();
@@ -124,7 +129,7 @@ namespace WindowsFormsApplication1
 
             //시작 버튼 활성화 시도
 
-            context.start_button_valid("phone");
+            context.start_button_valid("login");
             //waiting done
             Main_Manager.ip_changing = false;
 
@@ -189,6 +194,9 @@ namespace WindowsFormsApplication1
 
                     Thread.Sleep(1000);
 
+                    //mysql 재연결
+                    
+
                 }
                 else
                 {
@@ -196,9 +204,8 @@ namespace WindowsFormsApplication1
                 }
             }
 
-
-            //mysql 재연결
             conn.mysql_refresh();
+
             context.log(" [아이피 변경] : 데이터베이스 연결 완료");
 
 
@@ -217,7 +224,7 @@ namespace WindowsFormsApplication1
 
 
             Main_Manager.ip_changing = false;
-            
+
         }
 
 

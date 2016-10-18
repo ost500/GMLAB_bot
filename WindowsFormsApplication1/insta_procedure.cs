@@ -86,8 +86,10 @@ namespace WindowsFormsApplication1
             {
                 context.log(" [이지그램] : 좋아요, 팔로우, 댓글 딜레이 시간을 입력하세요 " + user_id);
                 context.log(" [이지그램] :  로그인 http://easygram.kr/ & 딜레이 시간 입력");
+
                 //context.log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR " + user_id);
                 //context.log("PLEASE context.log IN HERE: http://easygram.kr/ & ADD DELAYS");
+
 
                 return true;
             }
@@ -169,11 +171,13 @@ namespace WindowsFormsApplication1
         //SET TIME DELAY TO LIKE PICTURES
         public bool like_time_gap(double delay_like)
         {
+
             //context.log("LIKE DELAY:"+like.ToString());
             DateTime now = DateTime.Now;
             //context.log(now.ToString());
             //context.log(like_time.ToString());
             //context.log(now.Subtract(follow_time).TotalSeconds.ToString() + "Like_time_gap");
+
             if (now.Subtract(like_time).TotalSeconds > delay_like)
             {
                 like_time = DateTime.Now;
@@ -183,7 +187,9 @@ namespace WindowsFormsApplication1
             {
                 //Thread.Sleep(11000);
                 //like_time = DateTime.Now;
+
                 //context.log("no like");
+
                 context.log(" [인스타 루프] 좋아요 : 딜레이 간격을 위해 휴식합니다");
                 context.log(" [인스타 루프] 좋아요 : " + delay_like.ToString("##.###") + "초 간격");
                 return false;
@@ -208,6 +214,7 @@ namespace WindowsFormsApplication1
             {
                 //Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
                 //context.log("no follow");
+
                 context.log(" [인스타 루프] 팔로우 : 딜레이 간격을 위해 휴식합니다");
                 context.log(" [인스타 루프] 팔로우 : " + delay_follow.ToString("##.###") + "분 간격");
                 return false;
@@ -218,11 +225,13 @@ namespace WindowsFormsApplication1
         public bool comment_time_gap(double delay_comment)
         {
             DateTime now = DateTime.Now;
+
             //  context.log("COMMENT DELAY:" + comment.ToString());
             //context.log(now.ToString());
             //context.log(comment_time.ToString());
 
             //context.log(now.Subtract(comment_time).TotalSeconds.ToString() + "comment_time_gap");
+
 
             if (now.Subtract(comment_time).TotalSeconds > delay_comment)
 
@@ -232,7 +241,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                //context.log("no work");
+                //context.context.log("no work");
                 //Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
                 context.log(" [인스타 루프] 댓글 : 딜레이 간격을 위해 휴식합니다");
                 context.log(" [인스타 루프] 댓글 : " + delay_comment.ToString("##.###") + "초 간격");
@@ -309,7 +318,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
+
                 // context.log("Login is already Korean");
+
             }
 
 
@@ -332,7 +343,9 @@ namespace WindowsFormsApplication1
             }
             catch (Exception exc)
             {
+
                 //context.log("Profile is already in korean");
+
             }
 
         }
@@ -369,12 +382,12 @@ namespace WindowsFormsApplication1
 
 
 
-        public void log(string logging)
-        {
-            context.textBox1.AppendText(Environment.NewLine);
-            context.textBox1.AppendText("[" + DateTime.Now.ToString() + "]" + logging);
+        //public void context.log(string logging)
+        //{
+        //    context.textBox1.AppendText(Environment.NewLine);
+        //    context.textBox1.AppendText("[" + DateTime.Now.ToString() + "]" + logging);
 
-        }
+        //}
 
         public void start()
         {
@@ -385,7 +398,6 @@ namespace WindowsFormsApplication1
             if (t == null) { throw new NullReferenceException(); }
 
             r = t.Rows[0];
-            //   log("row[0]" + t.Rows[0]["user_id"]);
 
             //work_number 1 더하기
             conn_manager.Update_worknum();
@@ -404,8 +416,8 @@ namespace WindowsFormsApplication1
             current_user = r["user_id"].ToString();
 
 
-            //log(" USER:" + current_user + " \n");
-            log(" [이지그램] 로그인 유저 :  " + current_user + " \n");
+            //context.context.log(" USER:" + current_user + " \n");
+            context.log(" [이지그램] 로그인 유저 :  " + current_user + " \n");
 
             delay_like = getLikeDelay(current_user);
             delay_comment = getCommentDealy(current_user);
@@ -493,6 +505,7 @@ namespace WindowsFormsApplication1
                     //안나오면 정상 가동
                     //no verify your account
                     //context.log("계정 인증이 없다");
+
 
                     return false;
                 }
@@ -593,7 +606,9 @@ namespace WindowsFormsApplication1
 
                     Thread.Sleep(rnd.Next(1000, 3000));
                 }
+
                 catch (Exception e) { /*context.log("팔로우를 못찾았습니다1");*/ }
+
 
             }
             //다른모양의 팔로우 
@@ -996,7 +1011,6 @@ namespace WindowsFormsApplication1
                                     followers_count_new = 25;
                                     scroll_up_speed = 5;
                                 }
-
                                 //context.log("WEB_COUNT: " + followers_count.ToString());
 
                                 context.log(" [언팔로우] : " + followers_count_new + " 개의 팔로우 계정을 검사합니다");
@@ -1075,7 +1089,6 @@ namespace WindowsFormsApplication1
                                                     {
 
                                                         // unfollow_flag = false;
-
                                                         not_unfollow_list.Add(followedby_me);
                                                         context.log(" MATCHED AND FOLLOWING ME");
                                                         // context.log("[언팔로우] : 맞팔을 확인했습니다");
@@ -1095,13 +1108,16 @@ namespace WindowsFormsApplication1
                                                         {
                                                             alreday_exist = false;
 
+
                                                         }
                                                         else { alreday_exist = true; break; }
                                                     }
+
                                                 }
                                                 //If not inb the list then add other wise no need to add
                                                 if (alreday_exist == false)
                                                 {
+
                                                     not_unfollow_list.Add(followedby_me);
                                                 }
                                             }
@@ -1146,13 +1162,13 @@ namespace WindowsFormsApplication1
 
 
                                 //Print  NOT UNFOLLOW LIST
-                                log("########### NOT UNFOLLOW LIST: ###### ");
+                                context.log("########### NOT UNFOLLOW LIST: ###### ");
                                 foreach (string not_unfollow_user in not_unfollow_list)
                                 {
 
-                                    log(not_unfollow_user);
+                                    context.log(not_unfollow_user);
                                 }
-                                log("##################################### ");
+                                context.log("##################################### ");
                                 //Reset the scroll delay to initial value
                                 scroll = 5;
 
@@ -1199,6 +1215,7 @@ namespace WindowsFormsApplication1
 
                                             //For each  followed users match with website's followers list
                                             foreach (DataRow r in tbl.Rows)
+
                                             {
 
                                                 //get the user followed by me 
@@ -1249,8 +1266,7 @@ namespace WindowsFormsApplication1
                                                     }
                                                     else
                                                     {
-
-                                                        
+                                                      
                                                         if (i == followers_count_new) //if we are at last and user is not matched in the following list
                                                         {
                                                             context.log("[언팔로우] :NOT MATCHED and DELETED ");
@@ -1259,8 +1275,6 @@ namespace WindowsFormsApplication1
                                                         }
 
                                                     } //End of If
-
-
 
                                                 } //End of if Unfollow
                                             } //End of For each loop
@@ -1302,6 +1316,7 @@ namespace WindowsFormsApplication1
                         }
                         else
                         {
+
                             context.log("Not following Anyone");
                             context.log("[언팔로우] : 팔로우가 0 입니다");
                         } //End of if-else
@@ -1407,12 +1422,13 @@ namespace WindowsFormsApplication1
             myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._4y3e3")));
 
             driver.FindElement(By.CssSelector("button._4y3e3")).Click();
-            //log("로그아웃 성공");
+            //context.log("로그아웃 성공");
         }
 
         public void quit()
         {
-            driver.Quit();
+            //driver.Quit();
+            TeardownTest();
         }
 
 

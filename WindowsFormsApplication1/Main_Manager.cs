@@ -16,9 +16,9 @@ namespace WindowsFormsApplication1
         public sql_connection_manager conn_manager;
 
         //Thread
-        private Thread like_thr;
+        public Thread like_thr;
 
-        insta_procedure insta_run;
+        public insta_procedure insta_run;
 
         public static IPchange ipchanger;
 
@@ -43,20 +43,23 @@ namespace WindowsFormsApplication1
                 context.log("EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n");
 
 
-                //모바일 연결 mobile connection
-                ipchanger = new IPchange(context, conn_manager);
 
-                insta_procedure.follow_time = DateTime.Now;
-                insta_procedure.like_time = DateTime.Now;
-
-
-
-                like_thr = new Thread(ipchanger.StartListening);
-                like_thr.Start();
             }
-            catch (NullReferenceException ex) { context.log("No Result Found!!!!"); }
+            catch (NullReferenceException) { context.log("No Result Found!!!!"); }
 
 
+        }
+
+        public void mobile_connection()
+        {
+            //모바일 연결 mobile connection
+            ipchanger = new IPchange(context, conn_manager);
+
+            insta_procedure.follow_time = DateTime.Now;
+            insta_procedure.like_time = DateTime.Now;
+            
+            like_thr = new Thread(ipchanger.StartListening);
+            like_thr.Start();
         }
 
         public void like_proc()
