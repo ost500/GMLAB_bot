@@ -31,9 +31,7 @@ namespace WindowsFormsApplication1
         private bool ready_login = false;
         private bool ready_phone = false;
 
-        public bool hash_tag_checked;
-        public bool random_user_checked;
-        public bool unfollow_checked;
+        
 
         Main_Manager manager;
 
@@ -321,19 +319,19 @@ namespace WindowsFormsApplication1
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
-            hash_tag_checked = checkBox1.Checked;
+        
 
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            random_user_checked = checkBox2.Checked;
+         
 
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            unfollow_checked = checkBox3.Checked;
+           
         }
     }
 }

@@ -23,7 +23,7 @@ namespace WindowsFormsApplication1
         {
 
             //Reset the delay_follow if Hash tag and random user is not checked 
-            if (!context.hash_tag_checked && !context.random_user_checked)
+            if (!context.checkBox1.Checked && !context.checkBox2.Checked)
             {
 
                 delay_follow = 2.66667 - context.total_user * 0.333333;
@@ -64,7 +64,7 @@ namespace WindowsFormsApplication1
                             //Update request follow done
                             conn_manager.update_follow_done();
 
-                            log("[인스타 루프] : 팔로우 했습니다");
+                            context.log("[인스타 루프] : 팔로우 했습니다");
                         }
 
 
@@ -92,7 +92,7 @@ namespace WindowsFormsApplication1
                             //Update request follow done
                             conn_manager.update_follow_done();
 
-                            log(" [인스타 루프] 팔로우 했습니다");
+                            context.log(" [인스타 루프] 팔로우 했습니다");
                         }
 
                         Thread.Sleep(rnd.Next(1000, 3000));
@@ -136,7 +136,7 @@ namespace WindowsFormsApplication1
                     }
                     catch (Exception e)
                     {
-                        log("[인스타 루프] : 페이지 로딩에 실패했습니다");
+                        context.log("[인스타 루프] : 페이지 로딩에 실패했습니다");
                         Thread.Sleep(rnd.Next(1000, 3000));
 
                         break;
@@ -158,7 +158,7 @@ namespace WindowsFormsApplication1
 
 
                             //"좋아요" 클릭! 
-                            log(" [인스타 루프] : 좋아요를 눌렀습니다");
+                            context.log(" [인스타 루프] : 좋아요를 눌렀습니다");
                             Thread.Sleep(rnd.Next(1000, 3000));
                         }
                         else
@@ -184,7 +184,7 @@ namespace WindowsFormsApplication1
                                     Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
                                     driver.FindElement(By.XPath("//header/span/button")).Click();
 
-                                    log(" [인스타 루프] : 팔로우 했습니다");
+                                    context.log(" [인스타 루프] : 팔로우 했습니다");
                                     //Save Follow data
                                     saveFollowData();
                                     //Update request follow done
@@ -237,7 +237,7 @@ namespace WindowsFormsApplication1
                             }
                             catch (Exception ex)
                             {
-                                log(" [인스타 루프] : 이미 팔로우 했습니다");
+                                context.log(" [인스타 루프] : 이미 팔로우 했습니다");
                             }
                             break;
 
@@ -252,7 +252,7 @@ namespace WindowsFormsApplication1
                         driver.FindElement(By.LinkText("다음")).Click();
 
 
-                        log(" [인스타 루프] : 다음 게시물로 넘어갑니다");
+                        context.log(" [인스타 루프] : 다음 게시물로 넘어갑니다");
                     }
                     // while loop goes once
                     break;
@@ -301,7 +301,7 @@ namespace WindowsFormsApplication1
                             conn_manager.update_follow_done();
 
                             //follow
-                            log(" [인스타 루프] : 팔로우 했습니다");
+                            context.log(" [인스타 루프] : 팔로우 했습니다");
                         }
                         else
                         {
@@ -309,9 +309,9 @@ namespace WindowsFormsApplication1
 
                             //대기 타다가 팔로우
                             DateTime now = DateTime.Now;
-                            log(now.ToString() + "현시각");
-                            log(follow_time.ToString() + "팔로우한 시각");
-                            log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
+                            context.log(now.ToString() + "현시각");
+                            context.log(follow_time.ToString() + "팔로우한 시각");
+                            context.log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
                             Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
@@ -322,7 +322,7 @@ namespace WindowsFormsApplication1
                             //Update request follow done
                             conn_manager.update_follow_done();
 
-                            log(" [인스타 루프] : 팔로우 했습니다");
+                           context.log(" [인스타 루프] : 팔로우 했습니다");
                         }
 
                         Thread.Sleep(rnd.Next(1000, 3000));
@@ -330,7 +330,7 @@ namespace WindowsFormsApplication1
                     catch (Exception e)
                     {
                         //failed to follow after waiting
-                        log("[인스타 루프]팔로우에 실패했습니다");
+                        context.log("[인스타 루프]팔로우에 실패했습니다");
                     }
 
 
@@ -359,7 +359,7 @@ namespace WindowsFormsApplication1
                             //Update request follow done
                             conn_manager.update_follow_done();
 
-                            log("[인스타 루프]팔로우 했습니다");
+                            context.log("[인스타 루프]팔로우 했습니다");
                         }
                         else
                         {
@@ -376,14 +376,14 @@ namespace WindowsFormsApplication1
                             //Update request follow done
                             conn_manager.update_follow_done();
 
-                            log("[인스타 루프]팔로우 했습니다");
+                            context.log("[인스타 루프]팔로우 했습니다");
                         }
                         Thread.Sleep(rnd.Next(1000, 3000));
                     }
                     catch (Exception ex)
                     {
                         //failed to follow after waiting
-                        log("[인스타 루프]팔로우에 실패했습니다");
+                        context.log("[인스타 루프]팔로우에 실패했습니다");
                     }
                 }
 

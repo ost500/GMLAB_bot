@@ -43,7 +43,7 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-                
+
 
 
                 if (ds.Tables.Count > 0)
@@ -68,7 +68,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                
+
                 string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' ORDER BY work_number";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
@@ -127,7 +127,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                
+
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
                 //   context.log(sql);
@@ -165,7 +165,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-               
+
 
                 string sql = "SELECT * FROM insta_tag_my WHERE mb_id = '" + context.user + "'";
 
@@ -200,7 +200,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                
+
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
 
@@ -233,7 +233,7 @@ namespace WindowsFormsApplication1
         public void Update_worknum()
         {
             MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
-            
+
             cmd2.ExecuteNonQuery();
 
         }
@@ -254,6 +254,15 @@ namespace WindowsFormsApplication1
             if (cmd4.ExecuteNonQuery() > 0) { context.log("Agent Updated"); }
 
         }
+
+        public void Update_followers(string current_user, int followers)
+        {
+
+            MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_follows SET followers ='" + followers + "' WHERE user_id = '" + current_user + "' AND followers='" + 0 + "'", conn);
+            cmd3.ExecuteNonQuery();
+
+        }
+
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)
         {
@@ -297,7 +306,7 @@ namespace WindowsFormsApplication1
                 adpt.Fill(ds, "members");
 
 
-                
+
 
                 for (int i = 0; i < num_random_user; i++)
                 {
@@ -324,7 +333,7 @@ namespace WindowsFormsApplication1
 
         public DataRow Select_tag()
         {
-            context.textBox1.AppendText("clicked");
+
             DataSet ds = new DataSet();
             try
             {
@@ -344,7 +353,7 @@ namespace WindowsFormsApplication1
                 if (ds.Tables.Count > 0)
                 {
 
-                    
+
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
 
@@ -429,7 +438,7 @@ namespace WindowsFormsApplication1
         public void blocked_update()
         {
             MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_account SET blocked = 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
-            
+
             cmd2.ExecuteNonQuery();
         }
 
@@ -524,8 +533,39 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "followers");
 
+                context.log("TABLE Result " + ds.Tables.Count.ToString());
+
+                if (ds.Tables.Count > 0)
+                {
+
+                    return ds.Tables[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
 
 
+                return null;
+            }
+
+        }
+
+        //Select user specific follows 
+        public DataTable select_specific_follow(string current_user, string followed)
+
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + current_user + "' and followed_id='" + followed + "'";
+
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "specific_followers");
+
+               
                 if (ds.Tables.Count > 0)
                 {
 
@@ -550,7 +590,7 @@ namespace WindowsFormsApplication1
 
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_status WHERE user_id ='" + user_id + "' order by created_at DESC";
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "' order by followers";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "followers");
@@ -572,24 +612,25 @@ namespace WindowsFormsApplication1
         //STORE Follow Data
         public void insert_followdata(string current_user, string followed, string follow_time)
         {
-            try
-            {
+    
+                    try
+                    {
 
-                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                        MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
 
-                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
+                        cmd2.ExecuteNonQuery();
+                        //context.textBox1.AppendText("########## Inserted Follow Data ##########");
+                        //context.log("[데이터베이스]");
 
-                cmd2.ExecuteNonQuery();
-                //context.textBox1.AppendText("########## Inserted Follow Data ##########");
-                //context.log("[데이터베이스]");
+                    }
+                    catch (Exception e)
+                    {
 
-            }
-            catch (Exception e)
-            {
-
-            }
+                    }
+           
 
         }
+
         //Remove Follow Data
         public void remove_followdata(string current_user, string followed)
         {
@@ -616,11 +657,16 @@ namespace WindowsFormsApplication1
         //STORE FOLLOWERS COUNT
         public void insert_followersCount(string current_user, int followers_count, string created_at)
         {
+
+
+
             try
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + current_user + "' and followed_id='jams_march'";
 
+             
 
                 MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_status` (`no`, `user_id`, `followers`, `created_at`) VALUES(NULL, '" + current_user + "', '" + followers_count + "', '" + created_at + "');", conn);
                 // context.log(cmd2.ToString());
@@ -650,7 +696,7 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "request");
 
-                
+
 
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
