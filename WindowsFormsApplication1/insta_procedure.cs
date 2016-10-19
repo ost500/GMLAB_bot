@@ -1253,7 +1253,7 @@ namespace WindowsFormsApplication1
                                                             driver.FindElement(By.XPath("//li[" + i + "]/div/div/span/button")).Click();
                                                             //Delete from db
                                                             conn_manager.remove_followdata(current_user, followedby_me);
-                                                            //context.log("<<<<<<<<<<<<<<< UNFOLLOWED>>>>>>>>>>>>>>>");
+                                                            context.log("<<<<<<<<<<<<<<< UNFOLLOWED>>>>>>>>>>>>>>>");
                                                             context.log("[언팔로우] : 언팔로우 했습니다");
                                                             Thread.Sleep(rnd.Next(1000, 3000));
                                                             break;

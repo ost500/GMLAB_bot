@@ -16,7 +16,6 @@ C:\Users\OST\Documents\Visual Studio 2015\Projects\WindowsFormsApplication1\Wind
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
-C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.LoginForm.resources
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
@@ -30,3 +29,4 @@ C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WebDriv
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
 C:\Users\OST\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Login_Form.resources
+C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Login_Form.resources
