@@ -66,7 +66,7 @@ namespace WindowsFormsApplication1
 
 
         }
-        
+
         public string getCurrentPath()
         {
             string currentDirName = Directory.GetCurrentDirectory();
@@ -958,6 +958,7 @@ namespace WindowsFormsApplication1
             string web_follower_count;
             string follower_username;
             string following_username;
+            List<string> followed_list = new List<string>();
             List<string> not_unfollow_list = new List<string>();
             IWebElement Box;
             int DivHeight;
@@ -993,17 +994,17 @@ namespace WindowsFormsApplication1
                             DataRow row = conn_manager.select_followers_count(current_user);
 
                             int db_followers = Int32.Parse(row["followers"].ToString());
-                            context.log("GDGDGDGGDGDGDG " + row["followers"].ToString());
+                           // context.log("GDGDGDGGDGDGDG " + row["followers"].ToString());
                             if (db_followers > 0)
                             {
 
                                 //subtract db followers from website followers and add 15 to result
                                 int followers_count_new = web_followers - db_followers;
-                                context.log("Check_COUNT: " + followers_count_new.ToString());
+                               // context.log("Check_COUNT: " + followers_count_new.ToString());
                                 // followers_count_new = followers_count_new + 25;
                                 if (web_followers > 0)
                                 {
-                                    followers_count_new = followers_count_new + 25;
+                                    followers_count_new = followers_count_new + 40;
                                     scroll_up_speed = 15;
                                 }
                                 else
@@ -1025,7 +1026,14 @@ namespace WindowsFormsApplication1
                                 DivHeight = Box.Size.Height;
                                 //Add Delay
                                 Thread.Sleep(rnd.Next(1000, 3000));
-                                context.log(" [언팔로우] : Searching in Followers list.............. " );
+
+                                //Duplicate db followed data to followed list
+                                foreach (DataRow r in tbl.Rows)
+                                {
+                                    followed_list.Add(r["followed_id"].ToString());
+                                }
+
+                                context.log(" [언팔로우] : Searching in Followers list.............. ");
                                 for (int i = 1; i <= followers_count_new; i++)
                                 {
 
@@ -1037,10 +1045,10 @@ namespace WindowsFormsApplication1
                                         {
 
                                             // Scroll inside web element vertically (e.g. 100 pixel)
-                                            
+
                                             DivHeight = DivHeight + scroll * 10;
                                             js.ExecuteScript("arguments[0].scrollTop = arguments[1];",
-                                                driver.FindElement(By.ClassName("_4gt3b")), DivHeight);
+                                            driver.FindElement(By.ClassName("_4gt3b")), DivHeight);
                                             Thread.Sleep(rnd.Next(1000, 2000));
                                             scroll = scroll + 3;
 
@@ -1049,16 +1057,13 @@ namespace WindowsFormsApplication1
                                         //get the user from website follower list
                                         follower_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
                                         //For each  followed users match with website's followers list
-                                       // context.log(" [언팔로우] : " + i);
+                                        // context.log(" [언팔로우] : " + i);
 
                                         foreach (DataRow r in tbl.Rows)
                                         {
 
                                             //get the user followed by me and time as well
                                             string followedby_me = r["followed_id"].ToString();
-                                            // context.log(" [언팔로우] : " + followedby_me + "(을)를 검사합니다");
-                                            //context.log("User Followed by Me: " + followedby_me + " \n");
-
                                             DateTime time_whenfollowed = (DateTime)r["time"];
                                             DateTime now = DateTime.Now;
                                             double duration = now.Subtract(time_whenfollowed).TotalHours;
@@ -1088,10 +1093,12 @@ namespace WindowsFormsApplication1
                                                     if (followedby_me == follower_username)
                                                     {
 
-                                                        // unfollow_flag = false;
+                                                        //Add to not unfollow list
                                                         not_unfollow_list.Add(followedby_me);
-                                                        context.log(" MATCHED AND FOLLOWING ME");
-                                                        // context.log("[언팔로우] : 맞팔을 확인했습니다");
+                                                        //Remove from followed list
+                                                        followed_list.Remove(followedby_me);
+                                                        // context.log(" MATCHED AND FOLLOWING ME");
+                                                         context.log("[언팔로우] : 맞팔을 확인했습니다");
                                                         Thread.Sleep(rnd.Next(1000, 3000));
                                                     }
 
@@ -1118,7 +1125,10 @@ namespace WindowsFormsApplication1
                                                 if (alreday_exist == false)
                                                 {
 
+                                                    //Add to not unfollow list
                                                     not_unfollow_list.Add(followedby_me);
+                                                    //Remove from followed list
+                                                    followed_list.Remove(followedby_me);
                                                 }
                                             }
                                         } //end of for each loop
@@ -1160,22 +1170,21 @@ namespace WindowsFormsApplication1
                                 //Just Sleep
                                 Thread.Sleep(rnd.Next(1000, 3000));
 
-
                                 //Print  NOT UNFOLLOW LIST
-                                context.log("########### NOT UNFOLLOW LIST: ###### ");
-                                foreach (string not_unfollow_user in not_unfollow_list)
+                                context.log("########### UNFOLLOW LIST: ###### ");
+                                foreach (string followedby_me in followed_list)
                                 {
 
-                                    context.log(not_unfollow_user);
+                                    context.log(followedby_me);
                                 }
                                 context.log("##################################### ");
+
+
+
                                 //Reset the scroll delay to initial value
                                 scroll = 5;
 
                                 /////////////////////////////RESET PART END ////////////////////////////////////////
-
-
-
 
                                 //context.log("Opening following.....");
                                 Thread.Sleep(rnd.Next(1000, 3000));
@@ -1188,61 +1197,42 @@ namespace WindowsFormsApplication1
                                 context.log("[언팔로우] : 팔로잉 리스트를 엽니다");
 
                                 context.log("Unfollow is Runing............");
-                                for (int i = 1; i <= followers_count_new; i++)
-                                {
 
-                                    try
+                                //  if (not_unfollow_list.Count != tbl.Rows.Count) //donot unfollow anyone
+                                if (followed_list.Count > 0)
+                                {
+                                    for (int i = 1; i <= followers_count_new; i++)
                                     {
 
-                                        //get the  user from website following list
-                                        Thread.Sleep(rnd.Next(1000, 3000));
-                                        following_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
-                                        //  context.log("Following "+ i + following_username);
-
-                                        if (i == scroll)
+                                        try
                                         {
-                                            // Scroll inside web element vertically (e.g. 100 pixel)
-                                           // context.log("Scroll: " + scroll.ToString());
-                                            DivHeight = DivHeight + scroll * 10;
-                                            js.ExecuteScript("arguments[0].scrollTop = arguments[1];",
-                                            driver.FindElement(By.ClassName("_4gt3b")), DivHeight);
-                                            Thread.Sleep(rnd.Next(1000, 2000));
-                                            scroll = scroll + 3;
-                                        }
+                                            //get the  user from website following list
+                                            Thread.Sleep(rnd.Next(1000, 3000));
+                                            following_username = driver.FindElement(By.XPath("//li[" + i + "]/div/div/div/div/a")).Text;
+                                            //  context.log("Following "+ i + following_username);
 
-                                        if (tbl.Rows.Count > 0)
-                                        {
+                                            if (i == scroll)
+                                            {
+                                                // Scroll inside web element vertically (e.g. 100 pixel)
+                                                context.log("Scroll: " + scroll.ToString());
+                                                DivHeight = DivHeight + scroll * 10;
+                                                js.ExecuteScript("arguments[0].scrollTop = arguments[1];",
+                                                driver.FindElement(By.ClassName("_4gt3b")), DivHeight);
+                                                Thread.Sleep(rnd.Next(1000, 2000));
+                                                scroll = scroll + 3;
+                                            }
+                                           // context.log("ROW COUNT DURING UNFOLLOW : " + followed_list.Count.ToString());
 
-                                            //For each  followed users match with website's followers list
-                                            foreach (DataRow r in tbl.Rows)
-
+                                            // if (tbl.Rows.Count > 0)
+                                            if (followed_list.Count > 0)
                                             {
 
-                                                //get the user followed by me 
-                                                string followedby_me = r["followed_id"].ToString();
-
-                                                if (not_unfollow_list.Count > 0)
-                                                {
-                                                    //Check Whether it exist in the not_follow_list or not
-                                                    foreach (string not_unfollow_user in not_unfollow_list)
-                                                    {
-
-                                                        if (followedby_me != not_unfollow_user)
-                                                        {
-                                                            unfollow_flag = true; //If not in list
-
-                                                        }
-                                                        else { unfollow_flag = false; break; }
-                                                    }
-                                                }
-                                                else { unfollow_flag = true; } //If  list is empty 
-
-                                                /////// Unfollow if flag is true [its not found in the follower's list] ////////////
-                                                if (unfollow_flag == true)
+                                                //For each  followed users match with website's followers list
+                                                
+                                                foreach (string followedby_me in followed_list)
                                                 {
 
-
-
+                                                    //get the user followed by me 
                                                     //if he or she is our following list
                                                     if (followedby_me == following_username)
                                                     {
@@ -1251,11 +1241,14 @@ namespace WindowsFormsApplication1
                                                             Thread.Sleep(rnd.Next(2000, 3000));
                                                             //then unfollow him or her 
                                                             driver.FindElement(By.XPath("//li[" + i + "]/div/div/span/button")).Click();
+                                                            //Remove from followed list
+                                                            followed_list.Remove(followedby_me);
                                                             //Delete from db
                                                             conn_manager.remove_followdata(current_user, followedby_me);
-                                                            context.log("<<<<<<<<<<<<<<< UNFOLLOWED>>>>>>>>>>>>>>>");
+
+                                                            //context.log("<<<<<<<<<<<<<<< UNFOLLOWED>>>>>>>>>>>>>>>");
                                                             context.log("[언팔로우] : 언팔로우 했습니다");
-                                                            Thread.Sleep(rnd.Next(1000, 3000));
+                                                            Thread.Sleep(rnd.Next(2000, 3000));
                                                             break;
                                                         }
                                                         catch
@@ -1266,50 +1259,54 @@ namespace WindowsFormsApplication1
                                                     }
                                                     else
                                                     {
-                                                      
+
                                                         if (i == followers_count_new) //if we are at last and user is not matched in the following list
                                                         {
-                                                            context.log("[언팔로우] :NOT MATCHED and DELETED ");
+                                                            context.log("[언팔로우] : " + followedby_me + " NOT MATCHED IN THE LIST and DELETED ");
+                                                            //Remove from followed list
+                                                            followed_list.Remove(followedby_me);
                                                             //Delete from db
                                                             conn_manager.remove_followdata(current_user, followedby_me);
+
                                                         }
 
                                                     } //End of If
 
-                                                } //End of if Unfollow
-                                            } //End of For each loop
+                                                    // } //End of if Unfollow
+                                                } //End of For each loop
+                                            }
+                                            else { break; }//End of if-else check count
                                         }
-                                        else { break; }//End of if-else check count
-                                    }
-                                    catch
+                                        catch
+                                        {
+                                            //context.log("Wrong Following Index: " + i);
+                                            context.log("[언팔로우] : 가능한 인덱스를 넘었습니다 : " + i);
+                                            Thread.Sleep(rnd.Next(1000, 1000));
+                                            break;
+                                        }
+
+
+                                    }//End of for loop
+
+                                    // failed to unfollow and scroll up
+                                    for (int j = followers_count_new; j >= 0; j -= scroll_up_speed)
                                     {
-                                        //context.log("Wrong Following Index: " + i);
-                                        context.log("[언팔로우] : 가능한 인덱스를 넘었습니다 : " + i);
+                                        // Scroll inside web element vertically (e.g. 100 pixel)
+                                        js.ExecuteScript("arguments[0].scrollTop = arguments[1];", driver.FindElement(By.ClassName("_4gt3b")), j);
                                         Thread.Sleep(rnd.Next(1000, 1000));
-                                        break;
+                                        ///////////////////// Unfollow if flag is true [its not found in the follower's list]   /////////////////////////
                                     }
-
-
-                                }//End of for loop
-
-                                // failed to unfollow and scroll up
-                                for (int j = followers_count_new; j >= 0; j -= scroll_up_speed)
-                                {
-                                    // Scroll inside web element vertically (e.g. 100 pixel)
-                                    js.ExecuteScript("arguments[0].scrollTop = arguments[1];", driver.FindElement(By.ClassName("_4gt3b")), j);
-                                    Thread.Sleep(rnd.Next(1000, 1000));
-                                    ///////////////////// Unfollow if flag is true [its not found in the follower's list]   /////////////////////////
+                                    //Wait
+                                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                                    myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+                                    //Close following page
+                                    driver.FindElement(By.CssSelector("button._3eajp")).Click();
                                 }
-                                //Wait
-                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                                myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
-                                //Close following page
-                                driver.FindElement(By.CssSelector("button._3eajp")).Click();
-
+                                else { context.log("No One to unfollow"); }
                             }
                             else
                             {
-                                context.log("Will not Unfollow as Followers count is not available in DB");
+                               // context.log("Will not Unfollow as Followers count is not available in DB");
                                 context.log("[언팔로우] : 그동안 아무도 팔로우 하지 않았습니다");
 
                             }
@@ -1317,14 +1314,14 @@ namespace WindowsFormsApplication1
                         else
                         {
 
-                            context.log("Not following Anyone");
+                          //  context.log("Not following Anyone");
                             context.log("[언팔로우] : 팔로우가 0 입니다");
                         } //End of if-else
 
                     }
                     catch
                     {
-                        context.log("Not able to access Follwers Count from website");
+                      //  context.log("Not able to access Follwers Count from website");
                         context.log("[언팔로우] : 팔로워가 0 입니다");
                     }
                 } //end of if(IsElementPresent)

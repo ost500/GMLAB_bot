@@ -124,7 +124,7 @@ namespace WindowsFormsApplication1
             }
 
             //mysql 재연결
-            conn.mysql_refresh();
+         //   conn.mysql_refresh();
             context.log(" [아이피 변경] : 연결 성공!");
 
             //시작 버튼 활성화 시도
