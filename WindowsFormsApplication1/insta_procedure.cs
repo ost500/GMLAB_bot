@@ -66,7 +66,7 @@ namespace WindowsFormsApplication1
 
 
         }
-
+        
         public string getCurrentPath()
         {
             string currentDirName = Directory.GetCurrentDirectory();

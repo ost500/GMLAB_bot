@@ -34,6 +34,7 @@ namespace WindowsFormsApplication1
         
 
         Main_Manager manager;
+        public sql_connection_manager conn_manager;
 
         private Thread like_thr;
 
@@ -55,11 +56,15 @@ namespace WindowsFormsApplication1
     
         public void form_start()
         {
-            manager = new Main_Manager(this);
+
+            conn_manager = new sql_connection_manager(this);
+
+            manager = new Main_Manager(this, conn_manager);
+
 
             try
             {
-                t = manager.conn_manager.SelectData();
+                t = conn_manager.SelectData();
                 r = t.Rows[0];
 
 
@@ -113,7 +118,7 @@ namespace WindowsFormsApplication1
         //CHECK STATUS OF HASH TAGS FOR A USER
         public bool checkHashTag()
         {
-            DataRow row = manager.conn_manager.check_hashtag();
+            DataRow row = conn_manager.check_hashtag();
             if (row == null)
             {
                 //log("YOU NEED TO ADD FEW HASH TAGS INTO YOUR ACCOUNT");
@@ -131,7 +136,7 @@ namespace WindowsFormsApplication1
         //CHECK STATUS OF COMMENTS FOR A USER
         public bool checkCommentStatus()
         {
-            DataRow row = manager.conn_manager.check_comments();
+            DataRow row = conn_manager.check_comments();
             if (row == null)
             {
                 //log("YOU NEED TO ENTER  COMMENTS");
@@ -150,6 +155,8 @@ namespace WindowsFormsApplication1
 
         private void iTalk_Button_21_Click(object sender, EventArgs e)
         {
+            
+
             like_thr = new Thread(manager.like_proc);
             like_thr.Start();
         }
@@ -189,7 +196,7 @@ namespace WindowsFormsApplication1
 
             try
             {
-                DataRow dr = manager.conn_manager.Select_job(selected_account);
+                DataRow dr = conn_manager.Select_job(selected_account);
                 if (dr == null)
                 {
                     limit_comment.Text = "None";
@@ -237,13 +244,13 @@ namespace WindowsFormsApplication1
 
         private void button4_Click(object sender, EventArgs e)
         {
-            log(manager.conn_manager.select_request()["mb_id"].ToString());
+            log(conn_manager.select_request()["mb_id"].ToString());
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            log(manager.conn_manager.Select_content()["content"].ToString());
-            t = manager.conn_manager.SelectData();
+            log(conn_manager.Select_content()["content"].ToString());
+            t = conn_manager.SelectData();
             r = t.Rows[0];
 
             foreach (DataRow r in t.Rows)
@@ -255,7 +262,7 @@ namespace WindowsFormsApplication1
         private void button6_Click(object sender, EventArgs e)
         {
             log("is it working?");
-            manager.conn_manager.insert_insta_job();
+            conn_manager.insert_insta_job();
         }
 
 
@@ -321,7 +328,8 @@ namespace WindowsFormsApplication1
 
         private void iTalk_RadioButton1_CheckedChanged(object sender)
         {
-            manager.mobile_connection();
+            Thread thr = new Thread(manager.mobile_connection);
+            thr.Start();   
         }
 
         private void iTalk_Button_11_Click(object sender, EventArgs e)
@@ -329,5 +337,8 @@ namespace WindowsFormsApplication1
             manager.insta_run.quit();
             like_thr.Abort();
         }
+
+
+
     }
 }

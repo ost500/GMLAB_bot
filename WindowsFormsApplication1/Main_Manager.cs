@@ -29,12 +29,12 @@ namespace WindowsFormsApplication1
 
 
 
-        public Main_Manager(Form1 context)
+        public Main_Manager(Form1 context, sql_connection_manager conn_manager)
         {
             try
             {
                 this.context = context;
-                conn_manager = new sql_connection_manager(context);
+                this.conn_manager = conn_manager;
 
 
                 DataRow r = conn_manager.version_control();
@@ -58,8 +58,9 @@ namespace WindowsFormsApplication1
             insta_procedure.follow_time = DateTime.Now;
             insta_procedure.like_time = DateTime.Now;
             
-            like_thr = new Thread(ipchanger.StartListening);
-            like_thr.Start();
+            //like_thr = new Thread(ipchanger.StartListening);
+            //like_thr.Start();
+            ipchanger.StartListening();
         }
 
         public void like_proc()
@@ -91,6 +92,8 @@ namespace WindowsFormsApplication1
                             break;
                         }
                     }
+
+                    conn_manager = new sql_connection_manager(context);
 
                     insta_run = new insta_procedure(context, conn_manager);
 
@@ -157,10 +160,12 @@ namespace WindowsFormsApplication1
 
                     insta_run.quit();
 
+                    //connection close();
+                    conn_manager.quit_conn();
 
                     ipchanger.send_change();
 
-
+                    
 
 
 

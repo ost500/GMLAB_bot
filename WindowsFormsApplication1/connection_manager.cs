@@ -37,6 +37,11 @@ namespace WindowsFormsApplication1
             ds = new DataSet();
         }
 
+        public void quit_conn()
+        {
+            conn.Close();
+        }
+
         public DataTable SelectData()
         {
             ds = new DataSet();
@@ -456,7 +461,6 @@ namespace WindowsFormsApplication1
         {
             try
             {
-                conn.Close();
 
                 String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
                 conn = new MySqlConnection(strConn);

@@ -204,7 +204,7 @@ namespace WindowsFormsApplication1
                 }
             }
 
-            conn.mysql_refresh();
+            
 
             context.log(" [아이피 변경] : 데이터베이스 연결 완료");
 
