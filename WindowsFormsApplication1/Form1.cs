@@ -75,6 +75,10 @@ namespace WindowsFormsApplication1
                     listBox1.Items.Add(r["user_id"].ToString());
                 }
 
+                //Select the current item in the list
+                listBox1.Focus();
+                listBox1.SetSelected(0, true);
+
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
 
                 if (checkCommentStatus() && checkHashTag())
@@ -205,12 +209,12 @@ namespace WindowsFormsApplication1
                     limit_comment.Text = "None";
                     limit_follow.Text = "None";
                     limit_like.Text = "None";
-                    limit_unfollow.Text = "None";
+                 //   limit_unfollow.Text = "None";
 
 
                     delay_follow.Text = "None";
                     delay_like.Text = "None";
-                    delay_unfollow.Text = "None";
+                    //delay_unfollow.Text = "None";
                     delay_comment.Text = "None";
 
                     time_start.Text = "None";
@@ -227,7 +231,7 @@ namespace WindowsFormsApplication1
 
                     delay_follow.Text = dr["delay_follow"].ToString();
                     delay_like.Text = dr["delay_like"].ToString();
-                    delay_unfollow.Text = dr["delay_unfollow"].ToString();
+                 //   delay_unfollow.Text = dr["delay_unfollow"].ToString();
                     delay_comment.Text = dr["delay_comment"].ToString();
 
                     time_start.Text = dr["hour_between_start"].ToString();
@@ -357,6 +361,24 @@ namespace WindowsFormsApplication1
         private void iTalk_ThemeContainer1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void iTalk_Button_12_Click(object sender, EventArgs e)
+        {
+
+            limit_comment.Text;
+            limit_follow.Text ;
+            limit_like.Text;
+            //limit_unfollow.Text = dr["unfollows"].ToString();
+
+
+            delay_follow.Text;
+            delay_like.Text =;
+            //   delay_unfollow.Text = dr["delay_unfollow"].ToString();
+            delay_comment.Text;
+
+            time_start.Text =;
+            time_finish.Text = dr["hour_between_end"].ToString();
         }
     }
 }

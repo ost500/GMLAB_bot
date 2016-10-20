@@ -410,11 +410,14 @@ namespace WindowsFormsApplication1
                 context.listBox1.Items.Add(r["user_id"].ToString());
             }
 
-
+            //Select the current item in the list
+            context.listBox1.Focus();
+            context.listBox1.SetSelected(0, true);
+            
             //String path = "D:\\chrome_cache\\" + r["user_id"].ToString();
 
             current_user = r["user_id"].ToString();
-
+           
 
             //context.context.log(" USER:" + current_user + " \n");
             context.log(" [이지그램] 로그인 유저 :  " + current_user + " \n");
