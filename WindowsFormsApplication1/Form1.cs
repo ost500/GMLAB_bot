@@ -194,7 +194,7 @@ namespace WindowsFormsApplication1
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selected_account = listBox1.SelectedItem.ToString();
-            account_label.Text = selected_account;
+          //  account_label.Text = selected_account;
 
 
             try
@@ -348,12 +348,14 @@ namespace WindowsFormsApplication1
             like_thr.Abort();
         }
 
-        private void iTalk_Button_21_Click_1(object sender, EventArgs e)
+  
+        private void limit_follow_TextChanged(object sender, EventArgs e)
         {
-            iTalk_Button_21.Enabled = false;
-            iTalk_Button_21.Visible = false;
-            Thread thr = new Thread(manager.mobile_connection);
-            thr.Start();
+
+        }
+
+        private void iTalk_ThemeContainer1_Click(object sender, EventArgs e)
+        {
 
         }
     }
