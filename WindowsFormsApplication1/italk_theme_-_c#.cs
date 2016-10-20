@@ -3827,7 +3827,7 @@ namespace iTalk
     #endregion
     #region ListView
 
-    class iTalk_Listview : ListView
+    public class iTalk_Listview : ListView
     {
 
         [DllImport("uxtheme", CharSet = CharSet.Unicode)]

@@ -27,7 +27,7 @@ namespace WindowsFormsApplication1
             conn.Open();
             
 
-            context.iTalk_RadioButton1.Enabled = true;
+            
 
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
             //context.textBox1.Text += cmd.ExecuteNonQuery();

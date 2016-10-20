@@ -66,7 +66,7 @@ namespace WindowsFormsApplication1
 
 
         }
-        
+
         public string getCurrentPath()
         {
             string currentDirName = Directory.GetCurrentDirectory();
@@ -407,7 +407,7 @@ namespace WindowsFormsApplication1
 
             foreach (DataRow r in t.Rows)
             {
-                context.listBox1.Items.Add(r["user_id"]);
+                context.listBox1.Items.Add(r["user_id"].ToString());
             }
 
 

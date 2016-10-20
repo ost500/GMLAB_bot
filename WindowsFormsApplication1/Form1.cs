@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -47,10 +48,10 @@ namespace WindowsFormsApplication1
             //conn_manager.like_up();
 
             this.user = user;
-
+            
             Thread thr = new Thread(this.form_start);
             thr.Start();
-
+            
         }
 
     
@@ -61,6 +62,7 @@ namespace WindowsFormsApplication1
 
             manager = new Main_Manager(this, conn_manager);
 
+            
 
             try
             {
@@ -70,7 +72,7 @@ namespace WindowsFormsApplication1
 
                 foreach (DataRow r in t.Rows)
                 {
-                    listBox1.Items.Add(r["user_id"]);
+                    listBox1.Items.Add(r["user_id"].ToString());
                 }
 
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
@@ -97,7 +99,8 @@ namespace WindowsFormsApplication1
 
             catch { log("No Users Record found!!!"); }
 
-            
+            Thread thr = new Thread(manager.mobile_connection);
+            thr.Start();
 
         }
 
@@ -278,6 +281,13 @@ namespace WindowsFormsApplication1
                     processList[0].Kill();
                 }
 
+                processList = Process.GetProcessesByName(this.Name);
+
+                if (processList.Length > 0)
+                {
+                    processList[0].Kill();
+                }
+
             }
             catch (Exception) { }
             try
@@ -338,7 +348,13 @@ namespace WindowsFormsApplication1
             like_thr.Abort();
         }
 
+        private void iTalk_Button_21_Click_1(object sender, EventArgs e)
+        {
+            iTalk_Button_21.Enabled = false;
+            iTalk_Button_21.Visible = false;
+            Thread thr = new Thread(manager.mobile_connection);
+            thr.Start();
 
-
+        }
     }
 }
