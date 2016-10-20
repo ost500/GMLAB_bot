@@ -1009,7 +1009,7 @@ namespace WindowsFormsApplication1
                                 }
                                 else
                                 {
-                                    followers_count_new = 25;
+                                    followers_count_new = 30;
                                     scroll_up_speed = 5;
                                 }
                                 //context.log("WEB_COUNT: " + followers_count.ToString());
