@@ -46,8 +46,6 @@
             this.time_start = new System.Windows.Forms.TextBox();
             this.button1 = new iTalk.iTalk_Button_2();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.delay_unfollow = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.delay_comment = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.delay_like = new System.Windows.Forms.TextBox();
@@ -55,16 +53,16 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.limit_unfollow = new System.Windows.Forms.TextBox();
             this.limit_comment = new System.Windows.Forms.TextBox();
             this.limit_like = new System.Windows.Forms.TextBox();
             this.limit_follow = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.iTalk_HeaderLabel1 = new iTalk.iTalk_HeaderLabel();
             this.iTalk_ControlBox1 = new iTalk.iTalk_ControlBox();
+            this.iTalk_Button_21 = new iTalk.iTalk_Button_2();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.iTalk_ThemeContainer1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.iTalk_GroupBox1.SuspendLayout();
@@ -76,6 +74,7 @@
             // iTalk_ThemeContainer1
             // 
             this.iTalk_ThemeContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_Button_21);
             this.iTalk_ThemeContainer1.Controls.Add(this.groupBox2);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_Button_11);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_GroupBox1);
@@ -85,6 +84,7 @@
             this.iTalk_ThemeContainer1.Controls.Add(this.groupBox4);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_HeaderLabel1);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_ControlBox1);
+            this.iTalk_ThemeContainer1.Controls.Add(this.panel1);
             this.iTalk_ThemeContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.iTalk_ThemeContainer1.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.iTalk_ThemeContainer1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(142)))), ((int)(((byte)(142)))));
@@ -92,7 +92,7 @@
             this.iTalk_ThemeContainer1.Name = "iTalk_ThemeContainer1";
             this.iTalk_ThemeContainer1.Padding = new System.Windows.Forms.Padding(3, 28, 3, 28);
             this.iTalk_ThemeContainer1.Sizable = true;
-            this.iTalk_ThemeContainer1.Size = new System.Drawing.Size(698, 664);
+            this.iTalk_ThemeContainer1.Size = new System.Drawing.Size(598, 700);
             this.iTalk_ThemeContainer1.SmartBounds = false;
             this.iTalk_ThemeContainer1.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultLocation;
             this.iTalk_ThemeContainer1.TabIndex = 18;
@@ -106,10 +106,10 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.textBox1);
             this.groupBox2.Controls.Add(this.listBox1);
-            this.groupBox2.Location = new System.Drawing.Point(12, 93);
+            this.groupBox2.Location = new System.Drawing.Point(28, 93);
             this.groupBox2.MinimumSize = new System.Drawing.Size(126, 39);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(672, 320);
+            this.groupBox2.Size = new System.Drawing.Size(536, 320);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "내용";
@@ -117,7 +117,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(153, 18);
+            this.label2.Location = new System.Drawing.Point(289, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 4;
@@ -126,7 +126,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 18);
+            this.label1.Location = new System.Drawing.Point(44, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 3;
@@ -136,24 +136,26 @@
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBox1.Location = new System.Drawing.Point(132, 33);
+            this.textBox1.Location = new System.Drawing.Point(123, 18);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(534, 281);
+            this.textBox1.Size = new System.Drawing.Size(410, 299);
             this.textBox1.TabIndex = 1;
             // 
             // listBox1
             // 
             this.listBox1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.listBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 17;
-            this.listBox1.Location = new System.Drawing.Point(6, 33);
+            this.listBox1.Location = new System.Drawing.Point(3, 18);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 276);
+            this.listBox1.Size = new System.Drawing.Size(120, 299);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -163,7 +165,7 @@
             this.iTalk_Button_11.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.iTalk_Button_11.Image = null;
             this.iTalk_Button_11.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iTalk_Button_11.Location = new System.Drawing.Point(383, 604);
+            this.iTalk_Button_11.Location = new System.Drawing.Point(320, 634);
             this.iTalk_Button_11.Name = "iTalk_Button_11";
             this.iTalk_Button_11.Size = new System.Drawing.Size(155, 30);
             this.iTalk_Button_11.TabIndex = 21;
@@ -177,11 +179,11 @@
             this.iTalk_GroupBox1.Controls.Add(this.checkBox1);
             this.iTalk_GroupBox1.Controls.Add(this.checkBox3);
             this.iTalk_GroupBox1.Controls.Add(this.checkBox2);
-            this.iTalk_GroupBox1.Location = new System.Drawing.Point(91, 413);
+            this.iTalk_GroupBox1.Location = new System.Drawing.Point(28, 413);
             this.iTalk_GroupBox1.MinimumSize = new System.Drawing.Size(136, 50);
             this.iTalk_GroupBox1.Name = "iTalk_GroupBox1";
             this.iTalk_GroupBox1.Padding = new System.Windows.Forms.Padding(5, 28, 5, 5);
-            this.iTalk_GroupBox1.Size = new System.Drawing.Size(516, 54);
+            this.iTalk_GroupBox1.Size = new System.Drawing.Size(536, 54);
             this.iTalk_GroupBox1.TabIndex = 17;
             this.iTalk_GroupBox1.Text = "프로세스";
             // 
@@ -232,9 +234,9 @@
             this.groupBox6.Controls.Add(this.label9);
             this.groupBox6.Controls.Add(this.time_finish);
             this.groupBox6.Controls.Add(this.time_start);
-            this.groupBox6.Location = new System.Drawing.Point(450, 474);
+            this.groupBox6.Location = new System.Drawing.Point(398, 484);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(157, 126);
+            this.groupBox6.Size = new System.Drawing.Size(157, 83);
             this.groupBox6.TabIndex = 6;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "작업시간";
@@ -242,7 +244,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(20, 77);
+            this.label10.Location = new System.Drawing.Point(11, 56);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(40, 13);
             this.label10.TabIndex = 0;
@@ -251,7 +253,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(9, 46);
+            this.label9.Location = new System.Drawing.Point(6, 21);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(51, 13);
             this.label9.TabIndex = 0;
@@ -259,7 +261,7 @@
             // 
             // time_finish
             // 
-            this.time_finish.Location = new System.Drawing.Point(68, 74);
+            this.time_finish.Location = new System.Drawing.Point(66, 49);
             this.time_finish.Name = "time_finish";
             this.time_finish.Size = new System.Drawing.Size(70, 22);
             this.time_finish.TabIndex = 3;
@@ -267,7 +269,7 @@
             // 
             // time_start
             // 
-            this.time_start.Location = new System.Drawing.Point(68, 41);
+            this.time_start.Location = new System.Drawing.Point(66, 18);
             this.time_start.Name = "time_start";
             this.time_start.Size = new System.Drawing.Size(70, 22);
             this.time_start.TabIndex = 3;
@@ -276,12 +278,11 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.Enabled = false;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 14F);
             this.button1.ForeColor = System.Drawing.Color.White;
             this.button1.Image = null;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(189, 604);
+            this.button1.Location = new System.Drawing.Point(116, 634);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(155, 30);
             this.button1.TabIndex = 19;
@@ -292,41 +293,22 @@
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.groupBox5.Controls.Add(this.delay_unfollow);
-            this.groupBox5.Controls.Add(this.label12);
             this.groupBox5.Controls.Add(this.delay_comment);
             this.groupBox5.Controls.Add(this.label8);
             this.groupBox5.Controls.Add(this.delay_like);
             this.groupBox5.Controls.Add(this.delay_follow);
             this.groupBox5.Controls.Add(this.label7);
             this.groupBox5.Controls.Add(this.label6);
-            this.groupBox5.Location = new System.Drawing.Point(271, 474);
+            this.groupBox5.Location = new System.Drawing.Point(219, 484);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(157, 126);
             this.groupBox5.TabIndex = 5;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "딜레이 시간";
             // 
-            // delay_unfollow
-            // 
-            this.delay_unfollow.Location = new System.Drawing.Point(59, 97);
-            this.delay_unfollow.Name = "delay_unfollow";
-            this.delay_unfollow.Size = new System.Drawing.Size(70, 22);
-            this.delay_unfollow.TabIndex = 3;
-            this.delay_unfollow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(24, 99);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(29, 13);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "언팔";
-            // 
             // delay_comment
             // 
-            this.delay_comment.Location = new System.Drawing.Point(59, 72);
+            this.delay_comment.Location = new System.Drawing.Point(59, 91);
             this.delay_comment.Name = "delay_comment";
             this.delay_comment.Size = new System.Drawing.Size(70, 22);
             this.delay_comment.TabIndex = 3;
@@ -335,7 +317,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(24, 75);
+            this.label8.Location = new System.Drawing.Point(24, 94);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(29, 13);
             this.label8.TabIndex = 2;
@@ -343,7 +325,7 @@
             // 
             // delay_like
             // 
-            this.delay_like.Location = new System.Drawing.Point(59, 46);
+            this.delay_like.Location = new System.Drawing.Point(59, 56);
             this.delay_like.Name = "delay_like";
             this.delay_like.Size = new System.Drawing.Size(70, 22);
             this.delay_like.TabIndex = 3;
@@ -360,7 +342,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 49);
+            this.label7.Location = new System.Drawing.Point(12, 59);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(40, 13);
             this.label7.TabIndex = 1;
@@ -378,32 +360,22 @@
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.groupBox4.Controls.Add(this.limit_unfollow);
             this.groupBox4.Controls.Add(this.limit_comment);
             this.groupBox4.Controls.Add(this.limit_like);
             this.groupBox4.Controls.Add(this.limit_follow);
-            this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.label4);
             this.groupBox4.Controls.Add(this.label3);
-            this.groupBox4.Location = new System.Drawing.Point(91, 475);
+            this.groupBox4.Location = new System.Drawing.Point(39, 487);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(157, 126);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "하루 제한";
             // 
-            // limit_unfollow
-            // 
-            this.limit_unfollow.Location = new System.Drawing.Point(66, 96);
-            this.limit_unfollow.Name = "limit_unfollow";
-            this.limit_unfollow.Size = new System.Drawing.Size(70, 22);
-            this.limit_unfollow.TabIndex = 3;
-            this.limit_unfollow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // limit_comment
             // 
-            this.limit_comment.Location = new System.Drawing.Point(66, 71);
+            this.limit_comment.Location = new System.Drawing.Point(66, 90);
             this.limit_comment.Name = "limit_comment";
             this.limit_comment.Size = new System.Drawing.Size(70, 22);
             this.limit_comment.TabIndex = 3;
@@ -411,7 +383,7 @@
             // 
             // limit_like
             // 
-            this.limit_like.Location = new System.Drawing.Point(66, 46);
+            this.limit_like.Location = new System.Drawing.Point(66, 56);
             this.limit_like.Name = "limit_like";
             this.limit_like.Size = new System.Drawing.Size(70, 22);
             this.limit_like.TabIndex = 3;
@@ -426,19 +398,10 @@
             this.limit_follow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.limit_follow.TextChanged += new System.EventHandler(this.limit_follow_TextChanged);
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(22, 100);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(29, 13);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "언팔";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(22, 77);
+            this.label5.Location = new System.Drawing.Point(22, 96);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(29, 13);
             this.label5.TabIndex = 2;
@@ -447,7 +410,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(11, 50);
+            this.label4.Location = new System.Drawing.Point(11, 60);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 13);
             this.label4.TabIndex = 1;
@@ -468,7 +431,7 @@
             this.iTalk_HeaderLabel1.BackColor = System.Drawing.Color.Transparent;
             this.iTalk_HeaderLabel1.Font = new System.Drawing.Font("Segoe UI", 25F);
             this.iTalk_HeaderLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.iTalk_HeaderLabel1.Location = new System.Drawing.Point(266, 44);
+            this.iTalk_HeaderLabel1.Location = new System.Drawing.Point(200, 44);
             this.iTalk_HeaderLabel1.Name = "iTalk_HeaderLabel1";
             this.iTalk_HeaderLabel1.Size = new System.Drawing.Size(191, 46);
             this.iTalk_HeaderLabel1.TabIndex = 19;
@@ -478,17 +441,38 @@
             // 
             this.iTalk_ControlBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.iTalk_ControlBox1.BackColor = System.Drawing.Color.Transparent;
-            this.iTalk_ControlBox1.Location = new System.Drawing.Point(617, -1);
+            this.iTalk_ControlBox1.Location = new System.Drawing.Point(517, -1);
             this.iTalk_ControlBox1.Name = "iTalk_ControlBox1";
             this.iTalk_ControlBox1.Size = new System.Drawing.Size(77, 19);
             this.iTalk_ControlBox1.TabIndex = 18;
             this.iTalk_ControlBox1.Text = "iTalk_ControlBox1";
             // 
+            // iTalk_Button_21
+            // 
+            this.iTalk_Button_21.BackColor = System.Drawing.Color.Transparent;
+            this.iTalk_Button_21.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.iTalk_Button_21.ForeColor = System.Drawing.Color.White;
+            this.iTalk_Button_21.Image = null;
+            this.iTalk_Button_21.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iTalk_Button_21.Location = new System.Drawing.Point(398, 571);
+            this.iTalk_Button_21.Name = "iTalk_Button_21";
+            this.iTalk_Button_21.Size = new System.Drawing.Size(155, 30);
+            this.iTalk_Button_21.TabIndex = 22;
+            this.iTalk_Button_21.Text = "Save";
+            this.iTalk_Button_21.TextAlignment = System.Drawing.StringAlignment.Center;
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(28, 473);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(536, 150);
+            this.panel1.TabIndex = 23;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(698, 664);
+            this.ClientSize = new System.Drawing.Size(598, 700);
             this.Controls.Add(this.iTalk_ThemeContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MinimumSize = new System.Drawing.Size(126, 39);
@@ -535,8 +519,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.TextBox delay_unfollow;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox delay_comment;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox delay_like;
@@ -548,8 +530,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox time_finish;
         private System.Windows.Forms.TextBox time_start;
-        private System.Windows.Forms.TextBox limit_unfollow;
-        private System.Windows.Forms.Label label11;
+        private iTalk.iTalk_Button_2 iTalk_Button_21;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

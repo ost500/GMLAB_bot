@@ -129,6 +129,7 @@ namespace WindowsFormsApplication1
 
             context.log(" [아이피 변경] : 연결 성공!");
 
+
             //시작 버튼 활성화 시도
 
             context.start_button_valid("login");
