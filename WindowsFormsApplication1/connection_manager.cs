@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WindowsFormsApplication1
@@ -13,19 +14,32 @@ namespace WindowsFormsApplication1
         public MySqlConnection conn;
         public Form1 context;
         public DataSet ds;
+        private DataSet request_ds;
+        
 
         public sql_connection_manager(Form1 context)
         {
+
+            
             String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
             conn = new MySqlConnection(strConn);
 
             conn.Open();
+            
+
+            
+
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
-            //context.textBox1.Text += cmd.ExecuteNonQuery();
+            //context.richTextBox1.Text += cmd.ExecuteNonQuery();
 
             this.context = context;
 
             ds = new DataSet();
+        }
+
+        public void quit_conn()
+        {
+            conn.Close();
         }
 
         public DataTable SelectData()
@@ -36,41 +50,28 @@ namespace WindowsFormsApplication1
 
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
-                context.log(context.user + " <= contect user");
-                string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' ORDER BY work_number";
 
-
-
+                context.log(" [데이터베이스] : " + context.user + "의 인스타그램 계정을 가져옵니다");
+                string sql = "SELECT a.*,b.ip,b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
 
 
-                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[0]["work_number"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[1]["no"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[0]["work_number"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[2]["no"] + " 여기 확인   \n";
-                context.textBox1.Text += ds.Tables[0].Rows[0]["work_number"] + " 여기 확인   \n";
-
 
                 if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
+
                     return ds.Tables[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
 
+                return null;
             }
-            return ds.Tables[0];
+
         }
 
         public DataTable Select_user()
@@ -80,7 +81,7 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
+
                 string sql = "SELECT * FROM insta_account WHERE mb_id = '" + context.user + "' ORDER BY work_number";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
@@ -89,60 +90,75 @@ namespace WindowsFormsApplication1
 
 
 
-                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "    \n";
-
-
 
 
                 if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
+
                     return ds.Tables[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                //context.button1.Text = "Failed";
+
+
+                return null;
             }
-            return ds.Tables[0];
+
         }
 
-
-
-        public DataRow check_comments()
+        public DataTable Select_agent()
         {
-           DataSet  ds_comment = new DataSet();
+            ds = new DataSet();
             try
             {
 
-                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
-                string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
-                             " and a.group_id=b.group_id  ORDER BY b.work_number";
-             //   context.log(sql);
+                string sql = "SELECT * FROM insta_user_agent ";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
-                adpt.Fill(ds_comment, "comments");
+                adpt.Fill(ds, "agent");
 
-                if (ds_comment.Tables.Count > 0)
+                if (ds.Tables.Count > 0)
                 {
-                  // foreach (DataRow r in ds.Tables[0].Rows)
-                   // {
-                    //    Console.WriteLine(r["ID"]);
-                     // context.textBox1.Text += r["ID"].ToString();
-                    //}
-                  
-                    return ds_comment.Tables[0].Rows[0];
+
+                    return ds.Tables[0];
                 }
                 else { return null; }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+                return null;
+            }
+
+        }
+
+        public DataRow check_comments()
+        {
+            DataSet ds_comment = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+
+                string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
+                             " and a.group_id=b.group_id  ORDER BY b.work_number";
+                //   context.log(sql);
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds_comment, "comments");
+
+
+
+                if (ds_comment.Tables.Count > 0)
+                {
+
+                    return ds_comment.Tables[0].Rows[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
+
                 return null;
                 //context.button1.Text = "Failed";
             }
@@ -157,20 +173,20 @@ namespace WindowsFormsApplication1
         {
 
             ds = new DataSet();
-           
+
             try
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
+
 
                 string sql = "SELECT * FROM insta_tag_my WHERE mb_id = '" + context.user + "'";
 
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "tags");
-               
-                
+
+
                 if (ds.Tables.Count > 0)
                 {
                     return ds.Tables[0].Rows[0];
@@ -179,7 +195,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+
                 return null;
 
             }
@@ -197,32 +213,28 @@ namespace WindowsFormsApplication1
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                context.textBox1.AppendText(context.user);
+
                 string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
                              " and a.group_id=b.group_id  ORDER BY b.work_number";
-                context.log(sql);
+
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "comments");
 
-      
-               
-               if (ds.Tables.Count > 0)
+
+
+
+                if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
-                  
+
                     return ds.Tables[0];
                 }
                 else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+
+
                 return null;
-                //context.button1.Text = "Failed";
             }
 
         }
@@ -234,7 +246,7 @@ namespace WindowsFormsApplication1
         public void Update_worknum()
         {
             MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
-            context.textBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
+
             cmd2.ExecuteNonQuery();
 
         }
@@ -242,10 +254,50 @@ namespace WindowsFormsApplication1
         public void Update_comment_worknum(string comment)
         {
             MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_comment SET work_number = work_number + 1 WHERE comment = '" + comment + "'", conn);
-            // context.textBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
+            // context.richTextBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
             cmd3.ExecuteNonQuery();
 
         }
+
+        public void Update_user_agent(string current_user, string user_agent)
+        {
+            // context.log("current_user " + current_user);
+            // context.log(" user_agent " + user_agent);
+            MySqlCommand cmd4 = new MySqlCommand("UPDATE insta_account_info SET user_agent ='" + user_agent + "' WHERE user_id = '" + current_user + "'", conn);
+            if (cmd4.ExecuteNonQuery() > 0) { context.log("Agent Updated"); }
+
+        }
+
+        public void Update_followers(string current_user, int followers)
+        {
+
+            MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_follows SET followers ='" + followers + "' WHERE user_id = '" + current_user + "' AND followers='" + 0 + "'", conn);
+            cmd3.ExecuteNonQuery();
+
+        }
+
+
+        public void update_job(string current_user)
+        {
+            int limit_comment = Int32.Parse(context.limit_comment.Text);
+            int limit_follow = Int32.Parse(context.limit_follow.Text);
+            int limit_like = Int32.Parse(context.limit_like.Text) ;
+
+            int delay_follow = Int32.Parse(context.delay_follow.Text);
+            int delay_like = Int32.Parse(context.delay_like.Text) ;
+            int delay_comment = Int32.Parse(context.delay_comment.Text) ;
+
+            int time_start = Int32.Parse(context.time_start.Text) ;
+            int time_finish = Int32.Parse(context.time_finish.Text) ;
+           
+            MySqlCommand cmd5 = new MySqlCommand("UPDATE insta_job SET limit_comments='"+ limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ", conn);
+            if (cmd5.ExecuteNonQuery() > 0)
+            {
+
+                context.log("Record saved successfully.");
+            }
+        }
+
 
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)
@@ -269,7 +321,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+
 
                 return null;
             }
@@ -290,7 +342,7 @@ namespace WindowsFormsApplication1
                 adpt.Fill(ds, "members");
 
 
-                context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "    \n";
+
 
                 for (int i = 0; i < num_random_user; i++)
                 {
@@ -299,29 +351,25 @@ namespace WindowsFormsApplication1
                 }
 
 
-
                 if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
+
                     return ds.Tables[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                //context.button1.Text = "Failed";
+
+
+                return null;
             }
-            return ds.Tables[0];
         }
 
 
         public DataRow Select_tag()
         {
-            context.textBox1.AppendText("clicked");
+
             DataSet ds = new DataSet();
             try
             {
@@ -336,39 +384,24 @@ namespace WindowsFormsApplication1
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-<<<<<<< HEAD
-                
-=======
-
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
 
 
                 if (ds.Tables.Count > 0)
                 {
-<<<<<<< HEAD
 
-=======
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
-                    context.textBox1.Text += ds.Tables[0].Rows[0]["no"] + "---------    \n";
+
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
 
-<<<<<<< HEAD
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    context.textBox1.AppendText(r["tag"].ToString());
-                    //}
-=======
->>>>>>> 68290fe3aba370455be2db420457a6d61cab7b6d
                     return ds.Tables[0].Rows[0];
                 }
                 else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+
                 return null;
-                //context.button1.Text = "Failed";
+
             }
 
         }
@@ -387,22 +420,20 @@ namespace WindowsFormsApplication1
                 adpt.Fill(ds, "members");
 
 
+
                 if (ds.Tables.Count > 0)
                 {
 
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    context.textBox1.AppendText(r["tag"].ToString());
-                    //}
                     return ds.Tables[0].Rows[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                //context.button1.Text = "Failed";
+
+                return null;
+
             }
-            return ds.Tables[0].Rows[0];
         }
 
 
@@ -426,39 +457,39 @@ namespace WindowsFormsApplication1
                 adpt.Fill(ds, "members");
                 if (ds.Tables.Count > 0)
                 {
-                    //foreach (DataRow r in ds.Tables[0].Rows)
-                    //{
-                    //    Console.WriteLine(r["ID"]);
-                    //    textBox1.Text += r["ID"].ToString();
-                    //}
+
                     return ds.Tables[0].Rows[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                //context.button1.Text = "Failed";
+
+                return null;
+
             }
-            return ds.Tables[0].Rows[0];
+
         }
 
         public void blocked_update()
         {
             MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_account SET blocked = 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
-            context.textBox1.AppendText("차단 기록");
+
             cmd2.ExecuteNonQuery();
         }
 
-       
+
 
         public void mysql_refresh()
         {
             try
             {
+
                 String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
                 conn = new MySqlConnection(strConn);
 
                 conn.Open();
+                
             }
             catch (Exception ex)
             {
@@ -470,7 +501,7 @@ namespace WindowsFormsApplication1
 
         public DataRow select_request()
         {
-            DataSet ds = new DataSet();
+            request_ds = new DataSet();
             try
             {
 
@@ -479,18 +510,25 @@ namespace WindowsFormsApplication1
                              "WHERE request_follow > done_follow " +
                              "OR request_like > done_like ";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
-                adpt.Fill(ds, "request");
+                adpt.Fill(request_ds, "request");
 
-                if (ds.Tables.Count > 0)
+
+                if (request_ds.Tables.Count > 0)
                 {
-                    return ds.Tables[0].Rows[0];
+
+                    return request_ds.Tables[0].Rows[0];
                 }
+                else { return null; }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+
+                return null;
+
             }
-            return ds.Tables[0].Rows[0];
+
+
+
         }
 
         public DataRow select_configuration()
@@ -512,29 +550,198 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+
             }
             return null;
         }
 
-        public void insert_insta_job()
+
+        //Select user follows 
+        public DataTable select_follows(string user_id)
+
         {
             DataSet ds = new DataSet();
             try
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_account ";
+
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "'";
+
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "followers");
+
+                context.log("TABLE Result " + ds.Tables.Count.ToString());
+
+                if (ds.Tables.Count > 0)
+                {
+
+                    return ds.Tables[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
+
+
+                return null;
+            }
+
+        }
+
+        //Select user specific follows 
+        public DataTable select_specific_follow(string current_user, string followed)
+
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + current_user + "' and followed_id='" + followed + "'";
+
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "specific_followers");
+
+               
+                if (ds.Tables.Count > 0)
+                {
+
+                    return ds.Tables[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
+
+
+                return null;
+            }
+
+        }
+        //Select Followers Count
+        public DataRow select_followers_count(string user_id)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "' order by followers";
+
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "followers");
+
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0];
+                }
+                else { return null; }
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+
+        }
+
+        //STORE Follow Data
+        public void insert_followdata(string current_user, string followed, string follow_time)
+        {
+    
+                    try
+                    {
+
+                        MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
+
+                        cmd2.ExecuteNonQuery();
+                        //context.richTextBox1.AppendText("########## Inserted Follow Data ##########");
+                        //context.log("[데이터베이스]");
+
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+           
+
+        }
+
+        //Remove Follow Data
+        public void remove_followdata(string current_user, string followed)
+        {
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+
+                MySqlCommand cmd2 = new MySqlCommand("delete from insta_follows where user_id='" + current_user + "' and followed_id= '" + followed + "'", conn);
+
+                cmd2.ExecuteNonQuery();
+                //context.richTextBox1.AppendText("########## Deleted Followed Data ##########");
+
+            }
+            catch (Exception e)
+            {
+                //context.log("Delete Query Problem!!!! ");
+
+            }
+
+        }
+
+
+        //STORE FOLLOWERS COUNT
+        public void insert_followersCount(string current_user, int followers_count, string created_at)
+        {
+
+
+
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + current_user + "' and followed_id='jams_march'";
+
+             
+
+                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_status` (`no`, `user_id`, `followers`, `created_at`) VALUES(NULL, '" + current_user + "', '" + followers_count + "', '" + created_at + "');", conn);
+                // context.log(cmd2.ToString());
+                if (cmd2.ExecuteNonQuery() > 0)
+                {
+                    //context.richTextBox1.AppendText("########## Inserted Followers Count  ##########");
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+
+        public void insert_insta_job()
+        {
+            //context.log("work???????????");
+            DataSet ds = new DataSet();
+            try
+            {
+
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT * FROM insta_account WHERE mb_id='ost5253'";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "request");
 
 
+
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
-                    context.log(r["user_id"].ToString());
-                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `account_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`) VALUES(NULL, 'admin', '" + r["user_id"] + "', '3', '11', '11', '3', '0', '0');", conn);
-                    context.textBox1.AppendText("차단 기록");
+                    //context.log("working insert!!");
+                    //context.log(r["user_id"].ToString());
+                    MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_job` (`no`, `mb_id`, `user_id`, `delay_follow`, `delay_like`, `delay_comment`, `delay_unfollow`, `hour_between_start`, `hour_between_end`,`limit_comments`,`limit_follows`,`limit_likes`) VALUES(NULL, 'ost5253', '" + r["user_id"] + "', '3', '11', '11', '3', '0', '0','100','1000','1000');", conn);
+
                     cmd2.ExecuteNonQuery();
 
                 }
@@ -543,10 +750,47 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                context.log(e.StackTrace);
             }
 
         }
+
+        public void update_follow_done()
+        {
+            try
+            {
+                MySqlCommand cmd2 =
+                    new MySqlCommand(
+                        "UPDATE insta_request_job SET done_follow = done_follow + 1 WHERE no = " +
+                        request_ds.Tables[0].Rows[0]["no"], conn);
+
+                cmd2.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                //context.log("요청 계정 팔로우 업데이트 에러");
+            }
+
+        }
+
+        public void update_like_done()
+        {
+            try
+            {
+                MySqlCommand cmd2 =
+                    new MySqlCommand(
+                        "UPDATE insta_request_job SET done_like = done_like + 1 WHERE no = " +
+                        request_ds.Tables[0].Rows[0]["no"], conn);
+
+                cmd2.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                //context.log("요청 계정 좋아요 업데이트 에러");
+            }
+        }
+
+
 
     }
 }
