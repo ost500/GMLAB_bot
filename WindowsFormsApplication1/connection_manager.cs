@@ -30,7 +30,7 @@ namespace WindowsFormsApplication1
             
 
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
-            //context.textBox1.Text += cmd.ExecuteNonQuery();
+            //context.richTextBox1.Text += cmd.ExecuteNonQuery();
 
             this.context = context;
 
@@ -254,7 +254,7 @@ namespace WindowsFormsApplication1
         public void Update_comment_worknum(string comment)
         {
             MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_comment SET work_number = work_number + 1 WHERE comment = '" + comment + "'", conn);
-            // context.textBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
+            // context.richTextBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
             cmd3.ExecuteNonQuery();
 
         }
@@ -275,6 +275,29 @@ namespace WindowsFormsApplication1
             cmd3.ExecuteNonQuery();
 
         }
+
+
+        public void update_job(string current_user)
+        {
+            int limit_comment = Int32.Parse(context.limit_comment.Text);
+            int limit_follow = Int32.Parse(context.limit_follow.Text);
+            int limit_like = Int32.Parse(context.limit_like.Text) ;
+
+            int delay_follow = Int32.Parse(context.delay_follow.Text);
+            int delay_like = Int32.Parse(context.delay_like.Text) ;
+            int delay_comment = Int32.Parse(context.delay_comment.Text) ;
+
+            int time_start = Int32.Parse(context.time_start.Text) ;
+            int time_finish = Int32.Parse(context.time_finish.Text) ;
+           
+            MySqlCommand cmd5 = new MySqlCommand("UPDATE insta_job SET limit_comments='"+ limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ", conn);
+            if (cmd5.ExecuteNonQuery() > 0)
+            {
+
+                context.log("Record saved successfully.");
+            }
+        }
+
 
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)
@@ -634,7 +657,7 @@ namespace WindowsFormsApplication1
                         MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
 
                         cmd2.ExecuteNonQuery();
-                        //context.textBox1.AppendText("########## Inserted Follow Data ##########");
+                        //context.richTextBox1.AppendText("########## Inserted Follow Data ##########");
                         //context.log("[데이터베이스]");
 
                     }
@@ -657,7 +680,7 @@ namespace WindowsFormsApplication1
                 MySqlCommand cmd2 = new MySqlCommand("delete from insta_follows where user_id='" + current_user + "' and followed_id= '" + followed + "'", conn);
 
                 cmd2.ExecuteNonQuery();
-                //context.textBox1.AppendText("########## Deleted Followed Data ##########");
+                //context.richTextBox1.AppendText("########## Deleted Followed Data ##########");
 
             }
             catch (Exception e)
@@ -687,7 +710,7 @@ namespace WindowsFormsApplication1
                 // context.log(cmd2.ToString());
                 if (cmd2.ExecuteNonQuery() > 0)
                 {
-                    //context.textBox1.AppendText("########## Inserted Followers Count  ##########");
+                    //context.richTextBox1.AppendText("########## Inserted Followers Count  ##########");
                 }
 
             }

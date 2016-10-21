@@ -40,7 +40,7 @@ namespace WindowsFormsApplication1
                 DataRow r = conn_manager.version_control();
                 if (r == null) { throw new NullReferenceException(); }
 
-                context.log("EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n");
+                context.log(" EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n");
 
 
 

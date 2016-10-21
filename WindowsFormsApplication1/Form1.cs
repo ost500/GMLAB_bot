@@ -10,6 +10,8 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication1
 {
+
+
     public partial class Form1 : Form
     {
 
@@ -111,10 +113,13 @@ namespace WindowsFormsApplication1
 
         public void log(string logging)
         {
-            
-                textBox1.AppendText(Environment.NewLine);
-                textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-            
+                    
+
+            richTextBox1.AppendText(Environment.NewLine);
+            richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]"+ logging);
+            richTextBox1.Select(1, 13);
+            richTextBox1.SelectionColor = Color.Red;
+          
         }
 
 
@@ -363,22 +368,16 @@ namespace WindowsFormsApplication1
 
         }
 
-        private void iTalk_Button_12_Click(object sender, EventArgs e)
+        private void iTalk_Button_21_Click_1(object sender, EventArgs e)
+        {
+            string selected_account = listBox1.SelectedItem.ToString();
+            conn_manager.update_job(selected_account);
+        }
+
+        private void time_finish_TextChanged(object sender, EventArgs e)
         {
 
-            limit_comment.Text;
-            limit_follow.Text ;
-            limit_like.Text;
-            //limit_unfollow.Text = dr["unfollows"].ToString();
-
-
-            delay_follow.Text;
-            delay_like.Text =;
-            //   delay_unfollow.Text = dr["delay_unfollow"].ToString();
-            delay_comment.Text;
-
-            time_start.Text =;
-            time_finish.Text = dr["hour_between_end"].ToString();
         }
     }
+ 
 }

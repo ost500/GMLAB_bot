@@ -13,20 +13,20 @@ C:\Users\OST\Documents\Visual Studio 2015\Projects\WindowsFormsApplication1\Wind
 C:\Users\OST\Documents\Visual Studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WebDriver.Support.xml
 C:\Users\OST\Documents\Visual Studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\MySql.Data.dll
 C:\Users\OST\Documents\Visual Studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
-C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
-C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
-C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
-C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\MySql.Data.dll
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WebDriver.dll
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WebDriver.Support.dll
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WebDriver.xml
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\WebDriver.Support.xml
-C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
-C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
 C:\Users\OST\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Login_Form.resources
 C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Login_Form.resources
+C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\easygram.exe.config
+C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\easygram.exe
+C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\bin\Debug\easygram.pdb
+C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\easygram.Properties.Resources.resources
+C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\easygram.exe
+C:\Users\Devender\Documents\GMLAB_bot\WindowsFormsApplication1\obj\Debug\easygram.pdb
