@@ -48,7 +48,9 @@ namespace WindowsFormsApplication1
             //conn_manager.like_up();
 
             this.user = user;
-            
+
+            conn_manager = new sql_connection_manager(this);
+
             Thread thr = new Thread(this.form_start);
             thr.Start();
             
@@ -58,16 +60,17 @@ namespace WindowsFormsApplication1
         public void form_start()
         {
 
-            conn_manager = new sql_connection_manager(this);
+            
 
             manager = new Main_Manager(this, conn_manager);
 
+            Thread.Sleep(10000);
             
 
             try
             {
                 t = conn_manager.SelectData();
-                r = t.Rows[0];
+                //r = t.Rows[0];
 
 
                 foreach (DataRow r in t.Rows)
@@ -101,7 +104,7 @@ namespace WindowsFormsApplication1
             //else { MessageBox.Show("먼저 로그인하세요 "); }
 
 
-            catch { log("No Users Record found!!!"); }
+            catch(Exception ex) { log("No Users Record found!!!");  log(ex.StackTrace); }
 
             Thread thr = new Thread(manager.mobile_connection);
             thr.Start();
@@ -363,22 +366,6 @@ namespace WindowsFormsApplication1
 
         }
 
-        private void iTalk_Button_12_Click(object sender, EventArgs e)
-        {
-
-            limit_comment.Text;
-            limit_follow.Text ;
-            limit_like.Text;
-            //limit_unfollow.Text = dr["unfollows"].ToString();
-
-
-            delay_follow.Text;
-            delay_like.Text =;
-            //   delay_unfollow.Text = dr["delay_unfollow"].ToString();
-            delay_comment.Text;
-
-            time_start.Text =;
-            time_finish.Text = dr["hour_between_end"].ToString();
-        }
+        
     }
 }

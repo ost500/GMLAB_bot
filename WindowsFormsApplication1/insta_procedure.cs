@@ -28,7 +28,7 @@ namespace WindowsFormsApplication1
         protected Random rnd = new Random();
 
 
-        DataTable t;
+        protected DataTable t;
         DataRow r;
 
         //follow 시간 like 시간
@@ -449,7 +449,8 @@ namespace WindowsFormsApplication1
             //Set the Browser User Agent For current user
             co.AddArguments("--user-agent=" + user_agent);
             */
-            var driverService = ChromeDriverService.CreateDefaultService("C:\\Program Files (x86)\\Google\\Chrome\\Application");
+            context.log(Directory.GetCurrentDirectory());
+            var driverService = ChromeDriverService.CreateDefaultService(Directory.GetCurrentDirectory());
             driverService.HideCommandPromptWindow = true;
             //driverService.Port = my_port;
             //co.BinaryLocation = "C:\\Program Files (x86)\\Google\\Chrome\\Application";

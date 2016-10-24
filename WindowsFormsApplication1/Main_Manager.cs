@@ -171,21 +171,21 @@ namespace WindowsFormsApplication1
                 }
                 catch (NullReferenceException ex)
                 {
-                    //context.log(ex.StackTrace);
+                    context.log(ex.StackTrace);
                     context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
                     insta_run.quit();
                 }
 
                 catch (MySqlException ex)
                 {
-                    //context.log(ex.StackTrace);
+                    context.log(ex.StackTrace);
                     context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
                     insta_run.quit();
                 }
 
                 catch (Exception ex)
                 {
-                    //context.log(ex.StackTrace);
+                    context.log(ex.StackTrace);
                     context.log(" [이지그램] : 에러 발생");
                     insta_run.quit();
                 }
