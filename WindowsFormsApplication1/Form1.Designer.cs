@@ -40,7 +40,6 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -194,7 +193,6 @@
             this.iTalk_GroupBox1.Controls.Add(this.checkBox1);
             this.iTalk_GroupBox1.Controls.Add(this.checkBox3);
             this.iTalk_GroupBox1.Controls.Add(this.checkBox2);
-            this.iTalk_GroupBox1.Controls.Add(this.textBox1);
             this.iTalk_GroupBox1.Location = new System.Drawing.Point(28, 413);
             this.iTalk_GroupBox1.MinimumSize = new System.Drawing.Size(136, 50);
             this.iTalk_GroupBox1.Name = "iTalk_GroupBox1";
@@ -242,19 +240,6 @@
             this.checkBox2.Text = "서로 맞팔";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBox1.Location = new System.Drawing.Point(96, 6);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(410, 54);
-            this.textBox1.TabIndex = 24;
             // 
             // groupBox6
             // 
@@ -514,7 +499,6 @@
         }
 
         #endregion
-        public System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;

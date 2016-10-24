@@ -28,8 +28,8 @@ namespace WindowsFormsApplication1
         protected Random rnd = new Random();
 
 
-        DataTable t;
-        DataRow r;
+        public DataTable t;
+       public  DataRow r;
 
         //follow 시간 like 시간
         public static DateTime follow_time;
@@ -391,8 +391,6 @@ namespace WindowsFormsApplication1
 
         public void start()
         {
-
-
 
             t = conn_manager.SelectData();
             if (t == null) { throw new NullReferenceException(); }
@@ -974,6 +972,7 @@ namespace WindowsFormsApplication1
             {
                 if (IsElementPresent(By.LinkText("프로필")))
                 {
+                    Thread.Sleep(rnd.Next(1000, 3000));
                     //Click on profile
                     driver.FindElement(By.LinkText("프로필")).Click();
 

@@ -25,9 +25,9 @@ namespace WindowsFormsApplication1
             conn = new MySqlConnection(strConn);
 
             conn.Open();
-            
+          
 
-            
+
 
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
             //context.richTextBox1.Text += cmd.ExecuteNonQuery();
@@ -48,7 +48,7 @@ namespace WindowsFormsApplication1
             try
             {
 
-
+              
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
                 context.log(" [데이터베이스] : " + context.user + "의 인스타그램 계정을 가져옵니다");
@@ -289,13 +289,17 @@ namespace WindowsFormsApplication1
 
             int time_start = Int32.Parse(context.time_start.Text) ;
             int time_finish = Int32.Parse(context.time_finish.Text) ;
+
+            if (conn.State == ConnectionState.Closed) { conn.Open(); }
            
+            //context.log("Connection: "+conn.State);
             MySqlCommand cmd5 = new MySqlCommand("UPDATE insta_job SET limit_comments='"+ limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ", conn);
+            cmd5.CommandTimeout=200;
             if (cmd5.ExecuteNonQuery() > 0)
             {
-
                 context.log("Record saved successfully.");
             }
+            
         }
 
 
@@ -305,10 +309,13 @@ namespace WindowsFormsApplication1
             DataSet ds = new DataSet();
             try
             {
-
+                 if (conn.State == ConnectionState.Closed) { conn.Open(); }
+                // context.log("Connection" + conn.State);
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 string sql = "SELECT * FROM insta_job WHERE user_id ='" + user_id + "'";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+               
+
                 adpt.Fill(ds, "job");
 
 

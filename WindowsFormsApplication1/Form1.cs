@@ -38,7 +38,7 @@ namespace WindowsFormsApplication1
 
         Main_Manager manager;
         public sql_connection_manager conn_manager;
-
+       
         private Thread like_thr;
 
 
@@ -61,7 +61,7 @@ namespace WindowsFormsApplication1
         {
 
             conn_manager = new sql_connection_manager(this);
-
+           
             manager = new Main_Manager(this, conn_manager);
 
             
@@ -118,7 +118,7 @@ namespace WindowsFormsApplication1
             richTextBox1.AppendText(Environment.NewLine);
             richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]"+ logging);
             richTextBox1.Select(1, 13);
-            richTextBox1.SelectionColor = Color.Red;
+            richTextBox1.SelectionColor = Color.RosyBrown;
           
         }
 
@@ -371,6 +371,7 @@ namespace WindowsFormsApplication1
         private void iTalk_Button_21_Click_1(object sender, EventArgs e)
         {
             string selected_account = listBox1.SelectedItem.ToString();
+
             conn_manager.update_job(selected_account);
         }
 

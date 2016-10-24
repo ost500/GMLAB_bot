@@ -138,10 +138,10 @@ namespace WindowsFormsApplication1
 
                     //3. 요청 유저   This Procedure is Mandatory
                     //팔로우, 좋아요
-                   Request_proc req_run = new Request_proc(context, conn_manager);
-                    req_run.require();
+                 //  Request_proc req_run = new Request_proc(context, conn_manager);
+                 //   req_run.require();
 
-                    req_run.like_loop(1, req_run.require_like_count());
+                 //   req_run.like_loop(1, req_run.require_like_count());
 
     
                     //Run Unfollow Procedure if is checked
