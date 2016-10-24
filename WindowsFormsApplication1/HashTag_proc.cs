@@ -82,15 +82,35 @@ namespace WindowsFormsApplication1
                 }
                 catch (Exception e) { }
             }
-        
-           if(IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div")))
+
+            //finding first picture
+            IWebElement img_element;
+            bool image_startflag = false;
+
+            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div[2]/div/div/a/div")))
             {
 
-                 IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
+
+                img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div[2]/div/div/a/div"));
+                image_startflag = true;
+
+            }
+            else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div[1]/div/div/a/div")))
+            {
+
+                img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div[1]/div/div/a/div"));
+
+                image_startflag = true;
+
+            }
+            else { return; }
+
+            //finding first picture
+            if (image_startflag)
+            {
+               //  IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
 
                 img_element.Click();
-
-
 
                 DateTime currentTime = DateTime.Now;
                 DateTime future = currentTime.AddMinutes(6);
@@ -99,7 +119,6 @@ namespace WindowsFormsApplication1
                     currentTime = DateTime.Now;
 
                     Thread.Sleep(rnd.Next(1000, 3000));
-
 
                     try
                     {

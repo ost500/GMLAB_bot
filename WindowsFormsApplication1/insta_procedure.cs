@@ -29,13 +29,14 @@ namespace WindowsFormsApplication1
 
 
         public DataTable t;
-       public  DataRow r;
+        public  DataRow r;
 
         //follow 시간 like 시간
         public static DateTime follow_time;
         public static DateTime like_time;
         public static DateTime comment_time;
         public static string save_follow_time;
+
 
 
         public static double delay_like;
