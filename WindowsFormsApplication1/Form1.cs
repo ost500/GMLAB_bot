@@ -94,9 +94,6 @@ namespace WindowsFormsApplication1
                    
                 }
 
-               
-
-
 
                 //Select the current item in the list
                 listBox1.Focus();
@@ -188,10 +185,10 @@ namespace WindowsFormsApplication1
 
         private void iTalk_Button_21_Click(object sender, EventArgs e)
         {
-            
-
-            like_thr = new Thread(manager.like_proc);
-            like_thr.Start();
+          
+                like_thr = new Thread(manager.like_proc);
+                like_thr.Start();
+           
         }
 
 
@@ -230,6 +227,7 @@ namespace WindowsFormsApplication1
             try
             {
                 DataRow dr = conn_manager.Select_job(selected_account);
+              
                 if (dr == null)
                 {
                     limit_comment.Text = "None";

@@ -290,17 +290,24 @@ namespace WindowsFormsApplication1
             int time_start = Int32.Parse(context.time_start.Text) ;
             int time_finish = Int32.Parse(context.time_finish.Text) ;
 
-            if (conn.State == ConnectionState.Closed) { conn.Open(); }
-           
-            //context.log("Connection: "+conn.State);
-            MySqlCommand cmd5 = new MySqlCommand("UPDATE insta_job SET limit_comments='"+ limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ", conn);
-            cmd5.CommandTimeout=200;
-            if (cmd5.ExecuteNonQuery() > 0)
+            if (time_start > time_finish) { context.log("Start time must be less than End Time"); }
+            else
             {
-                context.log("Record saved successfully.");
+
+                if (conn.State == ConnectionState.Closed) { conn.Open(); }
+
+                context.log("Connection: " + conn.State);
+                // context.log("UPDATE insta_job SET limit_comments = '"+ limit_comment + "', limit_follows = '" + limit_follow + "', limit_likes = '" + limit_like + "', delay_follow = '" + delay_follow + "', delay_like = '" + delay_like + "', delay_comment = '" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ");
+                MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_job SET limit_comments='" + limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish + "' WHERE user_id = '" + current_user + "' ", conn);
+
+                if (cmd3.ExecuteNonQuery() > 0)
+                {
+                    context.log("Record saved successfully.");
+                }
             }
             
         }
+
         public void update_count_date(string current_user, string latest_date)
         {
          
@@ -308,22 +315,28 @@ namespace WindowsFormsApplication1
             cmd6.ExecuteNonQuery();
 
         }
-        public void update_likescount(string current_user, int likes_count, string latest_date)
+        public void update_likescount(string current_user, int likes_count)
         {
 
             MySqlCommand cmd7 = new MySqlCommand("UPDATE insta_account SET likes_count ='"+likes_count+ "'  WHERE user_id = '" + current_user + "'", conn);
             cmd7.ExecuteNonQuery();
 
         }
-        public void update_commentscount(string current_user, int comments_count, string latest_date)
+        public void update_commentscount(string current_user, int comments_count)
         {
 
             MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET comments_count ='" + comments_count+"' WHERE user_id = '" + current_user + "'", conn);
             cmd8.ExecuteNonQuery();
 
         }
-        
 
+        public void update_followscount(string current_user, int follows_count)
+        {
+
+            MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET follows_count ='" + follows_count + "' WHERE user_id = '" + current_user + "'", conn);
+            cmd8.ExecuteNonQuery();
+
+        }
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)
         {
