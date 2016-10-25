@@ -275,7 +275,7 @@ namespace WindowsFormsApplication1
             cmd3.ExecuteNonQuery();
 
         }
-
+       
 
         public void update_job(string current_user)
         {
@@ -301,7 +301,28 @@ namespace WindowsFormsApplication1
             }
             
         }
+        public void update_count_date(string current_user, string latest_date)
+        {
+         
+            MySqlCommand cmd6 = new MySqlCommand("UPDATE insta_account SET likes_count ='0',comments_count ='0' , latest_date='" + latest_date + "' WHERE user_id = '" + current_user + "'", conn);
+            cmd6.ExecuteNonQuery();
 
+        }
+        public void update_likescount(string current_user, int likes_count, string latest_date)
+        {
+
+            MySqlCommand cmd7 = new MySqlCommand("UPDATE insta_account SET likes_count ='"+likes_count+ "'  WHERE user_id = '" + current_user + "'", conn);
+            cmd7.ExecuteNonQuery();
+
+        }
+        public void update_commentscount(string current_user, int comments_count, string latest_date)
+        {
+
+            MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET comments_count ='" + comments_count+"' WHERE user_id = '" + current_user + "'", conn);
+            cmd8.ExecuteNonQuery();
+
+        }
+        
 
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)

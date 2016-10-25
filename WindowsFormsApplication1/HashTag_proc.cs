@@ -151,6 +151,8 @@ namespace WindowsFormsApplication1
                         if (like_time_gap(delay_like))
                         {
                             driver.FindElement(By.CssSelector("span._soakw.coreSpriteHeartOpen")).Click();
+                            //Set Likes Count for today
+                            likes_count = likes_count + 1;
                         }
 
 
@@ -197,7 +199,8 @@ namespace WindowsFormsApplication1
                                 driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
                                 //update worknumber  of comment
                                 conn_manager.Update_comment_worknum(comment);
-
+                                //Set Comments Count for today
+                                comments_count = comments_count + 1;
 
                                 Thread.Sleep(rnd.Next(1000, 3000));
                             }
@@ -226,6 +229,9 @@ namespace WindowsFormsApplication1
                             driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
                             //update worknumber  of comment
                             conn_manager.Update_comment_worknum(comment);
+                            //Set Comments Count for today
+                            comments_count = comments_count + 1;
+
                             context.log(" [인스타 루프] : 댓글을 입력했습니다");
 
                         }

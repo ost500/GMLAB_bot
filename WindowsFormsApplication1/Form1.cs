@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -69,18 +70,38 @@ namespace WindowsFormsApplication1
             try
             {
                 t = conn_manager.SelectData();
+               
                 r = t.Rows[0];
+
+                string now_date = DateTime.Now.ToString("yyyy-MM-dd");
+            
+                string latest_date;
 
 
                 foreach (DataRow r in t.Rows)
                 {
                     listBox1.Items.Add(r["user_id"].ToString());
+
+                    latest_date = r["latest_date"].ToString();
+
+                    DateTime dt = DateTime.ParseExact(latest_date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    latest_date = dt.ToString("yyyy-MM-dd");
+                    //if latest_date is not equal to current date then upadte date and set like and comment count to 0
+                    if (latest_date != now_date)
+                    {
+                        conn_manager.update_count_date(r["user_id"].ToString(), now_date);
+                    }
+                   
                 }
+
+               
+
+
 
                 //Select the current item in the list
                 listBox1.Focus();
                 listBox1.SetSelected(0, true);
-
+            
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
 
                 if (checkCommentStatus() && checkHashTag())

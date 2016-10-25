@@ -28,7 +28,7 @@ namespace WindowsFormsApplication1
         protected Random rnd = new Random();
 
 
-        public DataTable t;
+        public  DataTable t;
         public  DataRow r;
 
         //follow 시간 like 시간
@@ -37,12 +37,21 @@ namespace WindowsFormsApplication1
         public static DateTime comment_time;
         public static string save_follow_time;
 
+        //Limit variables
+        public static int comments_count;
+        public static int likes_count;
+        public static int follows_count;
+        public static int limit_comments;
+        public static int limit_likes;
+        public static int limit_follows;
 
-
+        //Delay variables
         public static double delay_like;
         public static double delay_comment;
         public static double delay_follow;
         public static double delay_unfollow;
+
+        //insta_user variables
         public static string current_user;
         public static string user_agent;
         //public string user_id;
@@ -99,7 +108,58 @@ namespace WindowsFormsApplication1
                 return true;
             }
         }
+        //GET limit_likes,limit__comments and limit__follows from database for current user
+        public int getLimitLikes(string user_id)
+        {
 
+            DataRow jobrow = conn_manager.Select_job(user_id);
+            if (jobrow == null)
+            {
+                return 1000;
+            }
+            else
+            {
+
+                limit_likes = Int32.Parse(jobrow["limit_likes"].ToString());
+
+                return limit_likes;
+            }
+
+        }
+
+        public int getLimitComments(string user_id)
+        {
+
+            DataRow jobrow = conn_manager.Select_job(user_id);
+            if (jobrow == null)
+            {
+                return 400;
+            }
+            else
+            {
+                limit_comments = Int32.Parse(jobrow["limit_comments"].ToString());
+
+
+                return limit_comments;
+            }
+        }
+
+        public int getLimitFollows(string user_id)
+        {
+
+            DataRow jobrow = conn_manager.Select_job(user_id);
+            if (jobrow == null)
+            {
+                return 50;
+            }
+            else
+            {
+                limit_follows = Int32.Parse(jobrow["limit_follows"].ToString());
+
+                return limit_follows;
+
+            }
+        }
 
         //GET delay_like,delay_comment,delay_follow and delay_unfollow from database for current user
         public double getLikeDelay(string user_id)
@@ -302,6 +362,23 @@ namespace WindowsFormsApplication1
             }
 
         }
+        public void saveLikesCount()
+        {
+            //set time
+            context.log("SCSCSCSCSCSCSCSCSCSCSCSCSC");
+            string  latest_date = DateTime.Now.ToString("yyyy-MM-dd");
+            conn_manager.update_likescount(current_user, likes_count, latest_date);
+            Thread.Sleep(rnd.Next(2000, 3000));
+        }
+
+        public void saveCommentsCount()
+        {
+            //set time
+            context.log("CCCCCCCCCCCCCCCCCCCCCCCC");
+            string latest_date = DateTime.Now.ToString("yyyy-MM-dd");
+            conn_manager.update_commentscount(current_user, comments_count, latest_date);
+            Thread.Sleep(rnd.Next(2000, 3000));
+        }
 
         public void changeLanguageOnLogin()
         {
@@ -421,13 +498,23 @@ namespace WindowsFormsApplication1
             //context.context.log(" USER:" + current_user + " \n");
             context.log(" [이지그램] 로그인 유저 :  " + current_user + " \n");
 
+            //get all limits
+            limit_likes = getLimitLikes(current_user);
+            limit_comments = getLimitComments(current_user);
+            limit_follows = getLimitFollows(current_user);
+
+            //get today's counts
+            likes_count = Int32.Parse(r["likes_count"].ToString());
+            comments_count = Int32.Parse(r["likes_count"].ToString());
+
+            //get all delays
             delay_like = getLikeDelay(current_user);
             delay_comment = getCommentDealy(current_user);
             delay_follow = getFollowDelay(current_user);
             delay_unfollow = getUnfollowDelay(current_user);
 
 
-            //Get current directory path and set chrome cache path
+            //Get current directory path and set charome cache path
             string currentDir = getCurrentPath();
             string path = currentDir + "\\chrome_cache\\" + current_user.Trim();
 
@@ -688,6 +775,8 @@ namespace WindowsFormsApplication1
                         if (like_time_gap(delay_like))
                         {
                             driver.FindElement(By.CssSelector("span._soakw.coreSpriteHeartOpen")).Click();
+                            //Set Likes Count for today
+                            likes_count=likes_count + 1;
                         }
 
 
@@ -734,7 +823,8 @@ namespace WindowsFormsApplication1
                                 driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
                                 //update worknumber  of comment
                                 conn_manager.Update_comment_worknum(comment);
-
+                                //Set Comments Count for today
+                                comments_count = comments_count + 1;
 
                                 Thread.Sleep(rnd.Next(1000, 3000));
                             }
@@ -763,6 +853,9 @@ namespace WindowsFormsApplication1
                             driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
                             //update worknumber  of comment
                             conn_manager.Update_comment_worknum(comment);
+                            //Set Comments Count for today
+                            comments_count = comments_count + 1;
+
                             context.log(" [인스타 루프] : 댓글을 입력했습니다");
 
                         }
