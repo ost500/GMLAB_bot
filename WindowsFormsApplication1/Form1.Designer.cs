@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApplication1
+﻿namespace easygram
 {
     partial class Form1
     {
@@ -29,10 +29,13 @@
         private void InitializeComponent()
         {
             this.iTalk_ThemeContainer1 = new iTalk.iTalk_ThemeContainer();
+            this.button2 = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.iTalk_Button_21 = new iTalk.iTalk_Button_2();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.iTalk_Button_11 = new iTalk.iTalk_Button_1();
             this.iTalk_GroupBox1 = new iTalk.iTalk_GroupBox();
@@ -61,7 +64,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.iTalk_HeaderLabel1 = new iTalk.iTalk_HeaderLabel();
             this.iTalk_ControlBox1 = new iTalk.iTalk_ControlBox();
-            this.iTalk_Button_21 = new iTalk.iTalk_Button_2();
             this.panel1 = new System.Windows.Forms.Panel();
             this.iTalk_ThemeContainer1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -74,6 +76,8 @@
             // iTalk_ThemeContainer1
             // 
             this.iTalk_ThemeContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.iTalk_ThemeContainer1.Controls.Add(this.button2);
+            this.iTalk_ThemeContainer1.Controls.Add(this.radioButton1);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_Button_21);
             this.iTalk_ThemeContainer1.Controls.Add(this.groupBox2);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_Button_11);
@@ -99,12 +103,50 @@
             this.iTalk_ThemeContainer1.Text = "이지그램";
             this.iTalk_ThemeContainer1.Click += new System.EventHandler(this.iTalk_ThemeContainer1_Click);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(29, 41);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(112, 37);
+            this.button2.TabIndex = 25;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1.Location = new System.Drawing.Point(488, 65);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(76, 25);
+            this.radioButton1.TabIndex = 24;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "테더링";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // iTalk_Button_21
+            // 
+            this.iTalk_Button_21.BackColor = System.Drawing.Color.Transparent;
+            this.iTalk_Button_21.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.iTalk_Button_21.ForeColor = System.Drawing.Color.White;
+            this.iTalk_Button_21.Image = null;
+            this.iTalk_Button_21.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iTalk_Button_21.Location = new System.Drawing.Point(398, 571);
+            this.iTalk_Button_21.Name = "iTalk_Button_21";
+            this.iTalk_Button_21.Size = new System.Drawing.Size(155, 30);
+            this.iTalk_Button_21.TabIndex = 22;
+            this.iTalk_Button_21.Text = "Save";
+            this.iTalk_Button_21.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.iTalk_Button_21.Click += new System.EventHandler(this.iTalk_Button_21_Click_1);
+            // 
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.groupBox2.Controls.Add(this.richTextBox1);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.textBox1);
             this.groupBox2.Controls.Add(this.listBox1);
             this.groupBox2.Location = new System.Drawing.Point(28, 93);
             this.groupBox2.MinimumSize = new System.Drawing.Size(126, 39);
@@ -113,6 +155,19 @@
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "내용";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.richTextBox1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBox1.Location = new System.Drawing.Point(123, 18);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.richTextBox1.Size = new System.Drawing.Size(410, 299);
+            this.richTextBox1.TabIndex = 1;
+            this.richTextBox1.Text = "";
             // 
             // label2
             // 
@@ -131,20 +186,6 @@
             this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "계정";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBox1.Location = new System.Drawing.Point(123, 18);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(410, 299);
-            this.textBox1.TabIndex = 1;
             // 
             // listBox1
             // 
@@ -266,6 +307,7 @@
             this.time_finish.Size = new System.Drawing.Size(70, 22);
             this.time_finish.TabIndex = 3;
             this.time_finish.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.time_finish.TextChanged += new System.EventHandler(this.time_finish_TextChanged);
             // 
             // time_start
             // 
@@ -431,7 +473,7 @@
             this.iTalk_HeaderLabel1.BackColor = System.Drawing.Color.Transparent;
             this.iTalk_HeaderLabel1.Font = new System.Drawing.Font("Segoe UI", 25F);
             this.iTalk_HeaderLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.iTalk_HeaderLabel1.Location = new System.Drawing.Point(200, 44);
+            this.iTalk_HeaderLabel1.Location = new System.Drawing.Point(211, 44);
             this.iTalk_HeaderLabel1.Name = "iTalk_HeaderLabel1";
             this.iTalk_HeaderLabel1.Size = new System.Drawing.Size(191, 46);
             this.iTalk_HeaderLabel1.TabIndex = 19;
@@ -447,22 +489,9 @@
             this.iTalk_ControlBox1.TabIndex = 18;
             this.iTalk_ControlBox1.Text = "iTalk_ControlBox1";
             // 
-            // iTalk_Button_21
-            // 
-            this.iTalk_Button_21.BackColor = System.Drawing.Color.Transparent;
-            this.iTalk_Button_21.Font = new System.Drawing.Font("Segoe UI", 14F);
-            this.iTalk_Button_21.ForeColor = System.Drawing.Color.White;
-            this.iTalk_Button_21.Image = null;
-            this.iTalk_Button_21.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iTalk_Button_21.Location = new System.Drawing.Point(398, 571);
-            this.iTalk_Button_21.Name = "iTalk_Button_21";
-            this.iTalk_Button_21.Size = new System.Drawing.Size(155, 30);
-            this.iTalk_Button_21.TabIndex = 22;
-            this.iTalk_Button_21.Text = "Save";
-            this.iTalk_Button_21.TextAlignment = System.Drawing.StringAlignment.Center;
-            // 
             // panel1
             // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Location = new System.Drawing.Point(28, 473);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(536, 150);
@@ -497,7 +526,6 @@
         }
 
         #endregion
-        public System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;
@@ -512,26 +540,29 @@
         public iTalk.iTalk_Button_2 button1;
         private iTalk.iTalk_Button_1 iTalk_Button_11;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox limit_comment;
-        private System.Windows.Forms.TextBox limit_like;
-        private System.Windows.Forms.TextBox limit_follow;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.TextBox delay_comment;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox delay_like;
-        private System.Windows.Forms.TextBox delay_follow;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox time_finish;
-        private System.Windows.Forms.TextBox time_start;
         private iTalk.iTalk_Button_2 iTalk_Button_21;
         private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.TextBox limit_comment;
+        public System.Windows.Forms.TextBox limit_like;
+        public System.Windows.Forms.TextBox limit_follow;
+        public System.Windows.Forms.TextBox delay_comment;
+        public System.Windows.Forms.TextBox delay_like;
+        public System.Windows.Forms.TextBox delay_follow;
+        public System.Windows.Forms.TextBox time_start;
+        public System.Windows.Forms.TextBox time_finish;
+        public System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

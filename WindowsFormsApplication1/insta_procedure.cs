@@ -9,8 +9,12 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Collections;
+using System.Runtime.Remoting.Contexts;
+using System.Security.Principal;
+using System.Security.AccessControl;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class insta_procedure
     {
@@ -28,14 +32,17 @@ namespace WindowsFormsApplication1
         protected Random rnd = new Random();
 
 
-        protected DataTable t;
-        DataRow r;
+
+        public DataTable t;
+        public  DataRow r;
+
 
         //follow 시간 like 시간
         public static DateTime follow_time;
         public static DateTime like_time;
         public static DateTime comment_time;
         public static string save_follow_time;
+
 
 
         public static double delay_like;
@@ -392,8 +399,6 @@ namespace WindowsFormsApplication1
         public void start()
         {
 
-
-
             t = conn_manager.SelectData();
             if (t == null) { throw new NullReferenceException(); }
 
@@ -449,13 +454,19 @@ namespace WindowsFormsApplication1
             //Set the Browser User Agent For current user
             co.AddArguments("--user-agent=" + user_agent);
             */
-            context.log(Directory.GetCurrentDirectory());
+            
+
+
+            var options = new ChromeOptions();
+
+
             var driverService = ChromeDriverService.CreateDefaultService(Directory.GetCurrentDirectory());
             driverService.HideCommandPromptWindow = true;
             //driverService.Port = my_port;
             //co.BinaryLocation = "C:\\Program Files (x86)\\Google\\Chrome\\Application";
 
-
+            
+            //driver = new ChromeDriver(co);
             driver = new ChromeDriver(driverService, co);
             //driver = new ChromeDriver("C:\\Program Files (x86)\\Google\\Chrome\\Application");
 
@@ -975,6 +986,7 @@ namespace WindowsFormsApplication1
             {
                 if (IsElementPresent(By.LinkText("프로필")))
                 {
+                    Thread.Sleep(rnd.Next(1000, 3000));
                     //Click on profile
                     driver.FindElement(By.LinkText("프로필")).Click();
 
@@ -1496,6 +1508,7 @@ namespace WindowsFormsApplication1
                 acceptNextAlert = true;
             }
         }
+
 
 
 

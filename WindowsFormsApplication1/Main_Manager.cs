@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class Main_Manager
     {
@@ -40,7 +40,7 @@ namespace WindowsFormsApplication1
                 DataRow r = conn_manager.version_control();
                 if (r == null) { throw new NullReferenceException(); }
 
-                context.log("EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n");
+                context.log(" EASYGRAM Version. " + r["LatestVersion"].ToString() + "\n");
 
 
 
@@ -138,12 +138,12 @@ namespace WindowsFormsApplication1
 
                     //3. 요청 유저   This Procedure is Mandatory
                     //팔로우, 좋아요
-                   Request_proc req_run = new Request_proc(context, conn_manager);
+                    Request_proc req_run = new Request_proc(context, conn_manager);
                     req_run.require();
 
                     req_run.like_loop(1, req_run.require_like_count());
 
-    
+
                     //Run Unfollow Procedure if is checked
                     if (context.checkBox3.Checked)
                     {
@@ -162,7 +162,11 @@ namespace WindowsFormsApplication1
                     //connection close();
                     conn_manager.quit_conn();
 
-                    ipchanger.send_change();
+                    if(ipchanger != null)
+                    {
+                        ipchanger.send_change();
+                    }
+                    
 
                     
 

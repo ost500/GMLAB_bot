@@ -4,9 +4,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WindowsFormsApplication1;
+using easygram;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     public class IPchange
     {

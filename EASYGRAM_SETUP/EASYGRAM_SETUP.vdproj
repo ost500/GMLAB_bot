@@ -76,7 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_84B7A0B38FFBD018A65F34C615DB443B"
+        "OwnerKey" = "8:_F937EAC9B025DA3D43B4FD98C4B79CA2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -89,6 +89,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BEA4AD6C7F3A54865D43E7EB2BDF2D24"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_84B7A0B38FFBD018A65F34C615DB443B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -107,12 +113,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A7EB756440FEAE7B97998A12F94C4C51"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F937EAC9B025DA3D43B4FD98C4B79CA2"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -476,7 +476,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EASYGRAM_SETUP"
         "ProductCode" = "8:{587AF0C8-5DE2-4ED3-A4B7-7AA44EA6C155}"
-        "PackageCode" = "8:{AB84BAEF-5DA9-4CB4-A0C6-A8DFC6637C31}"
+        "PackageCode" = "8:{42A92FE8-F057-4E8D-872C-6DC86743334E}"
         "UpgradeCode" = "8:{2B0D5431-1481-42C3-B8B6-AFC3C431D582}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -484,7 +484,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:착한마케팅연구소"
+        "Manufacturer" = "8:이지그램"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:EASYGRAM_SETUP"
@@ -492,7 +492,7 @@
         "ARPCONTACT" = "8:착한마케팅연구소"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:"
+        "ARPURLINFOABOUT" = "8:http://easygram.kr"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"

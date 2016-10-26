@@ -1,15 +1,20 @@
-﻿using System;
+﻿using Renci.SshNet;
+using System;
 using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Net;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
+
+
     public partial class Form1 : Form
     {
 
@@ -32,7 +37,7 @@ namespace WindowsFormsApplication1
         private bool ready_login = false;
         private bool ready_phone = false;
 
-        
+
 
         Main_Manager manager;
         public sql_connection_manager conn_manager;
@@ -45,27 +50,66 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
 
+            log(" [이지그램] 잠시만 기다려 주세요");
+            log(" [이지그램] 서버에서 데이터를 가지고 오는중입니다");
+
             //conn_manager.like_up();
 
             this.user = user;
 
-            conn_manager = new sql_connection_manager(this);
+
+            //if (/* Main 아래에 정의된 함수 */IsAdministrator() == false)
+            //{
+            //    try
+            //    {
+            //        ProcessStartInfo procInfo = new ProcessStartInfo();
+            //        procInfo.UseShellExecute = true;
+            //        procInfo.FileName = Application.ExecutablePath;
+            //        procInfo.WorkingDirectory = Environment.CurrentDirectory;
+            //        procInfo.Verb = "runas";
+            //        Process.Start(procInfo);
+            //    }
+            //    catch (Exception ex)
+            //    {
+                    
+            //    }
+
+                
+            //}
+
+
+
 
             Thread thr = new Thread(this.form_start);
             thr.Start();
-            
+
         }
 
-    
+        public static bool IsAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+
+            if (null != identity)
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+
+            return false;
+        }
+
+
+
         public void form_start()
         {
 
-            
+
+            conn_manager = new sql_connection_manager(this);
+
 
             manager = new Main_Manager(this, conn_manager);
 
-            Thread.Sleep(10000);
-            
+
 
             try
             {
@@ -90,34 +134,36 @@ namespace WindowsFormsApplication1
                     //get the total users and login
                     total_user = t.Rows.Count;
                     //total_user = 2;
-                    
+
 
                 }
                 else
                 {
                     MessageBox.Show(" [데이터베이스] 기본 데이터를 입력하세요");
                 }
-                
-                
+
+
             }
 
             //else { MessageBox.Show("먼저 로그인하세요 "); }
 
 
-            catch(Exception ex) { log("No Users Record found!!!");  log(ex.StackTrace); }
+            catch (Exception ex) { log("No Users Record found!!!"); log(ex.StackTrace); }
 
-            Thread thr = new Thread(manager.mobile_connection);
-            thr.Start();
+            
 
         }
 
 
         public void log(string logging)
         {
-            
-                textBox1.AppendText(Environment.NewLine);
-                textBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-            
+
+
+            richTextBox1.AppendText(Environment.NewLine);
+            richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+            richTextBox1.Select(1, 13);
+            richTextBox1.SelectionColor = Color.RosyBrown;
+
         }
 
 
@@ -165,7 +211,7 @@ namespace WindowsFormsApplication1
 
         private void iTalk_Button_21_Click(object sender, EventArgs e)
         {
-            
+
 
             like_thr = new Thread(manager.like_proc);
             like_thr.Start();
@@ -174,7 +220,7 @@ namespace WindowsFormsApplication1
 
         private void button2_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         public void start_button_valid(string LorP)
@@ -201,7 +247,7 @@ namespace WindowsFormsApplication1
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selected_account = listBox1.SelectedItem.ToString();
-          //  account_label.Text = selected_account;
+            //  account_label.Text = selected_account;
 
 
             try
@@ -212,7 +258,7 @@ namespace WindowsFormsApplication1
                     limit_comment.Text = "None";
                     limit_follow.Text = "None";
                     limit_like.Text = "None";
-                 //   limit_unfollow.Text = "None";
+                    //   limit_unfollow.Text = "None";
 
 
                     delay_follow.Text = "None";
@@ -234,7 +280,7 @@ namespace WindowsFormsApplication1
 
                     delay_follow.Text = dr["delay_follow"].ToString();
                     delay_like.Text = dr["delay_like"].ToString();
-                 //   delay_unfollow.Text = dr["delay_unfollow"].ToString();
+                    //   delay_unfollow.Text = dr["delay_unfollow"].ToString();
                     delay_comment.Text = dr["delay_comment"].ToString();
 
                     time_start.Text = dr["hour_between_start"].ToString();
@@ -250,7 +296,7 @@ namespace WindowsFormsApplication1
 
 
         }
-
+        
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -288,7 +334,7 @@ namespace WindowsFormsApplication1
                     processList[0].Kill();
                 }
 
-                processList = Process.GetProcessesByName(this.Name);
+                processList = Process.GetProcessesByName("easygram");
 
                 if (processList.Length > 0)
                 {
@@ -328,25 +374,25 @@ namespace WindowsFormsApplication1
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
-        
+
 
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-         
+
 
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-           
+
         }
 
         private void iTalk_RadioButton1_CheckedChanged(object sender)
         {
             Thread thr = new Thread(manager.mobile_connection);
-            thr.Start();   
+            thr.Start();
         }
 
         private void iTalk_Button_11_Click(object sender, EventArgs e)
@@ -355,7 +401,7 @@ namespace WindowsFormsApplication1
             like_thr.Abort();
         }
 
-  
+
         private void limit_follow_TextChanged(object sender, EventArgs e)
         {
 
@@ -366,6 +412,45 @@ namespace WindowsFormsApplication1
 
         }
 
-        
+
+        private void iTalk_Button_21_Click_1(object sender, EventArgs e)
+        {
+            string selected_account = listBox1.SelectedItem.ToString();
+
+            conn_manager.update_job(selected_account);
+        }
+
+        private void time_finish_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton1.Enabled = false;
+
+            Thread thr = new Thread(manager.mobile_connection);
+            thr.Start();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            
+            
+            
+
+            using (var sftp = new SftpClient("gmlab.kr", 22, "www_user", "qwqw12"))
+            {
+                sftp.Connect();
+
+                using (var file = File.OpenWrite("easygram.exe"))
+                {
+                    sftp.DownloadFile("/home/www_user/easygram/easygram.exe", file);
+                }
+
+                sftp.Disconnect();
+            }
+        }
     }
+
 }

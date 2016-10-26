@@ -1,10 +1,18 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using Renci.SshNet;
+using Renci.SshNet.Sftp;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     static class Program
     {
@@ -14,9 +22,15 @@ namespace WindowsFormsApplication1
         [STAThread]
         static void Main()
         {
+            Application.Run(new Version_Control_form());
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login_Form());
+
+
         }
+
     }
 }

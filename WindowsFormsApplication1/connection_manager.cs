@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     public class sql_connection_manager
     {
@@ -21,16 +21,16 @@ namespace WindowsFormsApplication1
         {
 
             
-            String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
+            String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;Allow Zero Datetime=true";
             conn = new MySqlConnection(strConn);
 
             conn.Open();
-            
+          
 
-            
+
 
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
-            //context.textBox1.Text += cmd.ExecuteNonQuery();
+            //context.richTextBox1.Text += cmd.ExecuteNonQuery();
 
             this.context = context;
 
@@ -47,29 +47,30 @@ namespace WindowsFormsApplication1
             ds = new DataSet();
             try
             {
-
+               
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
                 context.log(" [데이터베이스] : " + context.user + "의 인스타그램 계정을 가져옵니다");
-                string sql = "SELECT a.*,b.ip,b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
-                //string sql = "SELECT * FROM insta_account WHERE mb_id = 'ost5253'";
-                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, this.conn);
-                adpt.Fill(ds, "members");
 
-                context.log(ds.Tables.Count.ToString());
+                string sql = "SELECT a.*, b.ip, b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
+             
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql,conn);
+         
+                adpt.Fill(ds,"members");      
 
 
                 if (ds.Tables.Count > 0)
                 {
-
+                   
                     return ds.Tables[0];
                 }
-                else { return null; }
+                else {  return null; }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+               
+              //  context.log("catch "+ex.ToString());
                 return null;
             }
 
@@ -255,7 +256,7 @@ namespace WindowsFormsApplication1
         public void Update_comment_worknum(string comment)
         {
             MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_comment SET work_number = work_number + 1 WHERE comment = '" + comment + "'", conn);
-            // context.textBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
+            // context.richTextBox1.AppendText("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"]);
             cmd3.ExecuteNonQuery();
 
         }
@@ -277,16 +278,46 @@ namespace WindowsFormsApplication1
 
         }
 
+
+        public void update_job(string current_user)
+        {
+            int limit_comment = Int32.Parse(context.limit_comment.Text);
+            int limit_follow = Int32.Parse(context.limit_follow.Text);
+            int limit_like = Int32.Parse(context.limit_like.Text) ;
+
+            int delay_follow = Int32.Parse(context.delay_follow.Text);
+            int delay_like = Int32.Parse(context.delay_like.Text) ;
+            int delay_comment = Int32.Parse(context.delay_comment.Text) ;
+
+            int time_start = Int32.Parse(context.time_start.Text) ;
+            int time_finish = Int32.Parse(context.time_finish.Text) ;
+
+            if (conn.State == ConnectionState.Closed) { conn.Open(); }
+           
+            //context.log("Connection: "+conn.State);
+            MySqlCommand cmd5 = new MySqlCommand("UPDATE insta_job SET limit_comments='"+ limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ", conn);
+            cmd5.CommandTimeout=200;
+            if (cmd5.ExecuteNonQuery() > 0)
+            {
+                context.log("Record saved successfully.");
+            }
+            
+        }
+
+
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)
         {
             DataSet ds = new DataSet();
             try
             {
-
+                 if (conn.State == ConnectionState.Closed) { conn.Open(); }
+                // context.log("Connection" + conn.State);
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 string sql = "SELECT * FROM insta_job WHERE user_id ='" + user_id + "'";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+               
+
                 adpt.Fill(ds, "job");
 
 
@@ -635,7 +666,7 @@ namespace WindowsFormsApplication1
                         MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
 
                         cmd2.ExecuteNonQuery();
-                        //context.textBox1.AppendText("########## Inserted Follow Data ##########");
+                        //context.richTextBox1.AppendText("########## Inserted Follow Data ##########");
                         //context.log("[데이터베이스]");
 
                     }
@@ -658,7 +689,7 @@ namespace WindowsFormsApplication1
                 MySqlCommand cmd2 = new MySqlCommand("delete from insta_follows where user_id='" + current_user + "' and followed_id= '" + followed + "'", conn);
 
                 cmd2.ExecuteNonQuery();
-                //context.textBox1.AppendText("########## Deleted Followed Data ##########");
+                //context.richTextBox1.AppendText("########## Deleted Followed Data ##########");
 
             }
             catch (Exception e)
@@ -688,7 +719,7 @@ namespace WindowsFormsApplication1
                 // context.log(cmd2.ToString());
                 if (cmd2.ExecuteNonQuery() > 0)
                 {
-                    //context.textBox1.AppendText("########## Inserted Followers Count  ##########");
+                    //context.richTextBox1.AppendText("########## Inserted Followers Count  ##########");
                 }
 
             }

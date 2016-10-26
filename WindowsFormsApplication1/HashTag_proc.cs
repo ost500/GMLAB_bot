@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +11,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class HashTag_proc : insta_procedure
     {
+
+
+
         public HashTag_proc(Form1 context, sql_connection_manager conn_manager) : base(context, conn_manager)
         {
-            
+
         }
 
-        public void like_loop(int follow_count, int like_count = 1000)
+
+        public new void like_loop(int follow_count, int like_count = 1000)
         {
 
 
@@ -82,13 +89,33 @@ namespace WindowsFormsApplication1
 
 
             //finding first picture
-            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div")))
+            IWebElement img_element;
+            bool image_startflag = false;
+
+            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div[2]/div/div/a/div")))
             {
 
-                IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
+
+                img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div[2]/div/div/a/div"));
+                image_startflag = true;
+
+            }
+            else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div[1]/div/div/a/div")))
+            {
+
+                img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div[1]/div/div/a/div"));
+
+                image_startflag = true;
+
+            }
+            else { return; }
+
+            //finding first picture
+            if (image_startflag)
+            {
+               //  IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
 
                 img_element.Click();
-
 
 
                 DateTime currentTime = DateTime.Now;
@@ -186,6 +213,7 @@ namespace WindowsFormsApplication1
 
                             }
                             break;
+
 
                         }
 
@@ -394,9 +422,10 @@ namespace WindowsFormsApplication1
 
         }
 
+
         public void hash_tag_search()
         {
-            go_to_there("#"+conn_manager.Select_tag()["tag"].ToString());
+            go_to_there("#" + conn_manager.Select_tag()["tag"].ToString());
             context.log(baseURL + "/explore/tags/" + conn_manager.Select_tag()["tag"]);
             //log("해쉬태그 검색");
             Thread.Sleep(rnd.Next(1000, 3000));
