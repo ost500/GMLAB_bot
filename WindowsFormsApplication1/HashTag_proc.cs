@@ -31,61 +31,67 @@ namespace easygram
             int i = 0;
             Thread.Sleep(rnd.Next(1000, 3000));
 
-
-            //팔로우
-            //If there is a follow button on first page, try to press
-            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
-            {
-                try
+            if (follows_count < limit_follows)
+            {   //팔로우
+                //If there is a follow button on first page, try to press
+                if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
                 {
-                    //팔로우를 찾아서 있으면 진행 없으면 에러
-                    Assert.AreEqual("팔로우",
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                            .Text);
-                    if (follow_time_gap(delay_follow))
+                    try
                     {
+                        //팔로우를 찾아서 있으면 진행 없으면 에러
+                        Assert.AreEqual("팔로우",
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
+                                .Text);
+                        if (follow_time_gap(delay_follow))
+                        {
 
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                            .Click();
-                        //Save Follow data
-                        saveFollowData();
-                        //clicked follow button
-                        context.log(" [인스타 루프] : 팔로우 했습니다");
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
+                                .Click();
+                            //Save Follow data
+                            saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
+                            //clicked follow button
+                            context.log(" [인스타 루프] : 팔로우 했습니다");
+                        }
+
+
+                        Thread.Sleep(rnd.Next(1000, 3000));
                     }
 
+                    catch (Exception e) { /*context.log("팔로우를 못찾았습니다1");*/ }
 
-                    Thread.Sleep(rnd.Next(1000, 3000));
+
                 }
-
-                catch (Exception e) { /*context.log("팔로우를 못찾았습니다1");*/ }
-
-
-            }
-            //다른모양의 팔로우 
-            else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")))
-            {
-                try
+                //다른모양의 팔로우 
+                else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")))
                 {
-                    //팔로우를 찾아서 있으면 진행 없으면 에러
-                    Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Text);
-
-                    if (follow_time_gap(delay_follow))
+                    try
                     {
+                        //팔로우를 찾아서 있으면 진행 없으면 에러
+                        Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Text);
 
-                        driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
+                        if (follow_time_gap(delay_follow))
+                        {
 
-                        //Save Follow data
-                        saveFollowData();
+                            driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
 
-                        context.log(" [인스타 루프] 팔로우 했습니다");
+                            //Save Follow data
+                            saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
+
+                            context.log(" [인스타 루프] 팔로우 했습니다");
+                        }
+
+                        Thread.Sleep(rnd.Next(1000, 3000));
                     }
-
-                    Thread.Sleep(rnd.Next(1000, 3000));
+                    catch (Exception e) { }
                 }
-                catch (Exception e) { }
             }
+            else { context.log("Follow Limit reached"); }
 
 
             //finding first picture
@@ -113,7 +119,7 @@ namespace easygram
             //finding first picture
             if (image_startflag)
             {
-               //  IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
+                //  IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
 
                 img_element.Click();
 
@@ -150,51 +156,95 @@ namespace easygram
                         break;
                     }
 
-
-                    //LIKE portion
-                    if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
-                    //"좋아요"가 클릭 돼 있지 않을 때
+                    if (likes_count < limit_likes)
                     {
-                        if (like_time_gap(delay_like))
+                        //LIKE portion
+                        if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
+                        //"좋아요"가 클릭 돼 있지 않을 때
                         {
-                            driver.FindElement(By.CssSelector("span._soakw.coreSpriteHeartOpen")).Click();
-                        }
-
-
-                        //"좋아요" 클릭! 
-                        context.log(" [인스타 루프] : 좋아요를 눌렀습니다");
-                        Thread.Sleep(rnd.Next(1000, 3000));
-                    }
-                    else
-                    //"좋아요"가 클릭 돼 있을 때
-                    {
-
-                    }
-
-
-
-                    if (follow_time_gap(delay_follow))
-                    {
-                        //follow delay
-                        //팔로우
-                        if (IsElementPresent(By.XPath("//header/span/button")))
-                        {
-                            try
+                            if (like_time_gap(delay_like))
                             {
-                                //팔로우를 찾아서 있으면 진행 없으면 에러
-                                Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
-                                driver.FindElement(By.XPath("//header/span/button")).Click();
+                                driver.FindElement(By.CssSelector("span._soakw.coreSpriteHeartOpen")).Click();
+                                //Set Likes Count for today
+                                likes_count = likes_count + 1;
+                            }
 
 
-                                //Save Follow data
-                                saveFollowData();
-                                context.log(" [인스타 루프] : 팔로우 했습니다");
+                            //"좋아요" 클릭! 
+                            context.log(" [인스타 루프] : 좋아요를 눌렀습니다");
+                            Thread.Sleep(rnd.Next(1000, 3000));
+                        }
+                        else
+                        //"좋아요"가 클릭 돼 있을 때
+                        {
 
-                                follow_count--;
+                        }
+                    }
+                    else { context.log("Like Limit reached"); }
+
+                    if (follows_count < limit_follows)
+                    {
+                        if (follow_time_gap(delay_follow))
+                        {
+                            //follow delay
+                            //팔로우
+                            if (IsElementPresent(By.XPath("//header/span/button")))
+                            {
+                                try
+                                {
+                                    //팔로우를 찾아서 있으면 진행 없으면 에러
+                                    Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
+                                    driver.FindElement(By.XPath("//header/span/button")).Click();
 
 
+                                    //Save Follow data
+                                    saveFollowData();
+                                    //Set Follows Count for today
+                                    follows_count = follows_count + 1;
 
-                                //팔로우하면 댓글 자동
+                                    context.log(" [인스타 루프] : 팔로우 했습니다");
+
+                                    follow_count--;
+
+
+                                    if (comments_count < limit_comments)
+                                    {
+                                        //팔로우하면 댓글 자동
+                                        t = conn_manager.Select_comments();
+
+                                        string comment = t.Rows[0]["comment"].ToString();
+
+                                        //팔로우를 찾아서 있으면 진행 없으면 에러
+                                        driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
+                                        driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
+                                        //update worknumber  of comment
+                                        conn_manager.Update_comment_worknum(comment);
+                                        //Set Comments Count for today
+                                        comments_count = comments_count + 1;
+                                    }
+                                    Thread.Sleep(rnd.Next(1000, 3000));
+                                }
+                                catch (Exception e)
+                                {
+
+                                }
+                                break;
+
+                            }
+
+
+                        }
+                    }
+                    else { context.log("Follow Limit reached"); }
+
+                    if (comments_count < limit_comments)
+                    {
+                        //comment portion
+                        if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
+                        {
+                            if (comment_time_gap(delay_comment))
+                            {
+
                                 t = conn_manager.Select_comments();
 
                                 string comment = t.Rows[0]["comment"].ToString();
@@ -204,43 +254,17 @@ namespace easygram
                                 driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
                                 //update worknumber  of comment
                                 conn_manager.Update_comment_worknum(comment);
+                                //Set Comments Count for today
+                                comments_count = comments_count + 1;
 
-
-                                Thread.Sleep(rnd.Next(1000, 3000));
-                            }
-                            catch (Exception e)
-                            {
+                                context.log(" [인스타 루프] : 댓글을 입력했습니다");
 
                             }
-                            break;
-
-
+                            Thread.Sleep(rnd.Next(1000, 3000));
+                            Thread.Sleep(rnd.Next(1000, 3000));
                         }
-
                     }
-
-                    //comment portion
-                    if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
-                    {
-                        if (comment_time_gap(delay_comment))
-                        {
-
-                            t = conn_manager.Select_comments();
-
-                            string comment = t.Rows[0]["comment"].ToString();
-
-                            //팔로우를 찾아서 있으면 진행 없으면 에러
-                            driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-                            driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
-                            //update worknumber  of comment
-                            conn_manager.Update_comment_worknum(comment);
-                            context.log(" [인스타 루프] : 댓글을 입력했습니다");
-
-                        }
-                        Thread.Sleep(rnd.Next(1000, 3000));
-                        Thread.Sleep(rnd.Next(1000, 3000));
-                    }
-
+                    else { context.log("Comment Limit reached"); }
 
                     //If there is no next
                     if (!IsElementPresent(By.LinkText("다음"))) //"다음"이 없을 때
@@ -310,116 +334,125 @@ namespace easygram
 
 
 
-
-
-            // we passed the follow button because of follow time gap above, So we have to wait and follow
-            //랜덤 유저검색 후 팔로우
-            if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
+            if (follows_count < limit_follows)
             {
 
-
-                try
+                // we passed the follow button because of follow time gap above, So we have to wait and follow
+                //랜덤 유저검색 후 팔로우
+                if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")))
                 {
-                    //팔로우를 찾아서 있으면 진행 없으면 에러
-                    Assert.AreEqual("팔로우",
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                            .Text);
-                    if (follow_time_gap(delay_follow))
+
+
+                    try
                     {
-                        //If follow time gap was done
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                            .Click();
+                        //팔로우를 찾아서 있으면 진행 없으면 에러
+                        Assert.AreEqual("팔로우",
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
+                                .Text);
+                        if (follow_time_gap(delay_follow))
+                        {
+                            //If follow time gap was done
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
+                                .Click();
 
-                        //Save Follow data
-                        saveFollowData();
+                            //Save Follow data
+                            saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
 
+                            //follow
+                            context.log(" [인스타 루프] : 팔로우 했습니다");
+                        }
+                        else
+                        {
+                            // otherwise we have to wait again
 
-                        //follow
-                        context.log(" [인스타 루프] : 팔로우 했습니다");
+                            // caculate appropriate waiting time
+                            //대기 타다가 팔로우
+                            DateTime now = DateTime.Now;
+                            //context.log(now.ToString() + "현시각");
+                            //context.log(follow_time.ToString() + "팔로우한 시각");
+                            //context.log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
+                            Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
+                                .Click();
+
+                            //Save Follow data
+                            saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
+
+                            context.log(" [인스타 루프] : 팔로우 했습니다");
+
+                        }
+
+                        Thread.Sleep(rnd.Next(1000, 3000));
                     }
-                    else
+                    catch (Exception e)
                     {
-                        // otherwise we have to wait again
-
-                        // caculate appropriate waiting time
-                        //대기 타다가 팔로우
-                        DateTime now = DateTime.Now;
-                        //context.log(now.ToString() + "현시각");
-                        //context.log(follow_time.ToString() + "팔로우한 시각");
-                        //context.log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
-                        Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                            .Click();
-
-                        //Save Follow data
-                        saveFollowData();
-                        //follow
-                        context.log(" [인스타 루프] : 팔로우 했습니다");
-
+                        //failed to follow after waiting
+                        context.log(" [인스타 루프] : 팔로우에 실패했습니다");
                     }
 
-                    Thread.Sleep(rnd.Next(1000, 3000));
                 }
-                catch (Exception e)
+                //다른모양의 팔로우 
+                // different figure of follow button
+                else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")))
                 {
-                    //failed to follow after waiting
-                    context.log(" [인스타 루프] : 팔로우에 실패했습니다");
+
+                    try
+                    {
+                        //팔로우를 찾아서 있으면 진행 없으면 에러
+                        Assert.AreEqual("팔로우",
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
+                                .Text);
+
+                        if (follow_time_gap(delay_follow))
+                        {
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
+                                .Click();
+
+                            //Save Follow data
+                            saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
+
+                            context.log(" [인스타 루프] : 팔로우 했습니다");
+                        }
+                        else
+                        {
+
+                            //대기 타다가 팔로우
+                            DateTime now = DateTime.Now;
+                            Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+                            driver.FindElement(
+                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
+                                .Click();
+
+                            //Save Follow data
+                            saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
+
+                            context.log(" [인스타 루프] : 팔로우 했습니다");
+                        }
+                        Thread.Sleep(rnd.Next(1000, 3000));
+                    }
+                    catch (Exception e)
+                    {
+                        //failed to follow after waiting
+                        context.log(" [인스타 루프] : 팔로우에 실패했습니다");
+                    }
                 }
 
+                follow_time = DateTime.Now;
             }
-            //다른모양의 팔로우 
-            // different figure of follow button
-            else if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")))
-            {
-
-                try
-                {
-                    //팔로우를 찾아서 있으면 진행 없으면 에러
-                    Assert.AreEqual("팔로우",
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
-                            .Text);
-
-                    if (follow_time_gap(delay_follow))
-                    {
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
-                            .Click();
-
-                        //Save Follow data
-                        saveFollowData();
-
-                        context.log(" [인스타 루프] : 팔로우 했습니다");
-                    }
-                    else
-                    {
-
-                        //대기 타다가 팔로우
-                        DateTime now = DateTime.Now;
-                        Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
-                        driver.FindElement(
-                                By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
-                            .Click();
-
-                        //Save Follow data
-                        saveFollowData();
-
-                        context.log(" [인스타 루프] : 팔로우 했습니다");
-                    }
-                    Thread.Sleep(rnd.Next(1000, 3000));
-                }
-                catch (Exception e)
-                {
-                    //failed to follow after waiting
-                    context.log(" [인스타 루프] : 팔로우에 실패했습니다");
-                }
-            }
-
-            follow_time = DateTime.Now;
-
+            else { context.log("Follow Limit reached"); }
         }
 
 

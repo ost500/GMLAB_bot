@@ -57,7 +57,7 @@ namespace easygram
 
             insta_procedure.follow_time = DateTime.Now;
             insta_procedure.like_time = DateTime.Now;
-            
+
             //like_thr = new Thread(ipchanger.StartListening);
             //like_thr.Start();
             ipchanger.StartListening();
@@ -144,14 +144,19 @@ namespace easygram
                     req_run.like_loop(1, req_run.require_like_count());
 
 
+                    //update the Likes and comments
+                    insta_run.saveLikesCount();
+                    insta_run.saveCommentsCount();
+                    insta_run.saveFollowsCount();
+
+
                     //Run Unfollow Procedure if is checked
                     if (context.checkBox3.Checked)
                     {
                         insta_run.unfollow();
                     }
 
-                    //store of two numbers
-                   // insta_run.update_followers();
+             
 
                     //store of two numbers
                     insta_run.store_followers();
@@ -168,7 +173,7 @@ namespace easygram
                     }
                     
 
-                    
+
 
 
 
@@ -193,9 +198,9 @@ namespace easygram
                     context.log(" [이지그램] : 에러 발생");
                     insta_run.quit();
                 }
-                
-                
-                
+
+
+
 
 
             }

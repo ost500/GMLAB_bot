@@ -19,11 +19,14 @@ namespace easygram
         public Login_Form()
         {
             InitializeComponent();
-            
+
         }
 
+<<<<<<< HEAD
        
 
+=======
+>>>>>>> f8dd3238c5aa0d96ceff1f0a2667262a90d3e84f
 
         private void textBox1_Enter(object sender, EventArgs e)
         {
@@ -44,29 +47,32 @@ namespace easygram
                 values["mb_id"] = textBox1.Text;
                 values["mb_password"] = textBox2.Text;
                 values["easygram"] = "K";
-
-                var response = client.UploadValues("http://www.easygram.kr/manager/bbs/login_check.php", values);
-
-                var responseString = Encoding.Default.GetString(response);
-
-                if (responseString == "clear")
+                try
                 {
-                    MessageBox.Show(" [이지그램] : 로그인 성공");
-                    string user = values["mb_id"];
+                    var response = client.UploadValues("http://www.easygram.kr/manager/bbs/login_check.php", values);
+
+                    var responseString = Encoding.Default.GetString(response);
+
+                    if (responseString == "clear")
+                    {
+                        MessageBox.Show(" [이지그램] : 로그인 성공");
+                        string user = values["mb_id"];
 
 
-                    this.Hide();
+                        this.Hide();
 
-                    Form1 mainForm1 = new Form1(user);
-                    mainForm1.Show();
+                        Form1 mainForm1 = new Form1(user);
+                        mainForm1.Show();
 
 
+                    }
+                    else
+                    {
+
+                        MessageBox.Show(" [이지그램] 로그인 실패");
+                    }
                 }
-                else
-                {
-
-                    MessageBox.Show(" [이지그램] 로그인 실패");
-                }
+                catch { MessageBox.Show("Please Check Your Internet Connection"); }
             }
         }
     }
