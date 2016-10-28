@@ -143,8 +143,8 @@ namespace easygram
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
-                string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
-                             " and a.group_id=b.group_id  ORDER BY b.work_number";
+                string sql = "SELECT a.mb_id,b.comment FROM insta_comment_group as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
+                             " and a.no=b.group_id  ORDER BY b.work_number";
                 //   context.log(sql);
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds_comment, "comments");
@@ -173,17 +173,13 @@ namespace easygram
         ////////// Check HAsh_tag function Begins  //////////
         public DataRow check_hashtag()
         {
-
             ds = new DataSet();
-
             try
             {
-
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
-
-                string sql = "SELECT * FROM insta_tag_my WHERE mb_id = '" + context.user + "'";
-
+                string sql = "SELECT a.mb_id, b.tag FROM insta_tag_group as a, insta_tag as b WHERE a.mb_id = '" + context.user + "'" +
+                             " and a.no=b.group_id  ORDER BY b.work_number"; 
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "tags");
@@ -191,15 +187,13 @@ namespace easygram
 
                 if (ds.Tables.Count > 0)
                 {
-                    return ds.Tables[0].Rows[0];
+                    return ds.Tables[0].Rows[0]; 
                 }
                 else { return null; }
             }
             catch (Exception e)
             {
-
                 return null;
-
             }
 
         }
@@ -216,13 +210,11 @@ namespace easygram
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
-                string sql = "SELECT a.mb_id,b.comment FROM insta_comment_my as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
-                             " and a.group_id=b.group_id  ORDER BY b.work_number";
+                string sql = "SELECT a.mb_id,b.comment FROM insta_comment_group as a, insta_comment as b  WHERE a.mb_id = '" + context.user + "'" +
+                             " and a.no=b.group_id  ORDER BY b.work_number";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "comments");
-
-
 
 
                 if (ds.Tables.Count > 0)
@@ -418,20 +410,15 @@ namespace easygram
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql =
-                    "SELECT insta_tag.no, insta_tag.tag, insta_tag_my.mb_id " +
-                    "FROM insta_tag, insta_tag_my " +
-                    "WHERE insta_tag_my.group_id = insta_tag.group_id " +
-                    "AND insta_tag_my.mb_id = '" + context.user + "' " +
-                    "ORDER BY work_number";
+                string sql ="SELECT a.mb_id,b.no, b.tag FROM insta_tag_group as a, insta_tag as b WHERE a.mb_id = '" + context.user + "'" +
+                             " and a.no=b.group_id  ORDER BY b.work_number";
+               
+
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
 
-
-
                 if (ds.Tables.Count > 0)
                 {
-
 
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();

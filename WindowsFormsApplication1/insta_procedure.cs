@@ -267,7 +267,7 @@ namespace easygram
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 3;
+                return 72;
             }
             else
             {
@@ -1261,7 +1261,7 @@ namespace easygram
 
                                             //context.log(" Duration =" + now.Subtract(time_whenfollowed).TotalHours.ToString() + " \n");                     
 
-                                            if (duration > 72)
+                                            if (duration > delay_unfollow)
                                             {
                                                 //Check if user is already in the list or not
                                                 if (not_unfollow_list.Count > 0)
