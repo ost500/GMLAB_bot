@@ -28,23 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.iTalk_ProgressIndicator1 = new iTalk.iTalk_ProgressIndicator();
             this.iTalk_ThemeContainer1 = new iTalk.iTalk_ThemeContainer();
             this.iTalk_HeaderLabel1 = new iTalk.iTalk_HeaderLabel();
+            this.iTalk_ProgressIndicator1 = new iTalk.iTalk_ProgressIndicator();
             this.iTalk_ThemeContainer1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // iTalk_ProgressIndicator1
-            // 
-            this.iTalk_ProgressIndicator1.Location = new System.Drawing.Point(74, 40);
-            this.iTalk_ProgressIndicator1.MinimumSize = new System.Drawing.Size(80, 80);
-            this.iTalk_ProgressIndicator1.Name = "iTalk_ProgressIndicator1";
-            this.iTalk_ProgressIndicator1.P_AnimationColor = System.Drawing.Color.DimGray;
-            this.iTalk_ProgressIndicator1.P_AnimationSpeed = 100;
-            this.iTalk_ProgressIndicator1.P_BaseColor = System.Drawing.Color.DarkGray;
-            this.iTalk_ProgressIndicator1.Size = new System.Drawing.Size(131, 131);
-            this.iTalk_ProgressIndicator1.TabIndex = 0;
-            this.iTalk_ProgressIndicator1.Text = "iTalk_ProgressIndicator1";
             // 
             // iTalk_ThemeContainer1
             // 
@@ -62,7 +50,7 @@
             this.iTalk_ThemeContainer1.SmartBounds = false;
             this.iTalk_ThemeContainer1.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultLocation;
             this.iTalk_ThemeContainer1.TabIndex = 1;
-            this.iTalk_ThemeContainer1.Text = "iTalk_ThemeContainer1";
+            this.iTalk_ThemeContainer1.Text = "이지그램 업데이트";
             // 
             // iTalk_HeaderLabel1
             // 
@@ -76,6 +64,18 @@
             this.iTalk_HeaderLabel1.TabIndex = 1;
             this.iTalk_HeaderLabel1.Text = "업데이트 확인 중";
             // 
+            // iTalk_ProgressIndicator1
+            // 
+            this.iTalk_ProgressIndicator1.Location = new System.Drawing.Point(74, 40);
+            this.iTalk_ProgressIndicator1.MinimumSize = new System.Drawing.Size(80, 80);
+            this.iTalk_ProgressIndicator1.Name = "iTalk_ProgressIndicator1";
+            this.iTalk_ProgressIndicator1.P_AnimationColor = System.Drawing.Color.DimGray;
+            this.iTalk_ProgressIndicator1.P_AnimationSpeed = 100;
+            this.iTalk_ProgressIndicator1.P_BaseColor = System.Drawing.Color.DarkGray;
+            this.iTalk_ProgressIndicator1.Size = new System.Drawing.Size(131, 131);
+            this.iTalk_ProgressIndicator1.TabIndex = 0;
+            this.iTalk_ProgressIndicator1.Text = "iTalk_ProgressIndicator1";
+            // 
             // Version_Control_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -85,7 +85,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MinimumSize = new System.Drawing.Size(126, 39);
             this.Name = "Version_Control_form";
-            this.Text = "iTalk_ThemeContainer1";
+            this.Text = "이지그램 업데이트";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.iTalk_ThemeContainer1.ResumeLayout(false);
             this.iTalk_ThemeContainer1.PerformLayout();

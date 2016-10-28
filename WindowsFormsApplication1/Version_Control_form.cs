@@ -46,16 +46,14 @@ namespace easygram
                     sftp.Connect();
                     List<SftpFile> fileList = sftp.ListDirectory("./easygram/easygram_update/").ToList();
 
-                    MessageBox.Show(fileList.Count.ToString());
+                    
                     foreach (var ftpfile in fileList)
                     {
 
 
                         if (ftpfile.Name != "." && ftpfile.Name != "..")
                         {
-                            MessageBox.Show(ftpfile.Name);
-                            MessageBox.Show(ftpfile.FullName);
-
+                            
                             using (var filea = File.OpenWrite(ftpfile.Name))
                             {
                                 sftp.DownloadFile(ftpfile.FullName, filea);
@@ -66,6 +64,7 @@ namespace easygram
 
                     sftp.Disconnect();
                 }
+                conn.Close();
 
                 Process.Start(file.FullName);
 
@@ -74,6 +73,7 @@ namespace easygram
             else
             {
                 this.Close();
+                Application.Run(new Login_Form());
             }
         }
 

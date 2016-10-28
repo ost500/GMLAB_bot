@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.iTalk_ThemeContainer1 = new iTalk.iTalk_ThemeContainer();
-            this.button2 = new System.Windows.Forms.Button();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.iTalk_Button_21 = new iTalk.iTalk_Button_2();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -76,7 +75,6 @@
             // iTalk_ThemeContainer1
             // 
             this.iTalk_ThemeContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.iTalk_ThemeContainer1.Controls.Add(this.button2);
             this.iTalk_ThemeContainer1.Controls.Add(this.radioButton1);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_Button_21);
             this.iTalk_ThemeContainer1.Controls.Add(this.groupBox2);
@@ -102,16 +100,6 @@
             this.iTalk_ThemeContainer1.TabIndex = 18;
             this.iTalk_ThemeContainer1.Text = "이지그램";
             this.iTalk_ThemeContainer1.Click += new System.EventHandler(this.iTalk_ThemeContainer1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(29, 41);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 37);
-            this.button2.TabIndex = 25;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // radioButton1
             // 
@@ -562,7 +550,6 @@
         public System.Windows.Forms.TextBox time_finish;
         public System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.Button button2;
     }
 }
 

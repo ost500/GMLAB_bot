@@ -69,10 +69,10 @@ namespace easygram
             //    }
             //    catch (Exception ex)
             //    {
-                    
+
             //    }
 
-                
+
             //}
 
 
@@ -113,36 +113,48 @@ namespace easygram
             {
                 t = conn_manager.SelectData();
 
-               
+
                 r = t.Rows[0];
-
-
-                string now_date = DateTime.Now.ToString("yyyy-MM-dd");
-            
-                string latest_date;
-
-
-                foreach (DataRow r in t.Rows)
+                try
                 {
-                    listBox1.Items.Add(r["user_id"].ToString());
+                    string now_date = DateTime.Now.ToString("yyyy-MM-dd");
 
-                    latest_date = r["latest_date"].ToString();
+                    string latest_date;
 
-                    DateTime dt = DateTime.ParseExact(latest_date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                    latest_date = dt.ToString("yyyy-MM-dd");
-                    //if latest_date is not equal to current date then upadte date and set like and comment count to 0
-                    if (latest_date != now_date)
+
+                    foreach (DataRow r2 in t.Rows)
                     {
-                        conn_manager.update_count_date(r["user_id"].ToString(), now_date);
+                        listBox1.Items.Add(r2["user_id"].ToString());
+
+
+                        latest_date = r2["latest_date"].ToString();
+                        try
+                        {
+                            DateTime dt = DateTime.ParseExact(r2["latest_date"].ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            latest_date = dt.ToString("yyyy-MM-dd");
+                        }
+                        catch (Exception) { }
+
+                        //if latest_date is not equal to current date then upadte date and set like and comment count to 0
+                        if (latest_date != now_date)
+                        {
+                            conn_manager.update_count_date(r2["user_id"].ToString(), now_date);
+                        }
+
                     }
-                   
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.StackTrace);
+                }
+
+
 
 
                 //Select the current item in the list
                 listBox1.Focus();
                 listBox1.SetSelected(0, true);
-            
+
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
 
                 if (checkCommentStatus() && checkHashTag())
@@ -167,7 +179,7 @@ namespace easygram
 
             catch (Exception ex) { log("No Users Record found!!!"); log(ex.StackTrace); }
 
-            
+
 
         }
 
@@ -235,11 +247,6 @@ namespace easygram
         }
 
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         public void start_button_valid(string LorP)
         {
             if (LorP == "login")
@@ -270,7 +277,7 @@ namespace easygram
             try
             {
                 DataRow dr = conn_manager.Select_job(selected_account);
-              
+
                 if (dr == null)
                 {
                     limit_comment.Text = "None";
@@ -314,7 +321,7 @@ namespace easygram
 
 
         }
-        
+
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -453,9 +460,9 @@ namespace easygram
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            
-            
-            
+
+
+
 
             using (var sftp = new SftpClient("gmlab.kr", 22, "www_user", "qwqw12"))
             {

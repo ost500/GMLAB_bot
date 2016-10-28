@@ -558,7 +558,7 @@ namespace easygram
             if (!checkRunStatus(current_user))
             {
                 context.log("Thank You!!!!");
-                Thread.Sleep(rnd.Next(4000, 5000));
+                //Thread.Sleep(rnd.Next(4000, 5000));
                 return;
             }
 

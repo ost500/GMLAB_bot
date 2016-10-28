@@ -22,11 +22,7 @@ namespace easygram
 
         }
 
-<<<<<<< HEAD
-       
 
-=======
->>>>>>> f8dd3238c5aa0d96ceff1f0a2667262a90d3e84f
 
         private void textBox1_Enter(object sender, EventArgs e)
         {
