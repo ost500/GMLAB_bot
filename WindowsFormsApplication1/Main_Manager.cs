@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class Main_Manager
     {
@@ -57,7 +57,7 @@ namespace WindowsFormsApplication1
 
             insta_procedure.follow_time = DateTime.Now;
             insta_procedure.like_time = DateTime.Now;
-            
+
             //like_thr = new Thread(ipchanger.StartListening);
             //like_thr.Start();
             ipchanger.StartListening();
@@ -138,20 +138,25 @@ namespace WindowsFormsApplication1
 
                     //3. 요청 유저   This Procedure is Mandatory
                     //팔로우, 좋아요
-                   Request_proc req_run = new Request_proc(context, conn_manager);
+                    Request_proc req_run = new Request_proc(context, conn_manager);
                     req_run.require();
 
                     req_run.like_loop(1, req_run.require_like_count());
 
-    
+
+                    //update the Likes and comments
+                    insta_run.saveLikesCount();
+                    insta_run.saveCommentsCount();
+                    insta_run.saveFollowsCount();
+
+
                     //Run Unfollow Procedure if is checked
                     if (context.checkBox3.Checked)
                     {
                         insta_run.unfollow();
                     }
 
-                    //store of two numbers
-                   // insta_run.update_followers();
+             
 
                     //store of two numbers
                     insta_run.store_followers();
@@ -162,36 +167,40 @@ namespace WindowsFormsApplication1
                     //connection close();
                     conn_manager.quit_conn();
 
-                    ipchanger.send_change();
-
+                    if(ipchanger != null)
+                    {
+                        ipchanger.send_change();
+                    }
                     
+
+
 
 
 
                 }
                 catch (NullReferenceException ex)
                 {
-                    //context.log(ex.StackTrace);
+                    context.log(ex.StackTrace);
                     context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
                     insta_run.quit();
                 }
 
                 catch (MySqlException ex)
                 {
-                    //context.log(ex.StackTrace);
+                    context.log(ex.StackTrace);
                     context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
                     insta_run.quit();
                 }
 
                 catch (Exception ex)
                 {
-                    //context.log(ex.StackTrace);
+                    context.log(ex.StackTrace);
                     context.log(" [이지그램] : 에러 발생");
                     insta_run.quit();
                 }
-                
-                
-                
+
+
+
 
 
             }

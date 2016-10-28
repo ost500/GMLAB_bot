@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1
+
+namespace easygram
 {
     class RegisteredUser_proc : insta_procedure
     {
@@ -15,6 +16,7 @@ namespace WindowsFormsApplication1
         {
             
         }
+      
 
         public void random_user()
         {

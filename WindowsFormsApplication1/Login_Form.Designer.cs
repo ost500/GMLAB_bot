@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApplication1
+﻿namespace easygram
 {
     partial class Login_Form
     {

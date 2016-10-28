@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     public class sql_connection_manager
     {
@@ -21,13 +21,13 @@ namespace WindowsFormsApplication1
         {
 
             
-            String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;";
+            String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;Allow Zero Datetime=true";
             conn = new MySqlConnection(strConn);
 
             conn.Open();
-            
+          
 
-            
+
 
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
             //context.richTextBox1.Text += cmd.ExecuteNonQuery();
@@ -47,28 +47,30 @@ namespace WindowsFormsApplication1
             ds = new DataSet();
             try
             {
-
+               
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
                 context.log(" [데이터베이스] : " + context.user + "의 인스타그램 계정을 가져옵니다");
-                string sql = "SELECT a.*,b.ip,b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
-                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
-                adpt.Fill(ds, "members");
 
-
+                string sql = "SELECT a.*, b.ip, b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
+             
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql,conn);
+         
+                adpt.Fill(ds,"members");      
 
 
                 if (ds.Tables.Count > 0)
                 {
-
+                   
                     return ds.Tables[0];
                 }
-                else { return null; }
+                else {  return null; }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+               
+              //  context.log("catch "+ex.ToString());
                 return null;
             }
 
@@ -275,7 +277,7 @@ namespace WindowsFormsApplication1
             cmd3.ExecuteNonQuery();
 
         }
-
+       
 
         public void update_job(string current_user)
         {
@@ -289,26 +291,67 @@ namespace WindowsFormsApplication1
 
             int time_start = Int32.Parse(context.time_start.Text) ;
             int time_finish = Int32.Parse(context.time_finish.Text) ;
-           
-            MySqlCommand cmd5 = new MySqlCommand("UPDATE insta_job SET limit_comments='"+ limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ", conn);
-            if (cmd5.ExecuteNonQuery() > 0)
+
+            if (time_start > time_finish) { context.log("Start time must be less than End Time"); }
+            else
             {
 
-                context.log("Record saved successfully.");
+                if (conn.State == ConnectionState.Closed) { conn.Open(); }
+
+                context.log("Connection: " + conn.State);
+                // context.log("UPDATE insta_job SET limit_comments = '"+ limit_comment + "', limit_follows = '" + limit_follow + "', limit_likes = '" + limit_like + "', delay_follow = '" + delay_follow + "', delay_like = '" + delay_like + "', delay_comment = '" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ");
+                MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_job SET limit_comments='" + limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish + "' WHERE user_id = '" + current_user + "' ", conn);
+
+                if (cmd3.ExecuteNonQuery() > 0)
+                {
+                    context.log("Record saved successfully.");
+                }
             }
+            
         }
 
+        public void update_count_date(string current_user, string latest_date)
+        {
+         
+            MySqlCommand cmd6 = new MySqlCommand("UPDATE insta_account SET likes_count ='0',comments_count ='0' , latest_date='" + latest_date + "' WHERE user_id = '" + current_user + "'", conn);
+            cmd6.ExecuteNonQuery();
 
+        }
+        public void update_likescount(string current_user, int likes_count)
+        {
+
+            MySqlCommand cmd7 = new MySqlCommand("UPDATE insta_account SET likes_count ='"+likes_count+ "'  WHERE user_id = '" + current_user + "'", conn);
+            cmd7.ExecuteNonQuery();
+
+        }
+        public void update_commentscount(string current_user, int comments_count)
+        {
+
+            MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET comments_count ='" + comments_count+"' WHERE user_id = '" + current_user + "'", conn);
+            cmd8.ExecuteNonQuery();
+
+        }
+
+        public void update_followscount(string current_user, int follows_count)
+        {
+
+            MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET follows_count ='" + follows_count + "' WHERE user_id = '" + current_user + "'", conn);
+            cmd8.ExecuteNonQuery();
+
+        }
         ////////// check_job and select_job function begins   //////////
         public DataRow Select_job(string user_id)
         {
             DataSet ds = new DataSet();
             try
             {
-
+                 if (conn.State == ConnectionState.Closed) { conn.Open(); }
+                // context.log("Connection" + conn.State);
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 string sql = "SELECT * FROM insta_job WHERE user_id ='" + user_id + "'";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+               
+
                 adpt.Fill(ds, "job");
 
 

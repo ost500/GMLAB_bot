@@ -4,9 +4,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WindowsFormsApplication1;
+using easygram;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     public class IPchange
     {
@@ -124,7 +124,10 @@ namespace WindowsFormsApplication1
             }
 
             //mysql 재연결
+
             //conn.mysql_refresh();
+
+            context.log(" [아이피 변경] : 연결 성공!");
 
 
             //시작 버튼 활성화 시도

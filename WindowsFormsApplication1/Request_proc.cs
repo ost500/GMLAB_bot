@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class Request_proc : insta_procedure
     {
@@ -106,7 +106,7 @@ namespace WindowsFormsApplication1
 
             if (IsElementPresent(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div")))
             {
-                context.log("FOUND FIRST PICTURE##################");
+                
                 IWebElement img_element = driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/div/div/div/a/div"));
 
                 img_element.Click();
