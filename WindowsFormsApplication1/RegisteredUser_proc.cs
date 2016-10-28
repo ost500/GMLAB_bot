@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class RegisteredUser_proc : insta_procedure
     {

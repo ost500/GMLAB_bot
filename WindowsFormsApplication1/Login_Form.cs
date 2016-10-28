@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     public partial class Login_Form : Form
     {
@@ -19,6 +21,7 @@ namespace WindowsFormsApplication1
             InitializeComponent();
 
         }
+
 
 
         private void textBox1_Enter(object sender, EventArgs e)

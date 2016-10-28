@@ -1308,8 +1308,16 @@ namespace iTalk
         protected override void OnCreateControl()
         {
             base.OnCreateControl();
-            Point location = new Point(checked(this.FindForm().Width - 81), -1);
-            this.Location = location;
+            try
+            {
+                Point location = new Point(checked(this.FindForm().Width - 81), -1);
+                this.Location = location;
+            }
+            catch (Exception)
+            {
+
+            }
+            
         }
 
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
@@ -2236,7 +2244,7 @@ namespace iTalk
     #region Big TextBox
 
     [DefaultEvent("TextChanged")]
-    class iTalk_TextBox_Big : Control
+    public class iTalk_TextBox_Big : Control
     {
         #region Variables
 
@@ -3682,6 +3690,7 @@ namespace iTalk
             BackColor = Color.Transparent;
             Font = new Font("Segoe UI", 10);
             Width = 132;
+            Height = 50;
         }
 
         private void InvalidateControls()

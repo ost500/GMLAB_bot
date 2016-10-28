@@ -7,8 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class HashTag_proc : insta_procedure
     {
@@ -19,6 +22,7 @@ namespace WindowsFormsApplication1
         {
 
         }
+
 
         public new void like_loop(int follow_count, int like_count = 1000)
         {
@@ -89,6 +93,7 @@ namespace WindowsFormsApplication1
             }
             else { context.log("Follow Limit reached"); }
 
+
             //finding first picture
             IWebElement img_element;
             bool image_startflag = false;
@@ -118,6 +123,7 @@ namespace WindowsFormsApplication1
 
                 img_element.Click();
 
+
                 DateTime currentTime = DateTime.Now;
                 DateTime future = currentTime.AddMinutes(6);
                 while (follow_count != 0)
@@ -125,6 +131,7 @@ namespace WindowsFormsApplication1
                     currentTime = DateTime.Now;
 
                     Thread.Sleep(rnd.Next(1000, 3000));
+
 
                     try
                     {
@@ -224,6 +231,7 @@ namespace WindowsFormsApplication1
                                 break;
 
                             }
+
 
                         }
                     }

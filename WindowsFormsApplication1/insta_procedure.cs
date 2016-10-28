@@ -9,8 +9,12 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Collections;
+using System.Runtime.Remoting.Contexts;
+using System.Security.Principal;
+using System.Security.AccessControl;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     class insta_procedure
     {
@@ -28,8 +32,10 @@ namespace WindowsFormsApplication1
         protected Random rnd = new Random();
 
 
+
         public DataTable t;
         public DataRow r;
+
 
         //follow 시간 like 시간
         public static DateTime follow_time;
@@ -552,7 +558,7 @@ namespace WindowsFormsApplication1
             if (!checkRunStatus(current_user))
             {
                 context.log("Thank You!!!!");
-                Thread.Sleep(rnd.Next(4000, 5000));
+                //Thread.Sleep(rnd.Next(4000, 5000));
                 return;
             }
 
@@ -594,12 +600,19 @@ namespace WindowsFormsApplication1
             //Set the Browser User Agent For current user
             co.AddArguments("--user-agent=" + user_agent);
             */
-            var driverService = ChromeDriverService.CreateDefaultService("C:\\Program Files (x86)\\Google\\Chrome\\Application");
+            
+
+
+            var options = new ChromeOptions();
+
+
+            var driverService = ChromeDriverService.CreateDefaultService(Directory.GetCurrentDirectory());
             driverService.HideCommandPromptWindow = true;
             //driverService.Port = my_port;
             //co.BinaryLocation = "C:\\Program Files (x86)\\Google\\Chrome\\Application";
 
-
+            
+            //driver = new ChromeDriver(co);
             driver = new ChromeDriver(driverService, co);
             //driver = new ChromeDriver("C:\\Program Files (x86)\\Google\\Chrome\\Application");
 
@@ -1663,6 +1676,7 @@ namespace WindowsFormsApplication1
                 acceptNextAlert = true;
             }
         }
+
 
 
 

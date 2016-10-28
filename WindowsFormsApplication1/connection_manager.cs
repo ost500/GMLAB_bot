@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1
+namespace easygram
 {
     public class sql_connection_manager
     {
@@ -52,11 +52,13 @@ namespace WindowsFormsApplication1
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
                 context.log(" [데이터베이스] : " + context.user + "의 인스타그램 계정을 가져옵니다");
+
                 string sql = "SELECT a.*, b.ip, b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
              
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql,conn);
          
                 adpt.Fill(ds,"members");      
+
 
                 if (ds.Tables.Count > 0)
                 {
