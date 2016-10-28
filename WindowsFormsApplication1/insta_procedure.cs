@@ -705,16 +705,23 @@ namespace easygram
 
         public void go_to_there(string where_to)
         {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            for (int i = 0; i <= 150; i += 20)
+            try
             {
-                js.ExecuteScript("window.scrollTo(" + i + ", " + (i + 20) + ");");
-                Thread.Sleep(rnd.Next(100, 300));
+                IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+                for (int i = 0; i <= 150; i += 20)
+                {
+                    js.ExecuteScript("window.scrollTo(" + i + ", " + (i + 20) + ");");
+                    Thread.Sleep(rnd.Next(100, 300));
+                }
+                for (int i = 150; i >= 0; i -= 20)
+                {
+                    js.ExecuteScript("window.scrollTo(" + i + ", " + (i - 20) + ");");
+                    Thread.Sleep(rnd.Next(100, 300));
+                }
             }
-            for (int i = 150; i >= 0; i -= 20)
+            catch (Exception)
             {
-                js.ExecuteScript("window.scrollTo(" + i + ", " + (i - 20) + ");");
-                Thread.Sleep(rnd.Next(100, 300));
+
             }
 
 

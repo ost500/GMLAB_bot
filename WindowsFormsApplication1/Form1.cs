@@ -192,6 +192,7 @@ namespace easygram
             richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
             richTextBox1.Select(1, 13);
             richTextBox1.SelectionColor = Color.RosyBrown;
+            richTextBox1.ScrollToCaret();
 
         }
 

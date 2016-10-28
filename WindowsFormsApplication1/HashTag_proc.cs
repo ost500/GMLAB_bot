@@ -244,20 +244,27 @@ namespace easygram
                         {
                             if (comment_time_gap(delay_comment))
                             {
+                                try
+                                {
+                                    t = conn_manager.Select_comments();
 
-                                t = conn_manager.Select_comments();
+                                    string comment = t.Rows[0]["comment"].ToString();
 
-                                string comment = t.Rows[0]["comment"].ToString();
+                                    //팔로우를 찾아서 있으면 진행 없으면 에러
+                                    driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
+                                    driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
+                                    //update worknumber  of comment
+                                    conn_manager.Update_comment_worknum(comment);
+                                    //Set Comments Count for today
+                                    comments_count = comments_count + 1;
 
-                                //팔로우를 찾아서 있으면 진행 없으면 에러
-                                driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-                                driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
-                                //update worknumber  of comment
-                                conn_manager.Update_comment_worknum(comment);
-                                //Set Comments Count for today
-                                comments_count = comments_count + 1;
-
-                                context.log(" [인스타 루프] : 댓글을 입력했습니다");
+                                    context.log(" [인스타 루프] : 댓글을 입력했습니다");
+                                }
+                                catch (Exception)
+                                {
+                                    context.log(" [인스타 루프] : 입력할 댓글이 없습니다");
+                                }
+                                
 
                             }
                             Thread.Sleep(rnd.Next(1000, 3000));
