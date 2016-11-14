@@ -86,7 +86,8 @@ namespace easygram
         public string getCurrentPath()
         {
             string currentDirName = Directory.GetCurrentDirectory();
-            DirectoryInfo directoryInfo = Directory.GetParent(Directory.GetParent(currentDirName).ToString());
+            //     DirectoryInfo directoryInfo = Directory.GetParent(Directory.GetParent(currentDirName).ToString());
+            DirectoryInfo directoryInfo = Directory.GetParent(currentDirName);
             string path = directoryInfo.ToString();
             return path;
         }
@@ -189,7 +190,7 @@ namespace easygram
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 400;
+                return 100;
             }
             else
             {
@@ -206,7 +207,7 @@ namespace easygram
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 50;
+                return 1000;
             }
             else
             {
@@ -294,7 +295,7 @@ namespace easygram
             //context.log(now.ToString());
             //context.log(like_time.ToString());
             //context.log(now.Subtract(follow_time).TotalSeconds.ToString() + "Like_time_gap");
-
+            string remaining_like_time = now.Subtract(like_time).TotalSeconds.ToString("##.###");
             if (now.Subtract(like_time).TotalSeconds > delay_like)
             {
                 like_time = DateTime.Now;
@@ -308,7 +309,7 @@ namespace easygram
                 //context.log("no like");
 
                 context.log(" [인스타 루프] 좋아요 : 딜레이 간격을 위해 휴식합니다");
-                context.log(" [인스타 루프] 좋아요 : " + delay_like.ToString("##.###") + "초 간격");
+                context.log(" [인스타 루프] 좋아요 : " +remaining_like_time + "[" + delay_like + "] 초 간격");
                 return false;
             }
         }
@@ -321,7 +322,7 @@ namespace easygram
             //context.log(now.ToString());
             //context.log(follow_time.ToString());
             //context.log(now.Subtract(follow_time).TotalMinutes.ToString() + "follow_time_gap");
-
+            string remaining_follow_time = now.Subtract(follow_time).TotalMinutes.ToString("##.###");
             if (now.Subtract(follow_time).TotalMinutes > delay_follow)
             {
                 follow_time = DateTime.Now;
@@ -333,7 +334,7 @@ namespace easygram
                 //context.log("no follow");
 
                 context.log(" [인스타 루프] 팔로우 : 딜레이 간격을 위해 휴식합니다");
-                context.log(" [인스타 루프] 팔로우 : " + delay_follow.ToString("##.###") + "분 간격");
+                context.log(" [인스타 루프] 팔로우 : "+ remaining_follow_time+ "[" + delay_follow + "] 분 간격");
                 return false;
             }
         }
@@ -349,7 +350,7 @@ namespace easygram
 
             //context.log(now.Subtract(comment_time).TotalSeconds.ToString() + "comment_time_gap");
 
-
+            string remaining_comment_time = now.Subtract(comment_time).TotalSeconds.ToString("##.###");
             if (now.Subtract(comment_time).TotalSeconds > delay_comment)
 
             {
@@ -361,7 +362,8 @@ namespace easygram
                 //context.context.log("no work");
                 //Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
                 context.log(" [인스타 루프] 댓글 : 딜레이 간격을 위해 휴식합니다");
-                context.log(" [인스타 루프] 댓글 : " + delay_comment.ToString("##.###") + "초 간격");
+                // context.log(" [인스타 루프] 댓글 : " + delay_comment.ToString("##.###") + "초 간격");
+                context.log(" [인스타 루프] 댓글 : "+ remaining_comment_time+"[" + delay_comment +"] 초 간격");
                 return false;
             }
         }
@@ -385,7 +387,7 @@ namespace easygram
                     //insert followed id into database
                     if (follow_data.Rows.Count > 0)
                     {
-                        context.log(current_user + " is already following" + followed);
+                        context.log(current_user + " is already following " + followed);
                     }
                     else
                     {
@@ -421,7 +423,7 @@ namespace easygram
         public void saveLikesCount()
         {
             //set time
-
+           
             conn_manager.update_likescount(current_user, likes_count);
             Thread.Sleep(rnd.Next(2000, 3000));
         }
@@ -430,15 +432,13 @@ namespace easygram
         {
             //set time
 
-
+           
             conn_manager.update_commentscount(current_user, comments_count);
             Thread.Sleep(rnd.Next(2000, 3000));
         }
         public void saveFollowsCount()
         {
             //set time
-
-
             conn_manager.update_followscount(current_user, follows_count);
             Thread.Sleep(rnd.Next(2000, 3000));
         }
@@ -574,11 +574,12 @@ namespace easygram
             limit_likes = getLimitLikes(current_user);
             limit_comments = getLimitComments(current_user);
             limit_follows = getLimitFollows(current_user);
-
+         
             //get today's counts
             likes_count = Int32.Parse(r["likes_count"].ToString());
-            comments_count = Int32.Parse(r["likes_count"].ToString());
-
+            comments_count = Int32.Parse(r["comments_count"].ToString());
+            follows_count = Int32.Parse(r["follows_count"].ToString());
+            
             //get all delays
             delay_like = getLikeDelay(current_user);
             delay_comment = getCommentDealy(current_user);
@@ -588,7 +589,19 @@ namespace easygram
 
             //Get current directory path and set charome cache path
             string currentDir = getCurrentPath();
-            string path = currentDir + "\\chrome_cache\\" + current_user.Trim();
+           // context.log(currentDir);
+            string path = currentDir + "\\Release\\chrome_cache\\" + current_user.Trim();
+         //   string path = "c:\\chrome_cache\\" + current_user.Trim();
+
+          /*  DirectoryInfo dirInfo = new DirectoryInfo(@"c:\chrome_cache");
+
+            DirectorySecurity dirSecurity = dirInfo.GetAccessControl();
+
+            dirSecurity.AddAccessRule(new FileSystemAccessRule
+                (Enviroment.Username,
+                FileSystemRights.ReadData, AccessControlType.Allow));
+
+            dirInfo.SetAccessControl(dirSecurity);*/
 
             ChromeOptions co = new ChromeOptions();
 
@@ -782,6 +795,8 @@ namespace easygram
                                 .Click();
                             //Save Follow data
                             saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
                             //clicked follow button
                             context.log(" [인스타 루프] : 팔로우 했습니다");
                         }
@@ -809,7 +824,8 @@ namespace easygram
 
                             //Save Follow data
                             saveFollowData();
-
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
                             context.log(" [인스타 루프] 팔로우 했습니다");
                         }
 
@@ -906,6 +922,8 @@ namespace easygram
 
                                     //Save Follow data
                                     saveFollowData();
+                                    //Set Follows Count for today
+                                    follows_count = follows_count + 1;
                                     context.log(" [인스타 루프] : 팔로우 했습니다");
 
                                     follow_count--;
@@ -965,7 +983,7 @@ namespace easygram
 
                             }
                             Thread.Sleep(rnd.Next(1000, 3000));
-                            Thread.Sleep(rnd.Next(1000, 3000));
+                           
                         }
 
                     }
@@ -1064,7 +1082,8 @@ namespace easygram
 
                             //Save Follow data
                             saveFollowData();
-
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
 
                             //follow
                             context.log(" [인스타 루프] : 팔로우 했습니다");
@@ -1086,7 +1105,9 @@ namespace easygram
 
                             //Save Follow data
                             saveFollowData();
-                            //follow
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
+
                             context.log(" [인스타 루프] : 팔로우 했습니다");
 
                         }
@@ -1121,6 +1142,8 @@ namespace easygram
 
                             //Save Follow data
                             saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
 
                             context.log(" [인스타 루프] : 팔로우 했습니다");
                         }
@@ -1136,6 +1159,8 @@ namespace easygram
 
                             //Save Follow data
                             saveFollowData();
+                            //Set Follows Count for today
+                            follows_count = follows_count + 1;
 
                             context.log(" [인스타 루프] : 팔로우 했습니다");
                         }

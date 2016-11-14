@@ -67,12 +67,11 @@ namespace easygram
         {
 
 
-
-            try
+            while (true)
             {
-                while (true)
-                {
 
+                try
+                {
                     for (int i = 1; i <= 10; i++)
                     {
                         if (ip_changing)
@@ -139,11 +138,14 @@ namespace easygram
 
                     //3. 요청 유저   This Procedure is Mandatory
                     //팔로우, 좋아요
-                    Request_proc req_run = new Request_proc(context, conn_manager);
-                    req_run.require();
+                    try
+                    {
+                        Request_proc req_run = new Request_proc(context, conn_manager);
+                        req_run.require();
 
-                    req_run.like_loop(1, req_run.require_like_count());
-
+                        req_run.like_loop(1, req_run.require_like_count());
+                    }
+                    catch { context.log("There is no request till now."); }
 
                     //update the Likes and comments
                     insta_run.saveLikesCount();
@@ -174,31 +176,31 @@ namespace easygram
                     }
 
 
-
-
-
                 }
-            }
-            catch (NullReferenceException ex)
-            {
-                //context.log(ex.StackTrace);
-                context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
-                insta_run.quit();
+                catch (NullReferenceException ex)
+                {
+                    //context.log(ex.StackTrace);
+                    context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
+                    insta_run.quit();
+                }
+
+                catch (MySqlException ex)
+                {
+                    //context.log(ex.StackTrace);
+                    context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
+                    insta_run.quit();
+                }
+
+                catch (Exception ex)
+                {
+                    //context.log(ex.StackTrace);
+                    context.log(" [이지그램] : 에러 발생");
+                    insta_run.quit();
+                }
+
+
             }
 
-            catch (MySqlException ex)
-            {
-                //context.log(ex.StackTrace);
-                context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
-                insta_run.quit();
-            }
-
-            catch (Exception ex)
-            {
-                //context.log(ex.StackTrace);
-                context.log(" [이지그램] : 에러 발생");
-                insta_run.quit();
-            }
 
 
 
