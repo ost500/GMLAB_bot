@@ -25,9 +25,10 @@ namespace easygram
             conn = new MySqlConnection(strConn);
 
             conn.Open();
-          
 
 
+
+            
 
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
             //context.richTextBox1.Text += cmd.ExecuteNonQuery();
@@ -53,8 +54,9 @@ namespace easygram
 
                 context.log(" [데이터베이스] : " + context.user + "의 인스타그램 계정을 가져옵니다");
 
-                string sql = "SELECT a.*, b.ip, b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' AND a.`status` = 1 AND b.is_profile = 1 AND b.posting > 2 and a.user_id=b.user_id  ORDER BY a.work_number";
-             
+                //string sql = "SELECT a.*, b.ip, b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' ORDER BY a.work_number";
+                string sql = "SELECT a.* FROM insta_account as a WHERE a.mb_id = '" + context.user + "' ORDER BY a.work_number";
+
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql,conn);
          
                 adpt.Fill(ds,"members");      
@@ -413,16 +415,17 @@ namespace easygram
                 string sql ="SELECT a.mb_id,b.no, b.tag FROM insta_tag_group as a, insta_tag as b WHERE a.mb_id = '" + context.user + "'" +
                              " and a.no=b.group_id  ORDER BY b.work_number";
                
-
+                
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
-
+                
+                
                 if (ds.Tables.Count > 0)
                 {
-
+                    
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
-
+                    
                     return ds.Tables[0].Rows[0];
                 }
                 else { return null; }

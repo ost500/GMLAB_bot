@@ -95,45 +95,52 @@ namespace easygram
         //CHECK  Run Status i.e. start and end time FOR A USER 
         public bool checkRunStatus(string user_id)
         {
-          
 
-            DataRow jobrow = conn_manager.Select_job(user_id);
-        
-            int start_time = Int32.Parse(jobrow["hour_between_start"].ToString());
-            int end_time = Int32.Parse(jobrow["hour_between_end"].ToString());
-           
-
-            int now_time = Int32.Parse(DateTime.Now.ToString("HH"));
-
-            Thread.Sleep(rnd.Next(3000, 4000));
-            //Procedure should not start if now time is not in between start and end time
-
-            if (jobrow == null)
+            try
             {
-                context.log(" [이지그램] : No job record  " + user_id);
-                context.log(" [이지그램] :  로그인 http://easygram.kr/ & 딜레이 시간 입력");
+                DataRow jobrow = conn_manager.Select_job(user_id);
 
-                //context.log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR " + user_id);
-                //context.log("PLEASE context.log IN HERE: http://easygram.kr/ & ADD DELAYS");
+                int start_time = Int32.Parse(jobrow["hour_between_start"].ToString());
+                int end_time = Int32.Parse(jobrow["hour_between_end"].ToString());
+
+
+                int now_time = Int32.Parse(DateTime.Now.ToString("HH"));
 
                 Thread.Sleep(rnd.Next(3000, 4000));
-                return true;
-            }
-            else
-            {
-                if ((start_time <= now_time) && (now_time <= end_time))
+                //Procedure should not start if now time is not in between start and end time
+
+                if (jobrow == null)
                 {
+                    context.log(" [이지그램] : No job record  " + user_id);
+                    context.log(" [이지그램] :  로그인 http://easygram.kr/ & 딜레이 시간 입력");
+
+                    //context.log("YOU NEED TO ENTER DELAY FOR LIKE , FOLLOW, COMMENT AND UNFOLLOW FOR " + user_id);
+                    //context.log("PLEASE context.log IN HERE: http://easygram.kr/ & ADD DELAYS");
+
                     Thread.Sleep(rnd.Next(3000, 4000));
                     return true;
-
                 }
                 else
                 {
-                    context.log("Please check your start or end time"); Thread.Sleep(rnd.Next(3000, 4000)); return false;
+                    if ((start_time <= now_time) && (now_time <= end_time))
+                    {
+                        Thread.Sleep(rnd.Next(3000, 4000));
+                        return true;
+
+                    }
+                    else
+                    {
+                        context.log("Please check your start or end time"); Thread.Sleep(rnd.Next(3000, 4000)); return false;
+                    }
+
+
                 }
-
-
             }
+            catch (Exception)
+            {
+                return true;
+            }
+
         }
         //CHECK STATUS OF JOB FOR A USER 
         public bool checkJobStatus(string user_id)
@@ -267,7 +274,7 @@ namespace easygram
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 72;
+                return 3;
             }
             else
             {
@@ -562,7 +569,7 @@ namespace easygram
                 return;
             }
 
-         
+
             //get all limits
             limit_likes = getLimitLikes(current_user);
             limit_comments = getLimitComments(current_user);
@@ -586,6 +593,8 @@ namespace easygram
             ChromeOptions co = new ChromeOptions();
 
             co.AddArguments("user-data-dir=" + path);
+            
+            
 
             /*
             //get the Browser User Agent For current user
@@ -600,7 +609,7 @@ namespace easygram
             //Set the Browser User Agent For current user
             co.AddArguments("--user-agent=" + user_agent);
             */
-            
+
 
 
             var options = new ChromeOptions();
@@ -608,10 +617,11 @@ namespace easygram
 
             var driverService = ChromeDriverService.CreateDefaultService(Directory.GetCurrentDirectory());
             driverService.HideCommandPromptWindow = true;
+            
             //driverService.Port = my_port;
             //co.BinaryLocation = "C:\\Program Files (x86)\\Google\\Chrome\\Application";
 
-            
+
             //driver = new ChromeDriver(co);
             driver = new ChromeDriver(driverService, co);
             //driver = new ChromeDriver("C:\\Program Files (x86)\\Google\\Chrome\\Application");
@@ -731,6 +741,10 @@ namespace easygram
             Thread.Sleep(rnd.Next(1000, 3000));
             driver.FindElement(By.CssSelector("input._9x5sw._qy55y")).SendKeys(where_to);
             Thread.Sleep(rnd.Next(1000, 3000));
+
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            myDynamicElement = wait.Until(d => d.FindElement(By.XPath("//div[2]/div/a/div/div[2]")));
+
             driver.FindElement(By.XPath("//div[2]/div/a/div/div[2]")).Click();
 
             context.log(" [인스타 루프] : " + where_to + "(으)로 이동");
@@ -1261,7 +1275,7 @@ namespace easygram
 
                                             //context.log(" Duration =" + now.Subtract(time_whenfollowed).TotalHours.ToString() + " \n");                     
 
-                                            if (duration > delay_unfollow)
+                                            if (duration > 72)
                                             {
                                                 //Check if user is already in the list or not
                                                 if (not_unfollow_list.Count > 0)

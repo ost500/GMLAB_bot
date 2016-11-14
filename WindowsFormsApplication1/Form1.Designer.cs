@@ -125,7 +125,7 @@
             this.iTalk_Button_21.Name = "iTalk_Button_21";
             this.iTalk_Button_21.Size = new System.Drawing.Size(155, 30);
             this.iTalk_Button_21.TabIndex = 22;
-            this.iTalk_Button_21.Text = "Save";
+            this.iTalk_Button_21.Text = "저  장";
             this.iTalk_Button_21.TextAlignment = System.Drawing.StringAlignment.Center;
             this.iTalk_Button_21.Click += new System.EventHandler(this.iTalk_Button_21_Click_1);
             // 

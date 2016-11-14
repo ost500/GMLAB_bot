@@ -465,10 +465,19 @@ namespace easygram
 
         public void hash_tag_search()
         {
-            go_to_there("#" + conn_manager.Select_tag()["tag"].ToString());
-            context.log(baseURL + "/explore/tags/" + conn_manager.Select_tag()["tag"]);
-            //log("해쉬태그 검색");
-            Thread.Sleep(rnd.Next(1000, 3000));
+            try
+            {
+                go_to_there("#" + conn_manager.Select_tag()["tag"].ToString());
+                context.log(baseURL + "/explore/tags/" + conn_manager.Select_tag()["tag"]);
+                //log("해쉬태그 검색");
+                Thread.Sleep(rnd.Next(1000, 3000));
+            }
+            catch (Exception ex)
+            {
+                context.log(ex.StackTrace);
+                context.log(" [인스타 루프] : 등록된 해시태그가 없습니다");
+            }
+            
         }
     }
 }

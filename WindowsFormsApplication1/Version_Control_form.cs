@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -18,8 +19,25 @@ namespace easygram
         public Version_Control_form()
         {
             InitializeComponent();
-            
+
             new Thread(background_proc).Start();
+        }
+
+        public static void RemoveFileSecurity(string fileName, string account,
+            FileSystemRights rights, AccessControlType controlType)
+        {
+
+            // Get a FileSecurity object that represents the
+            // current security settings.
+            FileSecurity fSecurity = File.GetAccessControl(fileName);
+
+            // Remove the FileSystemAccessRule from the security settings.
+            fSecurity.RemoveAccessRule(new FileSystemAccessRule(account,
+                rights, controlType));
+
+            // Set the new access settings.
+            File.SetAccessControl(fileName, fSecurity);
+
         }
 
         protected void background_proc()
@@ -37,6 +55,8 @@ namespace easygram
                 MessageBox.Show("update");
                 System.IO.FileInfo file = new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
+                //RemoveFileSecurity(file.Name, @"DomainName\AccountName", FileSystemRights.ReadData, AccessControlType.Allow);
+
                 System.IO.File.Delete(file.DirectoryName + "\\" + "old" + "\\" + file.Name.Replace(file.Extension, "") + "-1" + file.Extension);
 
                 System.IO.File.Move(file.FullName, file.DirectoryName + "\\" + "old" + "\\" + file.Name.Replace(file.Extension, "") + "-1" + file.Extension);
@@ -46,14 +66,14 @@ namespace easygram
                     sftp.Connect();
                     List<SftpFile> fileList = sftp.ListDirectory("./easygram/easygram_update/").ToList();
 
-                    
+
                     foreach (var ftpfile in fileList)
                     {
 
 
                         if (ftpfile.Name != "." && ftpfile.Name != "..")
                         {
-                            
+
                             using (var filea = File.OpenWrite(ftpfile.Name))
                             {
                                 sftp.DownloadFile(ftpfile.FullName, filea);

@@ -48,6 +48,9 @@ namespace easygram
         {
             InitializeComponent();
 
+            
+
+
             log(" [이지그램] 잠시만 기다려 주세요");
             log(" [이지그램] 서버에서 데이터를 가지고 오는중입니다");
 
@@ -103,16 +106,16 @@ namespace easygram
 
 
             conn_manager = new sql_connection_manager(this);
-
+            
 
             manager = new Main_Manager(this, conn_manager);
 
-
+            
 
             try
             {
                 t = conn_manager.SelectData();
-
+                
 
                 r = t.Rows[0];
                 try
@@ -192,7 +195,9 @@ namespace easygram
             richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
             richTextBox1.Select(1, 13);
             richTextBox1.SelectionColor = Color.RosyBrown;
+            richTextBox1.SelectionStart = richTextBox1.Text.Length;
             richTextBox1.ScrollToCaret();
+            
 
         }
 
@@ -241,7 +246,7 @@ namespace easygram
 
         private void iTalk_Button_21_Click(object sender, EventArgs e)
         {
-
+            iTalk_Button_21.Enabled = false;
             like_thr = new Thread(manager.like_proc);
             like_thr.Start();
 
@@ -423,6 +428,7 @@ namespace easygram
 
         private void iTalk_Button_11_Click(object sender, EventArgs e)
         {
+            iTalk_Button_21.Enabled = true;
             manager.insta_run.quit();
             like_thr.Abort();
         }
