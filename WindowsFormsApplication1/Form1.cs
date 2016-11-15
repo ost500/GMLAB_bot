@@ -177,19 +177,25 @@ namespace easygram
 
         }
 
+        delegate void LogCallback(string logging);
 
         public void log(string logging)
         {
-
-
-            richTextBox1.AppendText(Environment.NewLine);
-            richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-            richTextBox1.Select(1, 13);
-            richTextBox1.SelectionColor = Color.RosyBrown;
-            richTextBox1.SelectionStart = richTextBox1.Text.Length;
-            richTextBox1.ScrollToCaret();
+            if (this.richTextBox1.InvokeRequired)
+            {
+                LogCallback d = new LogCallback(log);
+                this.Invoke(d, new object[] { logging });
+            }
+            else
+            {
+                //richTextBox1.AppendText(Environment.NewLine);
+                //richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+                //richTextBox1.Select(1, 13);
+                //richTextBox1.SelectionColor = Color.RosyBrown;
+                //richTextBox1.SelectionStart = richTextBox1.Text.Length;
+                //richTextBox1.ScrollToCaret();
+            }
             
-
         }
 
 
