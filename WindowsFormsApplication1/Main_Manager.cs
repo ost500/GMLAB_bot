@@ -67,11 +67,13 @@ namespace easygram
         {
 
 
+
             while (true)
             {
 
                 try
                 {
+
                     for (int i = 1; i <= 10; i++)
                     {
                         if (ip_changing)
@@ -191,6 +193,7 @@ namespace easygram
                     insta_run.quit();
                 }
 
+
                 catch (Exception ex)
                 {
                     //context.log(ex.StackTrace);
@@ -206,10 +209,14 @@ namespace easygram
 
 
 
+
+
         }
+
 
     }
 
 
 }
+
 
