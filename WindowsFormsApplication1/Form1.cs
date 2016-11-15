@@ -151,28 +151,19 @@ namespace easygram
                     MessageBox.Show(ex.StackTrace);
                 }
 
-
-
-
                 //Select the current item in the list
                 listBox1.Focus();
                 listBox1.SetSelected(0, true);
-
+                //get the total users and login
+                total_user = t.Rows.Count;
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
-
-                if (checkCommentStatus() && checkHashTag())
+                if (!checkCommentStatus() && !checkHashTag())
                 {
                     //시작 버튼 활성화 시도
-                    //get the total users and login
-                    total_user = t.Rows.Count;
-                    //total_user = 2;
 
-
-                }
-                else
-                {
                     MessageBox.Show(" [데이터베이스] 기본 데이터를 입력하세요");
                 }
+             
 
 
             }
@@ -286,19 +277,19 @@ namespace easygram
 
                 if (dr == null)
                 {
-                    limit_comment.Text = "None";
-                    limit_follow.Text = "None";
-                    limit_like.Text = "None";
+                    limit_comment.Text = "100";
+                    limit_follow.Text = "1000";
+                    limit_like.Text = "1000";
                     //   limit_unfollow.Text = "None";
 
 
-                    delay_follow.Text = "None";
-                    delay_like.Text = "None";
+                    delay_follow.Text = "3";
+                    delay_like.Text = "11";
                     //delay_unfollow.Text = "None";
-                    delay_comment.Text = "None";
+                    delay_comment.Text = "25";
 
-                    time_start.Text = "None";
-                    time_finish.Text = "None";
+                    time_start.Text = "7";
+                    time_finish.Text = "22";
 
                 }
                 else

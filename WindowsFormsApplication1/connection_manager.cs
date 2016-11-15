@@ -275,6 +275,7 @@ namespace easygram
 
         public void update_job(string current_user)
         {
+           
             int limit_comment = Int32.Parse(context.limit_comment.Text);
             int limit_follow = Int32.Parse(context.limit_follow.Text);
             int limit_like = Int32.Parse(context.limit_like.Text) ;
@@ -300,6 +301,7 @@ namespace easygram
                 {
                     context.log("Record saved successfully.");
                 }
+                else { context.log("Not updated as "+ current_user  + " is not found in the Insta_job table.");  }
             }
             
         }
@@ -315,22 +317,22 @@ namespace easygram
         {
 
             MySqlCommand cmd7 = new MySqlCommand("UPDATE insta_account SET likes_count ='"+likes_count+ "'  WHERE user_id = '" + current_user + "'", conn);
-            cmd7.ExecuteNonQuery();
+            if (cmd7.ExecuteNonQuery() > 0) { context.log("Likes updted successfully."); } else { context.log("Error on likes update."); }
 
         }
         public void update_commentscount(string current_user, int comments_count)
         {
 
             MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET comments_count ='" + comments_count+"' WHERE user_id = '" + current_user + "'", conn);
-            cmd8.ExecuteNonQuery();
+            if (cmd8.ExecuteNonQuery() > 0) { context.log("comments updted successfully."); } else { context.log("Error on comments update."); }
 
         }
 
         public void update_followscount(string current_user, int follows_count)
         {
 
-            MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET follows_count ='" + follows_count + "' WHERE user_id = '" + current_user + "'", conn);
-            cmd8.ExecuteNonQuery();
+            MySqlCommand cmd9 = new MySqlCommand("UPDATE insta_account SET follows_count ='" + follows_count + "' WHERE user_id = '" + current_user + "'", conn);
+            if (cmd9.ExecuteNonQuery() > 0) { context.log("follows_count updted successfully."); } else { context.log("Error on follows_count update."); }
 
         }
         ////////// check_job and select_job function begins   //////////

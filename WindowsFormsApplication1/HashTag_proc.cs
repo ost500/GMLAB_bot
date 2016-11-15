@@ -264,7 +264,7 @@ namespace easygram
                                 {
                                     context.log(" [인스타 루프] : 입력할 댓글이 없습니다");
                                 }
-                                
+
 
                             }
                             Thread.Sleep(rnd.Next(1000, 3000));
@@ -467,17 +467,37 @@ namespace easygram
         {
             try
             {
+                if (IsElementPresent(By.CssSelector("button._3eajp")))
+                {
+                    try
+                    {
+                        // 닫기
+                        // close
+                     
+                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                        myDynamicElement = wait.Until(d => d.FindElement(By.CssSelector("button._3eajp")));
+
+
+                        driver.FindElement(By.CssSelector("button._3eajp")).Click();
+                    }
+                    catch (Exception e)
+                    {
+                        //닫기가 없으면 그냥 패스~
+                    }
+                }
+
                 go_to_there("#" + conn_manager.Select_tag()["tag"].ToString());
                 context.log(baseURL + "/explore/tags/" + conn_manager.Select_tag()["tag"]);
+               
                 //log("해쉬태그 검색");
                 Thread.Sleep(rnd.Next(1000, 3000));
             }
             catch (Exception ex)
             {
-                context.log(ex.StackTrace);
+               // context.log(ex.StackTrace);
                 context.log(" [인스타 루프] : 등록된 해시태그가 없습니다");
             }
-            
+
         }
     }
 }
