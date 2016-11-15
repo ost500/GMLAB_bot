@@ -66,12 +66,12 @@ namespace easygram
         public void like_proc()
         {
 
-
-
-            try
+            while (true)
             {
-                while (true)
+
+                try
                 {
+
 
                     for (int i = 1; i <= 10; i++)
                     {
@@ -177,37 +177,38 @@ namespace easygram
 
 
 
+
                 }
+                catch (NullReferenceException ex)
+                {
+                    context.log(ex.StackTrace);
+                    context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
+                    insta_run.quit();
+                }
+
+                catch (MySqlException ex)
+                {
+                    context.log(ex.StackTrace);
+                    context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
+                    insta_run.quit();
+                }
+
+                catch (Exception ex)
+                {
+                    context.log(ex.StackTrace);
+                    context.log(" [이지그램] : 에러 발생");
+                    insta_run.quit();
+                }
+
+
+
+
+
             }
-            catch (NullReferenceException ex)
-            {
-                //context.log(ex.StackTrace);
-                context.log(" [데이터베이스] : 서버로부터 데이터를 가져오지 못했습니다");
-                insta_run.quit();
-            }
-
-            catch (MySqlException ex)
-            {
-                //context.log(ex.StackTrace);
-                context.log(" [데이터베이스] : 서버와 연결에 실패했습니다");
-                insta_run.quit();
-            }
-
-            catch (Exception ex)
-            {
-                //context.log(ex.StackTrace);
-                context.log(" [이지그램] : 에러 발생");
-                insta_run.quit();
-            }
-
-
-
-
 
         }
 
+
     }
-
-
 }
 
