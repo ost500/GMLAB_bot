@@ -48,7 +48,7 @@ namespace easygram
         {
             InitializeComponent();
 
-            
+
 
 
             log(" [이지그램] 잠시만 기다려 주세요");
@@ -106,34 +106,33 @@ namespace easygram
 
 
             conn_manager = new sql_connection_manager(this);
-            
+
 
             manager = new Main_Manager(this, conn_manager);
 
-            
+
 
             try
             {
                 t = conn_manager.SelectData();
-                
+
 
                 r = t.Rows[0];
+
                 try
                 {
                     string now_date = DateTime.Now.ToString("yyyy-MM-dd");
 
                     string latest_date;
 
-
-                    foreach (DataRow r2 in t.Rows)
+                   
+                    foreach (DataRow r in t.Rows)
                     {
-                        listBox1.Items.Add(r2["user_id"].ToString());
-
-
-                        latest_date = r2["latest_date"].ToString();
+                        listBox1.Items.Add(r["user_id"].ToString());
+                        latest_date = r["latest_date"].ToString();
                         try
                         {
-                            DateTime dt = DateTime.ParseExact(r2["latest_date"].ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            DateTime dt = DateTime.ParseExact(r["latest_date"].ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
                             latest_date = dt.ToString("yyyy-MM-dd");
                         }
                         catch (Exception) { }
@@ -141,7 +140,7 @@ namespace easygram
                         //if latest_date is not equal to current date then upadte date and set like and comment count to 0
                         if (latest_date != now_date)
                         {
-                            conn_manager.update_count_date(r2["user_id"].ToString(), now_date);
+                            conn_manager.update_count_date(r["user_id"].ToString(), now_date);
                         }
 
                     }
@@ -151,9 +150,11 @@ namespace easygram
                     MessageBox.Show(ex.StackTrace);
                 }
 
+
                 //Select the current item in the list
                 listBox1.Focus();
                 listBox1.SetSelected(0, true);
+
                 //get the total users and login
                 total_user = t.Rows.Count;
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
@@ -163,15 +164,12 @@ namespace easygram
 
                     MessageBox.Show(" [데이터베이스] 기본 데이터를 입력하세요");
                 }
-             
+
 
 
             }
-
-            //else { MessageBox.Show("먼저 로그인하세요 "); }
-
-
-            catch (Exception ex) { log("No Users Record found!!!"); log(ex.StackTrace); }
+            catch (Exception ex) { log("No Users Record found!!!"); //log(ex.StackTrace);
+            }
 
 
 
@@ -188,14 +186,12 @@ namespace easygram
             }
             else
             {
-                //richTextBox1.AppendText(Environment.NewLine);
-                //richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-                //richTextBox1.Select(1, 13);
-                //richTextBox1.SelectionColor = Color.RosyBrown;
-                //richTextBox1.SelectionStart = richTextBox1.Text.Length;
-                //richTextBox1.ScrollToCaret();
+                richTextBox1.AppendText(Environment.NewLine);
+                richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+                richTextBox1.SelectionStart = richTextBox1.Text.Length;
+                richTextBox1.ScrollToCaret();
             }
-            
+
         }
 
 

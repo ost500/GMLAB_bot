@@ -160,7 +160,7 @@ namespace easygram
 
                     if (likes_count < limit_likes)
                     {
-                        context.log("Like...");
+                      
                         //LIKE portion
                         if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
                         //"좋아요"가 클릭 돼 있지 않을 때
@@ -187,7 +187,7 @@ namespace easygram
 
                     if (follows_count < limit_follows)
                     {
-                        context.log("followw");
+                       
                         if (follow_time_gap(delay_follow))
                         {
                             //follow delay
@@ -214,13 +214,14 @@ namespace easygram
                                     if (comments_count < limit_comments)
                                     {
                                         //팔로우하면 댓글 자동
-                                        context.log("followw_comment");
+                                        
                                         t = conn_manager.Select_comments();
 
                                         string comment = t.Rows[0]["comment"].ToString();
 
                                         //팔로우를 찾아서 있으면 진행 없으면 에러
                                         driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
+                                        Thread.Sleep(rnd.Next(1000, 2000));
                                         driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
                                         //update worknumber  of comment
                                         conn_manager.Update_comment_worknum(comment);
@@ -245,7 +246,7 @@ namespace easygram
                     if (comments_count < limit_comments)
                     {
                         //comment portion
-                        context.log("comment");
+                       
                         if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
                         {
                             if (comment_time_gap(delay_comment))

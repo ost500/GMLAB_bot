@@ -975,7 +975,7 @@ namespace easygram
 
                                 //팔로우를 찾아서 있으면 진행 없으면 에러
                                 driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(comment);
-
+                                Thread.Sleep(rnd.Next(1000, 2000));
                                 driver.FindElement(By.CssSelector("input._7uiwk._qy55y")).SendKeys(Keys.Enter);
                                 //update worknumber  of comment
                                 conn_manager.Update_comment_worknum(comment);
@@ -1404,7 +1404,7 @@ namespace easygram
                                 Thread.Sleep(rnd.Next(1000, 3000));
 
                                 //Print  NOT UNFOLLOW LIST
-                                context.log("########### UNFOLLOW LIST: ###### ");
+                             /*   context.log("########### UNFOLLOW LIST: ###### ");
                                 foreach (string followedby_me in followed_list)
                                 {
 
@@ -1412,7 +1412,7 @@ namespace easygram
                                 }
                                 context.log("##################################### ");
 
-
+                                */
 
                                 //Reset the scroll delay to initial value
                                 scroll = 5;
@@ -1658,6 +1658,7 @@ namespace easygram
         public void quit()
         {
             //driver.Quit();
+            
             TeardownTest();
         }
 
@@ -1673,7 +1674,16 @@ namespace easygram
             }
             catch (Exception)
             {
-                // Ignore errors if unable to close the browser
+                Thread.Sleep(3000);
+                try
+                {
+                    driver.Quit();
+                }
+                catch (Exception)
+                {
+                    
+                }
+               
             }
 
         }
