@@ -275,7 +275,7 @@ namespace easygram
             DataRow jobrow = conn_manager.Select_job(user_id);
             if (jobrow == null)
             {
-                return 3;
+                return 72;
             }
             else
             {
@@ -1301,11 +1301,11 @@ namespace easygram
                                             DateTime now = DateTime.Now;
                                             double duration = now.Subtract(time_whenfollowed).TotalHours;
 
-                                            //context.log(" Duration =" + now.Subtract(time_whenfollowed).TotalHours.ToString() + " \n");                     
-
-                                            if (duration > 72)
+                                            context.log(" Duration =" + now.Subtract(time_whenfollowed).TotalHours.ToString() + " \n");                     
+                                            context.log(delay_unfollow.ToString());
+                                            if (duration > delay_unfollow)
                                             {
-                                                //Check if user is already in the list or not
+                                                //Check if user is already in the not_unfollow list or not[because he may be already following me]
                                                 if (not_unfollow_list.Count > 0)
                                                 {
                                                     foreach (string not_unfollow_user in not_unfollow_list)
@@ -1318,7 +1318,7 @@ namespace easygram
                                                         else { alreday_exist = true; break; }
                                                     }
                                                 }
-                                                //If not inb the list then add other wise no need to add
+                                                //If not in the list then add other wise no need to add
                                                 if (alreday_exist == false)
                                                 {
 
@@ -1326,20 +1326,21 @@ namespace easygram
                                                     if (followedby_me == follower_username)
                                                     {
 
-                                                        //Add to not unfollow list
-                                                        not_unfollow_list.Add(followedby_me);
                                                         //Remove from followed list
                                                         followed_list.Remove(followedby_me);
+                                                        //Add to not unfollow list
+                                                        not_unfollow_list.Add(followedby_me);
+                                                       
                                                         // context.log(" MATCHED AND FOLLOWING ME");
                                                         context.log("[언팔로우] : 맞팔을 확인했습니다");
-                                                        Thread.Sleep(rnd.Next(1000, 3000));
+                                                        Thread.Sleep(rnd.Next(1000, 2000));
                                                     }
 
                                                 }//End of already exist
                                             }
                                             else
                                             {
-                                                //Check if user is already in the list or not
+                                                //Check if user is already in the not_unfollow list or not
                                                 if (not_unfollow_list.Count > 0)
                                                 {
                                                     foreach (string not_unfollow_user in not_unfollow_list)
@@ -1357,11 +1358,11 @@ namespace easygram
                                                 //If not inb the list then add other wise no need to add
                                                 if (alreday_exist == false)
                                                 {
-
-                                                    //Add to not unfollow list
-                                                    not_unfollow_list.Add(followedby_me);
                                                     //Remove from followed list
                                                     followed_list.Remove(followedby_me);
+                                                    //Add to not unfollow list
+                                                    not_unfollow_list.Add(followedby_me);
+                                                    
                                                 }
                                             }
                                         } //end of for each loop
@@ -1404,15 +1405,16 @@ namespace easygram
                                 Thread.Sleep(rnd.Next(1000, 3000));
 
                                 //Print  NOT UNFOLLOW LIST
-                             /*   context.log("########### UNFOLLOW LIST: ###### ");
-                                foreach (string followedby_me in followed_list)
+                               context.log("########### UNFOLLOW LIST: ###### ");
+                                foreach (string followed_by_me in followed_list)
                                 {
 
-                                    context.log(followedby_me);
+                                    context.log(followed_by_me);
+                                    Thread.Sleep(1000);
                                 }
                                 context.log("##################################### ");
 
-                                */
+                                
 
                                 //Reset the scroll delay to initial value
                                 scroll = 5;

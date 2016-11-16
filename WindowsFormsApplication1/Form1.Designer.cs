@@ -42,12 +42,20 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.time_finish = new System.Windows.Forms.TextBox();
             this.time_start = new System.Windows.Forms.TextBox();
             this.button1 = new iTalk.iTalk_Button_2();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.delay_unfollow = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.delay_comment = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.delay_like = new System.Windows.Forms.TextBox();
@@ -64,6 +72,9 @@
             this.iTalk_HeaderLabel1 = new iTalk.iTalk_HeaderLabel();
             this.iTalk_ControlBox1 = new iTalk.iTalk_ControlBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
             this.iTalk_ThemeContainer1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.iTalk_GroupBox1.SuspendLayout();
@@ -121,7 +132,7 @@
             this.iTalk_Button_21.ForeColor = System.Drawing.Color.White;
             this.iTalk_Button_21.Image = null;
             this.iTalk_Button_21.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iTalk_Button_21.Location = new System.Drawing.Point(398, 571);
+            this.iTalk_Button_21.Location = new System.Drawing.Point(398, 573);
             this.iTalk_Button_21.Name = "iTalk_Button_21";
             this.iTalk_Button_21.Size = new System.Drawing.Size(155, 30);
             this.iTalk_Button_21.TabIndex = 22;
@@ -259,16 +270,36 @@
             // groupBox6
             // 
             this.groupBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.groupBox6.Controls.Add(this.label15);
+            this.groupBox6.Controls.Add(this.label14);
             this.groupBox6.Controls.Add(this.label10);
             this.groupBox6.Controls.Add(this.label9);
             this.groupBox6.Controls.Add(this.time_finish);
             this.groupBox6.Controls.Add(this.time_start);
-            this.groupBox6.Location = new System.Drawing.Point(398, 484);
+            this.groupBox6.Location = new System.Drawing.Point(398, 486);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(157, 83);
             this.groupBox6.TabIndex = 6;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "작업시간";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(134, 54);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(18, 13);
+            this.label15.TabIndex = 25;
+            this.label15.Text = "시";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(134, 23);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(18, 13);
+            this.label14.TabIndex = 7;
+            this.label14.Text = "시";
             // 
             // label10
             // 
@@ -290,7 +321,7 @@
             // 
             // time_finish
             // 
-            this.time_finish.Location = new System.Drawing.Point(66, 49);
+            this.time_finish.Location = new System.Drawing.Point(61, 49);
             this.time_finish.Name = "time_finish";
             this.time_finish.Size = new System.Drawing.Size(70, 22);
             this.time_finish.TabIndex = 3;
@@ -299,7 +330,7 @@
             // 
             // time_start
             // 
-            this.time_start.Location = new System.Drawing.Point(66, 18);
+            this.time_start.Location = new System.Drawing.Point(61, 18);
             this.time_start.Name = "time_start";
             this.time_start.Size = new System.Drawing.Size(70, 22);
             this.time_start.TabIndex = 3;
@@ -323,22 +354,81 @@
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.groupBox5.Controls.Add(this.label17);
+            this.groupBox5.Controls.Add(this.label16);
+            this.groupBox5.Controls.Add(this.delay_unfollow);
+            this.groupBox5.Controls.Add(this.label13);
+            this.groupBox5.Controls.Add(this.label12);
+            this.groupBox5.Controls.Add(this.label11);
             this.groupBox5.Controls.Add(this.delay_comment);
             this.groupBox5.Controls.Add(this.label8);
             this.groupBox5.Controls.Add(this.delay_like);
             this.groupBox5.Controls.Add(this.delay_follow);
             this.groupBox5.Controls.Add(this.label7);
             this.groupBox5.Controls.Add(this.label6);
-            this.groupBox5.Location = new System.Drawing.Point(219, 484);
+            this.groupBox5.Location = new System.Drawing.Point(219, 487);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(157, 126);
             this.groupBox5.TabIndex = 5;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "딜레이 시간";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(1, 99);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(51, 13);
+            this.label17.TabIndex = 27;
+            this.label17.Text = "언팔로우";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(127, 99);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(29, 13);
+            this.label16.TabIndex = 26;
+            this.label16.Text = "시간";
+            // 
+            // delay_unfollow
+            // 
+            this.delay_unfollow.Location = new System.Drawing.Point(57, 96);
+            this.delay_unfollow.Name = "delay_unfollow";
+            this.delay_unfollow.Size = new System.Drawing.Size(70, 22);
+            this.delay_unfollow.TabIndex = 25;
+            this.delay_unfollow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(133, 76);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(18, 13);
+            this.label13.TabIndex = 6;
+            this.label13.Text = "초";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(133, 52);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(18, 13);
+            this.label12.TabIndex = 5;
+            this.label12.Text = "초";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(133, 26);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(18, 13);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "분";
+            // 
             // delay_comment
             // 
-            this.delay_comment.Location = new System.Drawing.Point(59, 91);
+            this.delay_comment.Location = new System.Drawing.Point(57, 71);
             this.delay_comment.Name = "delay_comment";
             this.delay_comment.Size = new System.Drawing.Size(70, 22);
             this.delay_comment.TabIndex = 3;
@@ -347,7 +437,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(24, 94);
+            this.label8.Location = new System.Drawing.Point(23, 74);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(29, 13);
             this.label8.TabIndex = 2;
@@ -355,7 +445,7 @@
             // 
             // delay_like
             // 
-            this.delay_like.Location = new System.Drawing.Point(59, 56);
+            this.delay_like.Location = new System.Drawing.Point(57, 46);
             this.delay_like.Name = "delay_like";
             this.delay_like.Size = new System.Drawing.Size(70, 22);
             this.delay_like.TabIndex = 3;
@@ -363,7 +453,7 @@
             // 
             // delay_follow
             // 
-            this.delay_follow.Location = new System.Drawing.Point(59, 21);
+            this.delay_follow.Location = new System.Drawing.Point(57, 21);
             this.delay_follow.Name = "delay_follow";
             this.delay_follow.Size = new System.Drawing.Size(70, 22);
             this.delay_follow.TabIndex = 3;
@@ -372,7 +462,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 59);
+            this.label7.Location = new System.Drawing.Point(12, 49);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(40, 13);
             this.label7.TabIndex = 1;
@@ -390,6 +480,9 @@
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.groupBox4.Controls.Add(this.label20);
+            this.groupBox4.Controls.Add(this.label19);
+            this.groupBox4.Controls.Add(this.label18);
             this.groupBox4.Controls.Add(this.limit_comment);
             this.groupBox4.Controls.Add(this.limit_like);
             this.groupBox4.Controls.Add(this.limit_follow);
@@ -405,15 +498,16 @@
             // 
             // limit_comment
             // 
-            this.limit_comment.Location = new System.Drawing.Point(66, 90);
+            this.limit_comment.Location = new System.Drawing.Point(59, 90);
             this.limit_comment.Name = "limit_comment";
             this.limit_comment.Size = new System.Drawing.Size(70, 22);
             this.limit_comment.TabIndex = 3;
             this.limit_comment.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.limit_comment.TextChanged += new System.EventHandler(this.limit_comment_TextChanged);
             // 
             // limit_like
             // 
-            this.limit_like.Location = new System.Drawing.Point(66, 56);
+            this.limit_like.Location = new System.Drawing.Point(60, 55);
             this.limit_like.Name = "limit_like";
             this.limit_like.Size = new System.Drawing.Size(70, 22);
             this.limit_like.TabIndex = 3;
@@ -421,7 +515,7 @@
             // 
             // limit_follow
             // 
-            this.limit_follow.Location = new System.Drawing.Point(66, 21);
+            this.limit_follow.Location = new System.Drawing.Point(60, 21);
             this.limit_follow.Name = "limit_follow";
             this.limit_follow.Size = new System.Drawing.Size(70, 22);
             this.limit_follow.TabIndex = 3;
@@ -484,6 +578,33 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(536, 150);
             this.panel1.TabIndex = 23;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(134, 26);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(18, 13);
+            this.label18.TabIndex = 5;
+            this.label18.Text = "번";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(134, 60);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(18, 13);
+            this.label19.TabIndex = 6;
+            this.label19.Text = "번";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(134, 95);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(18, 13);
+            this.label20.TabIndex = 7;
+            this.label20.Text = "번";
             // 
             // Form1
             // 
@@ -550,6 +671,17 @@
         public System.Windows.Forms.TextBox time_finish;
         public System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        public System.Windows.Forms.TextBox delay_unfollow;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
     }
 }
 
