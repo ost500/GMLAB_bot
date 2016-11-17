@@ -300,9 +300,9 @@ namespace easygram
 
                 if (cmd3.ExecuteNonQuery() > 0)
                 {
-                   // context.log("Record saved successfully.");
+                    context.log("Record saved successfully.");
                 }
-                else {// context.log("Not updated as "+ current_user  + " is not found in the Insta_job table."); 
+                else { context.log("Not updated as "+ current_user  + " is not found in the Insta_job table."); 
                 }
             }
             

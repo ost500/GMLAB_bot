@@ -45,12 +45,23 @@ namespace easygram
                                 .Text);
                         if (follow_time_gap(delay_follow))
                         {
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
 
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
                                 .Click();
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
                             //clicked follow button
@@ -76,10 +87,22 @@ namespace easygram
                         if (follow_time_gap(delay_follow))
                         {
 
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -198,11 +221,24 @@ namespace easygram
                                 {
                                     //팔로우를 찾아서 있으면 진행 없으면 에러
                                     Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
+
+                                    string followed = "";
+                                    if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                                    {
+                                        //get the name of user to be followed
+                                        followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                                    }
+                                    else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                                    {
+                                        //get the name of user to be followed
+                                        followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                                    }
+
                                     driver.FindElement(By.XPath("//header/span/button")).Click();
 
 
                                     //Save Follow data
-                                    saveFollowData();
+                                    saveFollowData(followed);
                                     //Set Follows Count for today
                                     follows_count = follows_count + 1;
 
@@ -367,13 +403,27 @@ namespace easygram
                                 .Text);
                         if (follow_time_gap(delay_follow))
                         {
+
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
+
                             //If follow time gap was done
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -391,12 +441,26 @@ namespace easygram
                             //context.log(follow_time.ToString() + "팔로우한 시각");
                             //context.log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
                             Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+
+
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -428,12 +492,24 @@ namespace easygram
 
                         if (follow_time_gap(delay_follow))
                         {
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -445,12 +521,25 @@ namespace easygram
                             //대기 타다가 팔로우
                             DateTime now = DateTime.Now;
                             Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 

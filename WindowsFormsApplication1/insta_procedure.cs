@@ -92,6 +92,26 @@ namespace easygram
             return path;
         }
 
+        public void update_todayCounters(string user_id, string latest_date)
+        {
+            // latest_date = r["latest_date"].ToString();
+            string now_date = DateTime.Now.ToString("yyyy-MM-dd");
+            try
+            {
+                DateTime dt = DateTime.ParseExact(latest_date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                latest_date = dt.ToString("yyyy-MM-dd");
+            }
+            catch (Exception) { }
+
+            //if latest_date is not equal to current date then upadte date and set like and comment count to 0
+            if (latest_date != now_date)
+            {
+                conn_manager.update_count_date(user_id, now_date);
+            }
+
+
+
+        }
 
         //CHECK  Run Status i.e. start and end time FOR A USER 
         public bool checkRunStatus(string user_id)
@@ -309,7 +329,7 @@ namespace easygram
                 //context.log("no like");
 
                 context.log(" [인스타 루프] 좋아요 : 딜레이 간격을 위해 휴식합니다");
-                context.log(" [인스타 루프] 좋아요 : " +remaining_like_time + "[" + delay_like + "] 초 간격");
+                context.log(" [인스타 루프] 좋아요 : " + remaining_like_time + "[" + delay_like + "] 초 간격");
                 return false;
             }
         }
@@ -334,7 +354,7 @@ namespace easygram
                 //context.log("no follow");
 
                 context.log(" [인스타 루프] 팔로우 : 딜레이 간격을 위해 휴식합니다");
-                context.log(" [인스타 루프] 팔로우 : "+ remaining_follow_time+ "[" + delay_follow + "] 분 간격");
+                context.log(" [인스타 루프] 팔로우 : " + remaining_follow_time + "[" + delay_follow + "] 분 간격");
                 return false;
             }
         }
@@ -363,67 +383,68 @@ namespace easygram
                 //Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
                 context.log(" [인스타 루프] 댓글 : 딜레이 간격을 위해 휴식합니다");
                 // context.log(" [인스타 루프] 댓글 : " + delay_comment.ToString("##.###") + "초 간격");
-                context.log(" [인스타 루프] 댓글 : "+ remaining_comment_time+"[" + delay_comment +"] 초 간격");
+                context.log(" [인스타 루프] 댓글 : " + remaining_comment_time + "[" + delay_comment + "] 초 간격");
                 return false;
             }
         }
 
 
-        public void saveFollowData()
+        public void saveFollowData(string followed)
         {
             // Check for exact CSS Selector and save Follow data
 
-            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+            /*  if (IsElementPresent(By.CssSelector("a._4zhc5")))
+              {
+
+                  //find the above followed user
+                  string followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                  */
+            //set time
+            save_follow_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            try
             {
-
-                //find the above followed user
-                string followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
-
-                //set time
-                save_follow_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                try
+                DataTable follow_data = conn_manager.select_specific_follow(current_user, followed);
+                //insert followed id into database
+                if (follow_data.Rows.Count > 0)
                 {
-                    DataTable follow_data = conn_manager.select_specific_follow(current_user, followed);
-                    //insert followed id into database
-                    if (follow_data.Rows.Count > 0)
-                    {
-                        context.log(current_user + " is already following " + followed);
-                    }
-                    else
-                    {
-                        conn_manager.insert_followdata(current_user, followed, save_follow_time);
-                    }
+                    context.log(current_user + " is already following " + followed);
                 }
-                catch { context.log("Error in the select_specfic_follow Query"); }
-            }
-            else if (IsElementPresent(By.CssSelector("h1._i572c")))
-            {
-                //find the above followed user
-                string followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
-
-                //set time
-                save_follow_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                try
+                else
                 {
-                    DataTable follow_data = conn_manager.select_specific_follow(current_user, followed);
-                    //insert followed id into database
-                    if (follow_data.Rows.Count > 0)
-                    {
-                        context.log(current_user + " is already following" + followed);
-                    }
-                    else
-                    {
-                        conn_manager.insert_followdata(current_user, followed, save_follow_time);
-                    }
+                    conn_manager.insert_followdata(current_user, followed, save_follow_time);
                 }
-                catch { context.log("Error in the select_specfic_follow Query"); }
             }
+            catch { context.log("Error in the select_specfic_follow Query"); }
+            /* }
+             else if (IsElementPresent(By.CssSelector("h1._i572c")))
+             {
+                 //find the above followed user
+                 string followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+
+                 //set time
+                 save_follow_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                 try
+                 {
+                     DataTable follow_data = conn_manager.select_specific_follow(current_user, followed);
+                     //insert followed id into database
+                     if (follow_data.Rows.Count > 0)
+                     {
+                         context.log(current_user + " is already following" + followed);
+                     }
+                     else
+                     {
+                         conn_manager.insert_followdata(current_user, followed, save_follow_time);
+                     }
+                 }
+                 catch { context.log("Error in the select_specfic_follow Query"); }
+             }*/
 
         }
         public void saveLikesCount()
         {
             //set time
-           
+
+            context.log("L: "+likes_count.ToString());
             conn_manager.update_likescount(current_user, likes_count);
             Thread.Sleep(rnd.Next(2000, 3000));
         }
@@ -431,8 +452,7 @@ namespace easygram
         public void saveCommentsCount()
         {
             //set time
-
-           
+          
             conn_manager.update_commentscount(current_user, comments_count);
             Thread.Sleep(rnd.Next(2000, 3000));
         }
@@ -561,7 +581,10 @@ namespace easygram
             //context.context.log(" USER:" + current_user + " \n");
             context.log(" [이지그램] 로그인 유저 :  " + current_user + " \n");
 
-            //check for the timimgs
+            //update the like,comment and follow counters
+            update_todayCounters(r["user_id"].ToString(), r["latest_date"].ToString());
+
+            //check for the start and end timimgs
             if (!checkRunStatus(current_user))
             {
                 context.log("Thank You!!!!");
@@ -574,12 +597,12 @@ namespace easygram
             limit_likes = getLimitLikes(current_user);
             limit_comments = getLimitComments(current_user);
             limit_follows = getLimitFollows(current_user);
-         
+
             //get today's counts
             likes_count = Int32.Parse(r["likes_count"].ToString());
             comments_count = Int32.Parse(r["comments_count"].ToString());
             follows_count = Int32.Parse(r["follows_count"].ToString());
-            
+
             //get all delays
             delay_like = getLikeDelay(current_user);
             delay_comment = getCommentDealy(current_user);
@@ -589,25 +612,25 @@ namespace easygram
 
             //Get current directory path and set charome cache path
             string currentDir = getCurrentPath();
-           // context.log(currentDir);
+            // context.log(currentDir);
             string path = currentDir + "\\Release\\chrome_cache\\" + current_user.Trim();
-         //   string path = "c:\\chrome_cache\\" + current_user.Trim();
+            //   string path = "c:\\chrome_cache\\" + current_user.Trim();
 
-          /*  DirectoryInfo dirInfo = new DirectoryInfo(@"c:\chrome_cache");
+            /*  DirectoryInfo dirInfo = new DirectoryInfo(@"c:\chrome_cache");
 
-            DirectorySecurity dirSecurity = dirInfo.GetAccessControl();
+              DirectorySecurity dirSecurity = dirInfo.GetAccessControl();
 
-            dirSecurity.AddAccessRule(new FileSystemAccessRule
-                (Enviroment.Username,
-                FileSystemRights.ReadData, AccessControlType.Allow));
+              dirSecurity.AddAccessRule(new FileSystemAccessRule
+                  (Enviroment.Username,
+                  FileSystemRights.ReadData, AccessControlType.Allow));
 
-            dirInfo.SetAccessControl(dirSecurity);*/
+              dirInfo.SetAccessControl(dirSecurity);*/
 
             ChromeOptions co = new ChromeOptions();
 
             co.AddArguments("user-data-dir=" + path);
-            
-            
+
+
 
             /*
             //get the Browser User Agent For current user
@@ -630,7 +653,7 @@ namespace easygram
 
             var driverService = ChromeDriverService.CreateDefaultService(Directory.GetCurrentDirectory());
             driverService.HideCommandPromptWindow = true;
-            
+
             //driverService.Port = my_port;
             //co.BinaryLocation = "C:\\Program Files (x86)\\Google\\Chrome\\Application";
 
@@ -789,12 +812,22 @@ namespace easygram
                                 .Text);
                         if (follow_time_gap(delay_follow))
                         {
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
 
                             driver.FindElement(
-                                    By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
-                                .Click();
+                            By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button")).Click();
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
                             //clicked follow button
@@ -820,10 +853,22 @@ namespace easygram
                         if (follow_time_gap(delay_follow))
                         {
 
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button")).Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
                             context.log(" [인스타 루프] 팔로우 했습니다");
@@ -855,32 +900,32 @@ namespace easygram
                     Thread.Sleep(rnd.Next(1000, 3000));
 
 
-                  /*  try
-                    {
-                        //wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                        //myDynamicElement = wait.Until(d => d.FindElement(By.LinkText("다음")));
-                        //"다음"이 나올 때 까지 기다림
-                        //driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.FromSeconds(500));
-                        while (!driver.ExecuteScript("return document.readyState").ToString().Equals("complete"))
-                        {
-                            //페이지가 다 로딩 될 때 까지 기다린다
-                            //waiting the page ready
-                        }
+                    /*  try
+                      {
+                          //wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                          //myDynamicElement = wait.Until(d => d.FindElement(By.LinkText("다음")));
+                          //"다음"이 나올 때 까지 기다림
+                          //driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.FromSeconds(500));
+                          while (!driver.ExecuteScript("return document.readyState").ToString().Equals("complete"))
+                          {
+                              //페이지가 다 로딩 될 때 까지 기다린다
+                              //waiting the page ready
+                          }
 
-                    }
-                    catch (Exception e)
-                    {
-                        //failed to load the page
-                        context.log(" [인스타 루프] 페이지 로딩에 실패했습니다");
+                      }
+                      catch (Exception e)
+                      {
+                          //failed to load the page
+                          context.log(" [인스타 루프] 페이지 로딩에 실패했습니다");
 
-                        Thread.Sleep(rnd.Next(1000, 3000));
+                          Thread.Sleep(rnd.Next(1000, 3000));
 
-                        break;
-                    }*/
+                          break;
+                      }*/
 
                     if (likes_count < limit_likes)
                     {
-                        
+
                         //LIKE portion
                         if (IsElementPresent(By.CssSelector("span._soakw.coreSpriteHeartOpen")))
                         //"좋아요"가 클릭 돼 있지 않을 때
@@ -897,14 +942,14 @@ namespace easygram
                             context.log(" [인스타 루프] : 좋아요를 눌렀습니다");
                             Thread.Sleep(rnd.Next(1000, 3000));
                         }
-                        
+
 
                     }
                     else { context.log("Like Limit reached"); }
 
                     if (follows_count < limit_follows)
                     {
-                        
+
                         if (follow_time_gap(delay_follow))
                         {
                             //follow delay
@@ -915,11 +960,24 @@ namespace easygram
                                 {
                                     //팔로우를 찾아서 있으면 진행 없으면 에러
                                     Assert.AreEqual("팔로우", driver.FindElement(By.XPath("//header/span/button")).Text);
+
+                                    string followed = "";
+                                    if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                                    {
+                                        //get the name of user to be followed
+                                        followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                                    }
+                                    else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                                    {
+                                        //get the name of user to be followed
+                                        followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                                    }
+
                                     driver.FindElement(By.XPath("//header/span/button")).Click();
 
 
                                     //Save Follow data
-                                    saveFollowData();
+                                    saveFollowData(followed);
                                     //Set Follows Count for today
                                     follows_count = follows_count + 1;
                                     context.log(" [인스타 루프] : 팔로우 했습니다");
@@ -962,10 +1020,10 @@ namespace easygram
 
                     if (comments_count < limit_comments)
                     {
-                      
+
                         if (IsElementPresent(By.CssSelector("input._7uiwk._qy55y")))
                         {
-                           
+
                             if (comment_time_gap(delay_comment))
                             {
 
@@ -986,7 +1044,7 @@ namespace easygram
 
                             }
                             Thread.Sleep(rnd.Next(1000, 3000));
-                           
+
                         }
 
                     }
@@ -1078,13 +1136,26 @@ namespace easygram
                                 .Text);
                         if (follow_time_gap(delay_follow))
                         {
+
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             //If follow time gap was done
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -1102,12 +1173,25 @@ namespace easygram
                             //context.log(follow_time.ToString() + "팔로우한 시각");
                             //context.log(((int)(now.Subtract(follow_time).TotalSeconds) * 1000).ToString() + "여기에러인가요");
                             Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -1139,12 +1223,25 @@ namespace easygram
 
                         if (follow_time_gap(delay_follow))
                         {
+
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -1156,12 +1253,26 @@ namespace easygram
                             //대기 타다가 팔로우
                             DateTime now = DateTime.Now;
                             Thread.Sleep(200000 - ((int)(now.Subtract(follow_time).TotalSeconds) * 1000));
+
+
+                            string followed = "";
+                            if (IsElementPresent(By.CssSelector("a._4zhc5")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("a._4zhc5")).Text;
+                            }
+                            else if (IsElementPresent(By.CssSelector("h1._i572c")))
+                            {
+                                //get the name of user to be followed
+                                followed = driver.FindElement(By.CssSelector("h1._i572c")).Text;
+                            }
+
                             driver.FindElement(
                                     By.XPath("//span[@id='react-root']/section/main/article/header/div[2]/div/span/span/button"))
                                 .Click();
 
                             //Save Follow data
-                            saveFollowData();
+                            saveFollowData(followed);
                             //Set Follows Count for today
                             follows_count = follows_count + 1;
 
@@ -1295,14 +1406,13 @@ namespace easygram
                                         foreach (DataRow r in tbl.Rows)
                                         {
 
+
                                             //get the user followed by me and time as well
                                             string followedby_me = r["followed_id"].ToString();
-                                            DateTime time_whenfollowed = (DateTime)r["time"];
+                                            DateTime time_whenfollowed = Convert.ToDateTime(r["time"].ToString());
                                             DateTime now = DateTime.Now;
                                             double duration = now.Subtract(time_whenfollowed).TotalHours;
-
-                                            context.log(" Duration =" + now.Subtract(time_whenfollowed).TotalHours.ToString() + " \n");                     
-                                            context.log(delay_unfollow.ToString());
+                                            //   context.log(" Duration =" + now.Subtract(time_whenfollowed).TotalHours.ToString() + " \n");                                                               
                                             if (duration > delay_unfollow)
                                             {
                                                 //Check if user is already in the not_unfollow list or not[because he may be already following me]
@@ -1330,7 +1440,7 @@ namespace easygram
                                                         followed_list.Remove(followedby_me);
                                                         //Add to not unfollow list
                                                         not_unfollow_list.Add(followedby_me);
-                                                       
+
                                                         // context.log(" MATCHED AND FOLLOWING ME");
                                                         context.log("[언팔로우] : 맞팔을 확인했습니다");
                                                         Thread.Sleep(rnd.Next(1000, 2000));
@@ -1362,7 +1472,7 @@ namespace easygram
                                                     followed_list.Remove(followedby_me);
                                                     //Add to not unfollow list
                                                     not_unfollow_list.Add(followedby_me);
-                                                    
+
                                                 }
                                             }
                                         } //end of for each loop
@@ -1405,7 +1515,7 @@ namespace easygram
                                 Thread.Sleep(rnd.Next(1000, 3000));
 
                                 //Print  NOT UNFOLLOW LIST
-                               context.log("########### UNFOLLOW LIST: ###### ");
+                                context.log("########### TO BE UNFOLLOW LIST: ###### ");
                                 foreach (string followed_by_me in followed_list)
                                 {
 
@@ -1413,8 +1523,6 @@ namespace easygram
                                     Thread.Sleep(1000);
                                 }
                                 context.log("##################################### ");
-
-                                
 
                                 //Reset the scroll delay to initial value
                                 scroll = 5;
@@ -1660,7 +1768,7 @@ namespace easygram
         public void quit()
         {
             //driver.Quit();
-            
+
             TeardownTest();
         }
 
@@ -1683,9 +1791,9 @@ namespace easygram
                 }
                 catch (Exception)
                 {
-                    
+
                 }
-               
+
             }
 
         }

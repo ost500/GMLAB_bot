@@ -126,27 +126,14 @@ namespace easygram
 
                 try
                 {
-                    string now_date = DateTime.Now.ToString("yyyy-MM-dd");
+                   // string now_date = DateTime.Now.ToString("yyyy-MM-dd");
 
-                    string latest_date;
+                   // string latest_date;
 
                    
                     foreach (DataRow r in t.Rows)
                     {
                         listBox1.Items.Add(r["user_id"].ToString());
-                        latest_date = r["latest_date"].ToString();
-                        try
-                        {
-                            DateTime dt = DateTime.ParseExact(r["latest_date"].ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                            latest_date = dt.ToString("yyyy-MM-dd");
-                        }
-                        catch (Exception) { }
-
-                        //if latest_date is not equal to current date then upadte date and set like and comment count to 0
-                        if (latest_date != now_date)
-                        {
-                            conn_manager.update_count_date(r["user_id"].ToString(), now_date);
-                        }
 
                     }
                 }
