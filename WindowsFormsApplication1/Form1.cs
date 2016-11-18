@@ -188,12 +188,12 @@ namespace easygram
             }
             else
             {
-                //richTextBox1.AppendText(Environment.NewLine);
-                //richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-                //richTextBox1.Select(1, 13);
-                //richTextBox1.SelectionColor = Color.RosyBrown;
-                //richTextBox1.SelectionStart = richTextBox1.Text.Length;
-                //richTextBox1.ScrollToCaret();
+                richTextBox1.AppendText(Environment.NewLine);
+                richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+                richTextBox1.Select(1, 13);
+                richTextBox1.SelectionColor = Color.RosyBrown;
+                richTextBox1.SelectionStart = richTextBox1.Text.Length;
+                richTextBox1.ScrollToCaret();
             }
             
         }
