@@ -199,6 +199,19 @@ namespace easygram
                     //context.log(ex.StackTrace);
                     context.log(" [이지그램] : 에러 발생");
                     insta_run.quit();
+                    
+                }
+                finally
+                {
+                    try
+                    {
+                        if (ipchanger != null)
+                        {
+                            ipchanger.send_change();
+                        }
+                    }
+                    catch (Exception) { }
+                    
                 }
 
 

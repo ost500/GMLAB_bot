@@ -180,10 +180,12 @@ namespace easygram
             {
                 richTextBox1.AppendText(Environment.NewLine);
                 richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
+
                 // richTextBox1.SelectionStart = richTextBox1.Text.Length;
                 //richTextBox1.ScrollToCaret();
                 ScrollToBottom(richTextBox1);
            }
+
 
         }
         public static void ScrollToBottom(RichTextBox richTextBox1)
