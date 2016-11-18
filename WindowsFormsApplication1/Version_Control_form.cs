@@ -92,7 +92,13 @@ namespace easygram
             }
             else
             {
-                this.Close();
+
+                this.Invoke((MethodInvoker)delegate
+                {
+                    // close the form on the forms thread
+                    this.Close();
+                });
+
                 Application.Run(new Login_Form());
             }
         }

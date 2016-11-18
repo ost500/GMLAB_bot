@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace easygram
 {
@@ -42,13 +43,17 @@ namespace easygram
 
         private Thread like_thr;
 
-
+     [DllImport("user32.dll", CharSet = CharSet.Auto)]
+       private static extern int SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
+      private const int WM_VSCROLL = 277;
+      private const int SB_PAGEBOTTOM = 7;
+       
 
         public Form1(string user)
         {
             InitializeComponent();
 
-            
+
 
 
             log(" [이지그램] 잠시만 기다려 주세요");
@@ -106,43 +111,29 @@ namespace easygram
 
 
             conn_manager = new sql_connection_manager(this);
-            
+
 
             manager = new Main_Manager(this, conn_manager);
 
-            
+
 
             try
             {
                 t = conn_manager.SelectData();
-                
+
 
                 r = t.Rows[0];
+
                 try
                 {
-                    string now_date = DateTime.Now.ToString("yyyy-MM-dd");
+                   // string now_date = DateTime.Now.ToString("yyyy-MM-dd");
 
-                    string latest_date;
+                   // string latest_date;
 
-
-                    foreach (DataRow r2 in t.Rows)
+                   
+                    foreach (DataRow r in t.Rows)
                     {
-                        listBox1.Items.Add(r2["user_id"].ToString());
-
-
-                        latest_date = r2["latest_date"].ToString();
-                        try
-                        {
-                            DateTime dt = DateTime.ParseExact(r2["latest_date"].ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                            latest_date = dt.ToString("yyyy-MM-dd");
-                        }
-                        catch (Exception) { }
-
-                        //if latest_date is not equal to current date then upadte date and set like and comment count to 0
-                        if (latest_date != now_date)
-                        {
-                            conn_manager.update_count_date(r2["user_id"].ToString(), now_date);
-                        }
+                        listBox1.Items.Add(r["user_id"].ToString());
 
                     }
                 }
@@ -151,27 +142,26 @@ namespace easygram
                     MessageBox.Show(ex.StackTrace);
                 }
 
+
                 //Select the current item in the list
                 listBox1.Focus();
                 listBox1.SetSelected(0, true);
+
                 //get the total users and login
                 total_user = t.Rows.Count;
                 //Check #tag Status ,comment and job status ..IF Ok then Proceed Otherwise Stop
                 if (!checkCommentStatus() && !checkHashTag())
                 {
                     //시작 버튼 활성화 시도
-
+                    button1.Enabled = false;
                     MessageBox.Show(" [데이터베이스] 기본 데이터를 입력하세요");
                 }
-             
+
 
 
             }
-
-            //else { MessageBox.Show("먼저 로그인하세요 "); }
-
-
-            catch (Exception ex) { log("No Users Record found!!!"); log(ex.StackTrace); }
+            catch (Exception ex) { log("No Users Record found!!!"); //log(ex.StackTrace);
+            }
 
 
 
@@ -190,14 +180,18 @@ namespace easygram
             {
                 richTextBox1.AppendText(Environment.NewLine);
                 richTextBox1.AppendText("[" + DateTime.Now.ToLongTimeString() + "]" + logging);
-                richTextBox1.Select(1, 13);
-                richTextBox1.SelectionColor = Color.RosyBrown;
-                richTextBox1.SelectionStart = richTextBox1.Text.Length;
-                richTextBox1.ScrollToCaret();
-            }
-            
-        }
 
+                // richTextBox1.SelectionStart = richTextBox1.Text.Length;
+                //richTextBox1.ScrollToCaret();
+                ScrollToBottom(richTextBox1);
+           }
+
+
+        }
+        public static void ScrollToBottom(RichTextBox richTextBox1)
+        {
+            SendMessage(richTextBox1.Handle, WM_VSCROLL, (IntPtr)SB_PAGEBOTTOM, IntPtr.Zero);
+        }
 
 
 
@@ -291,7 +285,7 @@ namespace easygram
 
                     delay_follow.Text = "3";
                     delay_like.Text = "11";
-                    //delay_unfollow.Text = "None";
+                    delay_unfollow.Text = "72";
                     delay_comment.Text = "25";
 
                     time_start.Text = "7";
@@ -308,7 +302,7 @@ namespace easygram
 
                     delay_follow.Text = dr["delay_follow"].ToString();
                     delay_like.Text = dr["delay_like"].ToString();
-                    //   delay_unfollow.Text = dr["delay_unfollow"].ToString();
+                    delay_unfollow.Text = dr["delay_unfollow"].ToString();
                     delay_comment.Text = dr["delay_comment"].ToString();
 
                     time_start.Text = dr["hour_between_start"].ToString();
@@ -444,8 +438,10 @@ namespace easygram
 
         private void iTalk_Button_21_Click_1(object sender, EventArgs e)
         {
+           
             string selected_account = listBox1.SelectedItem.ToString();
-
+           // Thread thr_job = new Thread(this.update_job);
+          //  thr_job.Start();
             conn_manager.update_job(selected_account);
         }
 
@@ -480,6 +476,18 @@ namespace easygram
                 sftp.Disconnect();
             }
         }
+
+        private void limit_comment_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+      /*  public void update_job() {
+
+            string selected_account = listBox1.SelectedItem.ToString();
+            conn_manager.update_job(selected_account);
+        }*/
+      
     }
 
 }

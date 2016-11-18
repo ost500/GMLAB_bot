@@ -283,6 +283,7 @@ namespace easygram
             int delay_follow = Int32.Parse(context.delay_follow.Text);
             int delay_like = Int32.Parse(context.delay_like.Text) ;
             int delay_comment = Int32.Parse(context.delay_comment.Text) ;
+            int delay_unfollow = Int32.Parse(context.delay_unfollow.Text);
 
             int time_start = Int32.Parse(context.time_start.Text) ;
             int time_finish = Int32.Parse(context.time_finish.Text) ;
@@ -293,15 +294,16 @@ namespace easygram
 
                 if (conn.State == ConnectionState.Closed) { conn.Open(); }
 
-                context.log("Connection: " + conn.State);
+              //  context.log("Connection: " + conn.State);
                 // context.log("UPDATE insta_job SET limit_comments = '"+ limit_comment + "', limit_follows = '" + limit_follow + "', limit_likes = '" + limit_like + "', delay_follow = '" + delay_follow + "', delay_like = '" + delay_like + "', delay_comment = '" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ");
-                MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_job SET limit_comments='" + limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish + "' WHERE user_id = '" + current_user + "' ", conn);
+                MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_job SET limit_comments='" + limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', delay_unfollow='" + delay_unfollow + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish + "' WHERE user_id = '" + current_user + "' ", conn);
 
                 if (cmd3.ExecuteNonQuery() > 0)
                 {
                     context.log("Record saved successfully.");
                 }
-                else { context.log("Not updated as "+ current_user  + " is not found in the Insta_job table.");  }
+                else { context.log("Not updated as "+ current_user  + " is not found in the Insta_job table."); 
+                }
             }
             
         }
@@ -309,7 +311,7 @@ namespace easygram
         public void update_count_date(string current_user, string latest_date)
         {
          
-            MySqlCommand cmd6 = new MySqlCommand("UPDATE insta_account SET likes_count ='0',comments_count ='0' , latest_date='" + latest_date + "' WHERE user_id = '" + current_user + "'", conn);
+            MySqlCommand cmd6 = new MySqlCommand("UPDATE insta_account SET likes_count ='0',comments_count ='0', follows_count ='0' , latest_date='" + latest_date + "' WHERE user_id = '" + current_user + "'", conn);
             cmd6.ExecuteNonQuery();
 
         }
@@ -663,7 +665,7 @@ namespace easygram
 
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "' order by followers";
+                string sql = "SELECT * FROM insta_follows WHERE user_id ='" + user_id + "' and followers > 0  order by followers";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "followers");
