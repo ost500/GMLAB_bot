@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.iTalk_ThemeContainer1 = new iTalk.iTalk_ThemeContainer();
+            this.iTalk_ProgressIndicator1 = new iTalk.iTalk_ProgressIndicator();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.iTalk_Button_21 = new iTalk.iTalk_Button_2();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -63,6 +64,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.limit_comment = new System.Windows.Forms.TextBox();
             this.limit_like = new System.Windows.Forms.TextBox();
             this.limit_follow = new System.Windows.Forms.TextBox();
@@ -72,9 +76,6 @@
             this.iTalk_HeaderLabel1 = new iTalk.iTalk_HeaderLabel();
             this.iTalk_ControlBox1 = new iTalk.iTalk_ControlBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
             this.iTalk_ThemeContainer1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.iTalk_GroupBox1.SuspendLayout();
@@ -86,6 +87,7 @@
             // iTalk_ThemeContainer1
             // 
             this.iTalk_ThemeContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_ProgressIndicator1);
             this.iTalk_ThemeContainer1.Controls.Add(this.radioButton1);
             this.iTalk_ThemeContainer1.Controls.Add(this.iTalk_Button_21);
             this.iTalk_ThemeContainer1.Controls.Add(this.groupBox2);
@@ -111,6 +113,18 @@
             this.iTalk_ThemeContainer1.TabIndex = 18;
             this.iTalk_ThemeContainer1.Text = "이지그램";
             this.iTalk_ThemeContainer1.Click += new System.EventHandler(this.iTalk_ThemeContainer1_Click);
+            // 
+            // iTalk_ProgressIndicator1
+            // 
+            this.iTalk_ProgressIndicator1.Location = new System.Drawing.Point(47, 625);
+            this.iTalk_ProgressIndicator1.MinimumSize = new System.Drawing.Size(40, 40);
+            this.iTalk_ProgressIndicator1.Name = "iTalk_ProgressIndicator1";
+            this.iTalk_ProgressIndicator1.P_AnimationColor = System.Drawing.Color.DimGray;
+            this.iTalk_ProgressIndicator1.P_AnimationSpeed = 100;
+            this.iTalk_ProgressIndicator1.P_BaseColor = System.Drawing.Color.DarkGray;
+            this.iTalk_ProgressIndicator1.Size = new System.Drawing.Size(50, 50);
+            this.iTalk_ProgressIndicator1.TabIndex = 25;
+            this.iTalk_ProgressIndicator1.Text = "iTalk_ProgressIndicator1";
             // 
             // radioButton1
             // 
@@ -496,6 +510,33 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "하루 제한";
             // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(134, 95);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(18, 13);
+            this.label20.TabIndex = 7;
+            this.label20.Text = "번";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(134, 60);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(18, 13);
+            this.label19.TabIndex = 6;
+            this.label19.Text = "번";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(134, 26);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(18, 13);
+            this.label18.TabIndex = 5;
+            this.label18.Text = "번";
+            // 
             // limit_comment
             // 
             this.limit_comment.Location = new System.Drawing.Point(59, 90);
@@ -579,33 +620,6 @@
             this.panel1.Size = new System.Drawing.Size(536, 150);
             this.panel1.TabIndex = 23;
             // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(134, 26);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(18, 13);
-            this.label18.TabIndex = 5;
-            this.label18.Text = "번";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(134, 60);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(18, 13);
-            this.label19.TabIndex = 6;
-            this.label19.Text = "번";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(134, 95);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(18, 13);
-            this.label20.TabIndex = 7;
-            this.label20.Text = "번";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -682,6 +696,7 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label19;
+        private iTalk.iTalk_ProgressIndicator iTalk_ProgressIndicator1;
     }
 }
 

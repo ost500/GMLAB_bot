@@ -19,6 +19,7 @@ namespace easygram
         public Version_Control_form()
         {
             InitializeComponent();
+            
 
             new Thread(background_proc).Start();
         }

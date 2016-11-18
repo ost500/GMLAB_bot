@@ -425,7 +425,7 @@ namespace easygram
 
         private void limit_follow_TextChanged(object sender, EventArgs e)
         {
-
+             
         }
 
         private void iTalk_ThemeContainer1_Click(object sender, EventArgs e)

@@ -43,10 +43,11 @@ namespace easygram
         public static DateTime comment_time;
         public static string save_follow_time;
 
-        //Limit variables
+        //count variables
         public static int comments_count;
         public static int likes_count;
         public static int follows_count;
+        //Limit variables
         public static int limit_comments;
         public static int limit_likes;
         public static int limit_follows;
@@ -234,6 +235,59 @@ namespace easygram
                 limit_follows = Int32.Parse(jobrow["limit_follows"].ToString());
 
                 return limit_follows;
+
+            }
+        }
+
+        //GET the likes_count, comments_count, follows_count from database for current user
+
+        public int getLikesCount(string user_id)
+        {
+
+            DataRow row = conn_manager.Select_likesCount(user_id);
+            if (row == null)
+            {
+                return 0;
+            }
+            else
+            {
+                likes_count = Int32.Parse(row["likes_count"].ToString());
+
+                return likes_count;
+
+            }
+        }
+
+        public int getCommentsCount(string user_id)
+        {
+
+            DataRow row = conn_manager.Select_commentsCount(user_id);
+            if (row == null)
+            {
+                return 0;
+            }
+            else
+            {
+                comments_count = Int32.Parse(row["comments_count"].ToString());
+
+                return comments_count;
+
+            }
+        }
+
+        public int getFollowsCount(string user_id)
+        {
+
+            DataRow row = conn_manager.Select_followsCount(user_id);
+            if (row == null)
+            {
+                return 0;
+            }
+            else
+            {
+                follows_count = Int32.Parse(row["follows_count"].ToString());
+
+                return follows_count;
 
             }
         }
@@ -552,7 +606,7 @@ namespace easygram
 
         public void start()
         {
-
+           
             t = conn_manager.SelectData();
             if (t == null) { throw new NullReferenceException(); }
 
@@ -599,9 +653,9 @@ namespace easygram
             limit_follows = getLimitFollows(current_user);
 
             //get today's counts
-            likes_count = Int32.Parse(r["likes_count"].ToString());
-            comments_count = Int32.Parse(r["comments_count"].ToString());
-            follows_count = Int32.Parse(r["follows_count"].ToString());
+            likes_count = getLikesCount(current_user);
+            comments_count = getCommentsCount(current_user);
+            follows_count = getFollowsCount(current_user);
 
             //get all delays
             delay_like = getLikeDelay(current_user);
@@ -1778,13 +1832,14 @@ namespace easygram
 
         public void TeardownTest()
         {
+          //  Thread.Sleep(5000);
             try
             {
                 driver.Quit();
             }
             catch (Exception)
             {
-                Thread.Sleep(3000);
+                Thread.Sleep(5000);
                 try
                 {
                     driver.Quit();

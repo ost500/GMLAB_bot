@@ -15,12 +15,12 @@ namespace easygram
         public Form1 context;
         public DataSet ds;
         private DataSet request_ds;
-        
+
 
         public sql_connection_manager(Form1 context)
         {
 
-            
+
             String strConn = "Server=110.35.167.2;Database=easygram;Uid=easygram;Pwd=tU2LHxyyTppHUGvw;Allow Zero Datetime=true";
             conn = new MySqlConnection(strConn);
 
@@ -28,7 +28,7 @@ namespace easygram
 
 
 
-            
+
 
             //MySqlCommand cmd = new MySqlCommand("UPDATE insta_account SET work_number = 0", conn);
             //context.richTextBox1.Text += cmd.ExecuteNonQuery();
@@ -48,7 +48,7 @@ namespace easygram
             ds = new DataSet();
             try
             {
-               
+
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
@@ -57,22 +57,22 @@ namespace easygram
                 //string sql = "SELECT a.*, b.ip, b.user_agent FROM insta_account as a,insta_account_info as b WHERE a.mb_id = '" + context.user + "' ORDER BY a.work_number";
                 string sql = "SELECT a.* FROM insta_account as a WHERE a.mb_id = '" + context.user + "' ORDER BY a.work_number";
 
-                MySqlDataAdapter adpt = new MySqlDataAdapter(sql,conn);
-         
-                adpt.Fill(ds,"members");      
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+
+                adpt.Fill(ds, "members");
 
 
                 if (ds.Tables.Count > 0)
                 {
-                   
+
                     return ds.Tables[0];
                 }
-                else {  return null; }
+                else { return null; }
             }
             catch (Exception ex)
             {
-               
-              //  context.log("catch "+ex.ToString());
+
+                //  context.log("catch "+ex.ToString());
                 return null;
             }
 
@@ -181,7 +181,7 @@ namespace easygram
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
 
                 string sql = "SELECT a.mb_id, b.tag FROM insta_tag_group as a, insta_tag as b WHERE a.mb_id = '" + context.user + "'" +
-                             " and a.no=b.group_id  ORDER BY b.work_number"; 
+                             " and a.no=b.group_id  ORDER BY b.work_number";
 
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "tags");
@@ -189,7 +189,7 @@ namespace easygram
 
                 if (ds.Tables.Count > 0)
                 {
-                    return ds.Tables[0].Rows[0]; 
+                    return ds.Tables[0].Rows[0];
                 }
                 else { return null; }
             }
@@ -237,8 +237,76 @@ namespace easygram
 
         ////////// Select_comments function closed   //////////
 
+        ////////// select likes_count //////////////////
+        public DataRow Select_likesCount(string user_id)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT likes_count FROM insta_account WHERE user_id ='" + user_id + "'";
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "likes");
 
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0];
+                }
+                else { return null; }
 
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        ////////// select comments_count //////////////////
+        public DataRow Select_commentsCount(string user_id)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT comments_count FROM insta_account WHERE user_id ='" + user_id + "'";
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "comments");
+
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0];
+                }
+                else { return null; }
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        ////////// select follows_count //////////////////
+        public DataRow Select_followsCount(string user_id)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
+                string sql = "SELECT follows_count FROM insta_account WHERE user_id ='" + user_id + "'";
+                MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
+                adpt.Fill(ds, "follows");
+
+                if (ds.Tables.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0];
+                }
+                else { return null; }
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+      
         public void Update_worknum()
         {
             MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_account SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
@@ -271,22 +339,22 @@ namespace easygram
             cmd3.ExecuteNonQuery();
 
         }
-       
+
 
         public void update_job(string current_user)
         {
-           
+
             int limit_comment = Int32.Parse(context.limit_comment.Text);
             int limit_follow = Int32.Parse(context.limit_follow.Text);
-            int limit_like = Int32.Parse(context.limit_like.Text) ;
+            int limit_like = Int32.Parse(context.limit_like.Text);
 
             int delay_follow = Int32.Parse(context.delay_follow.Text);
-            int delay_like = Int32.Parse(context.delay_like.Text) ;
-            int delay_comment = Int32.Parse(context.delay_comment.Text) ;
+            int delay_like = Int32.Parse(context.delay_like.Text);
+            int delay_comment = Int32.Parse(context.delay_comment.Text);
             int delay_unfollow = Int32.Parse(context.delay_unfollow.Text);
 
-            int time_start = Int32.Parse(context.time_start.Text) ;
-            int time_finish = Int32.Parse(context.time_finish.Text) ;
+            int time_start = Int32.Parse(context.time_start.Text);
+            int time_finish = Int32.Parse(context.time_finish.Text);
 
             if (time_start > time_finish) { context.log("Start time must be less than End Time"); }
             else
@@ -294,7 +362,7 @@ namespace easygram
 
                 if (conn.State == ConnectionState.Closed) { conn.Open(); }
 
-              //  context.log("Connection: " + conn.State);
+                //  context.log("Connection: " + conn.State);
                 // context.log("UPDATE insta_job SET limit_comments = '"+ limit_comment + "', limit_follows = '" + limit_follow + "', limit_likes = '" + limit_like + "', delay_follow = '" + delay_follow + "', delay_like = '" + delay_like + "', delay_comment = '" + delay_comment + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish+ "' WHERE user_id = '" + current_user + "' ");
                 MySqlCommand cmd3 = new MySqlCommand("UPDATE insta_job SET limit_comments='" + limit_comment + "',limit_follows='" + limit_follow + "',limit_likes='" + limit_like + "',delay_follow='" + delay_follow + "', delay_like ='" + delay_like + "', delay_comment='" + delay_comment + "', delay_unfollow='" + delay_unfollow + "', hour_between_start = '" + time_start + "', hour_between_end = '" + time_finish + "' WHERE user_id = '" + current_user + "' ", conn);
 
@@ -302,31 +370,33 @@ namespace easygram
                 {
                     context.log("Record saved successfully.");
                 }
-                else { context.log("Not updated as "+ current_user  + " is not found in the Insta_job table."); 
+                else
+                {
+                    context.log("Not updated as " + current_user + " is not found in the Insta_job table.");
                 }
             }
-            
+
         }
 
         public void update_count_date(string current_user, string latest_date)
         {
-         
+
             MySqlCommand cmd6 = new MySqlCommand("UPDATE insta_account SET likes_count ='0',comments_count ='0', follows_count ='0' , latest_date='" + latest_date + "' WHERE user_id = '" + current_user + "'", conn);
-            cmd6.ExecuteNonQuery();
+            if (cmd6.ExecuteNonQuery() > 0) { context.log("Today counters and latest_date updated successfully."); } else { context.log("Error on counters and latest_date update."); }
 
         }
         public void update_likescount(string current_user, int likes_count)
         {
 
-            MySqlCommand cmd7 = new MySqlCommand("UPDATE insta_account SET likes_count ='"+likes_count+ "'  WHERE user_id = '" + current_user + "'", conn);
-            if (cmd7.ExecuteNonQuery() > 0) { context.log("Likes updted successfully."); } else { context.log("Error on likes update."); }
+            MySqlCommand cmd7 = new MySqlCommand("UPDATE insta_account SET likes_count ='" + likes_count + "'  WHERE user_id = '" + current_user + "'", conn);
+            if (cmd7.ExecuteNonQuery() > 0) { context.log("Likes updated successfully."); } else { context.log("Error on likes update."); }
 
         }
         public void update_commentscount(string current_user, int comments_count)
         {
 
-            MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET comments_count ='" + comments_count+"' WHERE user_id = '" + current_user + "'", conn);
-            if (cmd8.ExecuteNonQuery() > 0) { context.log("comments updted successfully."); } else { context.log("Error on comments update."); }
+            MySqlCommand cmd8 = new MySqlCommand("UPDATE insta_account SET comments_count ='" + comments_count + "' WHERE user_id = '" + current_user + "'", conn);
+            if (cmd8.ExecuteNonQuery() > 0) { context.log("comments updated successfully."); } else { context.log("Error on comments update."); }
 
         }
 
@@ -334,7 +404,7 @@ namespace easygram
         {
 
             MySqlCommand cmd9 = new MySqlCommand("UPDATE insta_account SET follows_count ='" + follows_count + "' WHERE user_id = '" + current_user + "'", conn);
-            if (cmd9.ExecuteNonQuery() > 0) { context.log("follows_count updted successfully."); } else { context.log("Error on follows_count update."); }
+            if (cmd9.ExecuteNonQuery() > 0) { context.log("follows_count updated successfully."); } else { context.log("Error on follows_count update."); }
 
         }
         ////////// check_job and select_job function begins   //////////
@@ -343,12 +413,12 @@ namespace easygram
             DataSet ds = new DataSet();
             try
             {
-                 if (conn.State == ConnectionState.Closed) { conn.Open(); }
+                if (conn.State == ConnectionState.Closed) { conn.Open(); }
                 // context.log("Connection" + conn.State);
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 string sql = "SELECT * FROM insta_job WHERE user_id ='" + user_id + "'";
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
-               
+
 
                 adpt.Fill(ds, "job");
 
@@ -416,20 +486,20 @@ namespace easygram
             {
 
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
-                string sql ="SELECT a.mb_id,b.no, b.tag FROM insta_tag_group as a, insta_tag as b WHERE a.mb_id = '" + context.user + "'" +
+                string sql = "SELECT a.mb_id,b.no, b.tag FROM insta_tag_group as a, insta_tag as b WHERE a.mb_id = '" + context.user + "'" +
                              " and a.no=b.group_id  ORDER BY b.work_number";
-               
-                
+
+
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "members");
-                
-                
+
+
                 if (ds.Tables.Count > 0)
                 {
-                    
+
                     MySqlCommand cmd2 = new MySqlCommand("UPDATE insta_tag SET work_number = work_number + 1 WHERE no = " + ds.Tables[0].Rows[0]["no"], conn);
                     cmd2.ExecuteNonQuery();
-                    
+
                     return ds.Tables[0].Rows[0];
                 }
                 else { return null; }
@@ -526,7 +596,7 @@ namespace easygram
                 conn = new MySqlConnection(strConn);
 
                 conn.Open();
-                
+
             }
             catch (Exception ex)
             {
@@ -640,7 +710,7 @@ namespace easygram
                 MySqlDataAdapter adpt = new MySqlDataAdapter(sql, conn);
                 adpt.Fill(ds, "specific_followers");
 
-               
+
                 if (ds.Tables.Count > 0)
                 {
 
@@ -687,22 +757,22 @@ namespace easygram
         //STORE Follow Data
         public void insert_followdata(string current_user, string followed, string follow_time)
         {
-    
-                    try
-                    {
 
-                        MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
+            try
+            {
 
-                        cmd2.ExecuteNonQuery();
-                        //context.richTextBox1.AppendText("########## Inserted Follow Data ##########");
-                        //context.log("[데이터베이스]");
+                MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_follows` (`no`, `user_id`, `followed_id`, `time`) VALUES(NULL, '" + current_user + "', '" + followed + "', '" + follow_time + "');", conn);
 
-                    }
-                    catch (Exception e)
-                    {
+                cmd2.ExecuteNonQuery();
+                //context.richTextBox1.AppendText("########## Inserted Follow Data ##########");
+                //context.log("[데이터베이스]");
 
-                    }
-           
+            }
+            catch (Exception e)
+            {
+
+            }
+
 
         }
 
@@ -741,7 +811,7 @@ namespace easygram
                 //MySqlDataAdapter 클래스를 이용하여 비연결 모드로 데이타 가져오기
                 string sql = "SELECT * FROM insta_follows WHERE user_id ='" + current_user + "' and followed_id='jams_march'";
 
-             
+
 
                 MySqlCommand cmd2 = new MySqlCommand("INSERT INTO `easygram`.`insta_status` (`no`, `user_id`, `followers`, `created_at`) VALUES(NULL, '" + current_user + "', '" + followers_count + "', '" + created_at + "');", conn);
                 // context.log(cmd2.ToString());
